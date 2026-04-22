@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>microCMS カスタムフィールド FAQ 設定手順（デザネコ用）</title>
+<style>
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; padding: 40px 20px;
+    background: #f8f9fa;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+    color: #333; line-height: 1.8;
+  }
+  .guide { max-width: 780px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  h1 { font-size: 1.4em; border-bottom: 3px solid #4a90d9; padding-bottom: 12px; margin-top: 0; }
+  h2 { font-size: 1.15em; margin-top: 2.5em; color: #4a90d9; border-left: 4px solid #4a90d9; padding-left: 12px; }
+  .step { background: #f0f6ff; border-left: 4px solid #4a90d9; padding: 14px 18px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+  .step-num { display: inline-block; background: #4a90d9; color: #fff; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 0.85em; font-weight: 700; margin-right: 8px; }
+  .warn { background: #fff8e1; border-left: 4px solid #f5a623; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .success { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #c7254e; }
+  pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.85em; line-height: 1.6; }
+  .keyword { color: #569cd6; }
+  .string { color: #ce9178; }
+  .comment { color: #6a9955; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { border: 1px solid #e0e0e0; padding: 10px 14px; text-align: left; font-size: 0.9em; }
+  th { background: #f5f5f5; font-weight: 600; }
+  .img-placeholder { background: #e0e8f0; border: 2px dashed #4a90d9; border-radius: 8px; padding: 30px; text-align: center; color: #4a90d9; margin: 16px 0; font-size: 0.9em; }
+  .flow { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin: 16px 0; }
+  .flow-item { background: #e8f0fe; padding: 8px 16px; border-radius: 20px; font-size: 0.85em; font-weight: 600; }
+  .flow-arrow { color: #4a90d9; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="guide">
+
+<h1>microCMS カスタムフィールド FAQ 設定手順</h1>
+<p>デザネコ（d-neko）サイトの <code>faq.php</code> で使う、カスタムフィールド（繰り返し）方式のFAQ設定手順です。</p>
+
+<div class="flow">
+  <span class="flow-item">STEP 1<br>microCMSでAPI作成</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-item">STEP 2<br>繰り返しフィールド設定</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-item">STEP 3<br>FAQデータ入力</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-item">STEP 4<br>faq.php を差し替え</span>
+</div>
+
+<!-- ============================== -->
+<h2>STEP 1：microCMS管理画面でAPIを作成</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  microCMS管理画面（<a href="https://d-neko.microcms.io" target="_blank">https://d-neko.microcms.io</a>）にログイン
+</div>
+<div class="step">
+  <span class="step-num">2</span>
+  左メニュー「コンテンツ（API）」→「＋ 追加」をクリック
+</div>
+<div class="step">
+  <span class="step-num">3</span>
+  API設定を入力：
+</div>
+
+<table>
+  <tr><th>項目</th><th>設定値</th></tr>
+  <tr><td>API名</td><td><code>よくあるご質問</code></td></tr>
+  <tr><td>エンドポイント</td><td><code>faq</code></td></tr>
+  <tr><td>APIの型</td><td><strong>オブジェクト形式</strong>（※リスト形式ではありません）</td></tr>
+</table>
+
+<div class="warn">
+  <strong>重要：</strong>APIの型は「オブジェクト形式」を選んでください。FAQページは1つだけなので、リスト形式（記事一覧のような形式）ではなく、1つのオブジェクトとしてデータを保持します。
+</div>
+
+<!-- ============================== -->
+<h2>STEP 2：繰り返しフィールドを設定</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  作成したFAQ APIの「APIスキーマ」画面を開く
+</div>
+<div class="step">
+  <span class="step-num">2</span>
+  「フィールドを追加」をクリック
+</div>
+<div class="step">
+  <span class="step-num">3</span>
+  以下のように設定：
+</div>
+
+<table>
+  <tr><th>項目</th><th>設定値</th></tr>
+  <tr><td>フィールドID</td><td><code>items</code></td></tr>
+  <tr><td>表示名</td><td><code>FAQ項目</code></td></tr>
+  <tr><td>種類</td><td><strong>繰り返し</strong></td></tr>
+</table>
+
+<div class="step">
+  <span class="step-num">4</span>
+  繰り返しフィールドの中に、以下の <strong>2つのサブフィールド</strong> を追加：
+</div>
+
+<table>
+  <tr><th>フィールドID</th><th>表示名</th><th>種類</th><th>必須</th></tr>
+  <tr><td><code>question</code></td><td>質問</td><td>テキストフィールド</td><td>はい</td></tr>
+  <tr><td><code>answer</code></td><td>回答</td><td>テキストエリア</td><td>はい</td></tr>
+</table>
+
+<div class="warn">
+  <strong>補足：</strong>回答にリンクや太字を使いたい場合は、<code>answer</code> の種類を「リッチエディタ」に変更してください。プレーンテキストで十分な場合は「テキストエリア」のままでOKです。
+</div>
+
+<div class="img-placeholder">
+  完成イメージ：<br><br>
+  FAQ API（オブジェクト形式）<br>
+  └─ items（繰り返し）<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;├─ question（テキストフィールド）<br>
+  &nbsp;&nbsp;&nbsp;&nbsp;└─ answer（テキストエリア）
+</div>
+
+<!-- ============================== -->
+<h2>STEP 3：FAQデータを入力</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  左メニュー「よくあるご質問」をクリック
+</div>
+<div class="step">
+  <span class="step-num">2</span>
+  「＋ 追加」ボタンでFAQ項目を1つずつ追加し、質問と回答を入力
+</div>
+<div class="step">
+  <span class="step-num">3</span>
+  全項目を入力したら「公開」をクリック
+</div>
+
+<div class="success">
+  <strong>ポイント：</strong>項目の順番はドラッグ＆ドロップで並び替えできます。追加・削除・並び替えもいつでも管理画面から操作できます。
+</div>
+
+<p>入力後、APIからは以下のようなデータが返ります：</p>
+
+<pre><span class="comment">// https://d-neko.microcms.io/api/v1/faq</span>
+{
+  <span class="string">"createdAt"</span>: <span class="string">"2026-04-13T..."</span>,
+  <span class="string">"updatedAt"</span>: <span class="string">"2026-04-13T..."</span>,
+  <span class="string">"publishedAt"</span>: <span class="string">"2026-04-13T..."</span>,
+  <span class="string">"revisedAt"</span>: <span class="string">"2026-04-13T..."</span>,
+  <span class="string">"items"</span>: [
+    {
+      <span class="string">"fieldId"</span>: <span class="string">"items"</span>,
+      <span class="string">"question"</span>: <span class="string">"WordPressって何ですか？"</span>,
+      <span class="string">"answer"</span>: <span class="string">"ブログを作るための仕組みです..."</span>
+    },
+    {
+      <span class="string">"fieldId"</span>: <span class="string">"items"</span>,
+      <span class="string">"question"</span>: <span class="string">"料金はいくらですか？"</span>,
+      <span class="string">"answer"</span>: <span class="string">"銀行振込またはクレジットカード..."</span>
+    }
+  ]
+}</pre>
+
+<!-- ============================== -->
+<h2>STEP 4：faq.php を差し替え</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  同梱の <code>faq.php</code>（カスタムフィールド対応版）で、既存の <code>faq.php</code> を上書き
+</div>
+<div class="step">
+  <span class="step-num">2</span>
+  サイトにアクセスしてFAQページを確認
+</div>
+
+<div class="success">
+  <strong>これで完了です！</strong>今後FAQの追加・編集・並び替えは、すべてmicroCMSの管理画面から行えます。PHPファイルを編集する必要はありません。
+</div>
+
+<h2>トラブルシューティング</h2>
+
+<table>
+  <tr><th>症状</th><th>原因と対処法</th></tr>
+  <tr>
+    <td>FAQが表示されない</td>
+    <td>microCMSでFAQデータが「公開」されているか確認してください。「下書き」のままだとAPIから取得できません。</td>
+  </tr>
+  <tr>
+    <td>「データの取得に失敗」と表示</td>
+    <td>エンドポイント名が <code>faq</code> になっているか確認してください。<code>common.php</code> のAPIキーが正しいかも確認。</td>
+  </tr>
+  <tr>
+    <td>質問は表示されるが回答が空</td>
+    <td>フィールドIDが <code>answer</code> になっているか確認してください（大文字小文字も一致させる）。</td>
+  </tr>
+</table>
+
+</div>
+</body>
+</html>

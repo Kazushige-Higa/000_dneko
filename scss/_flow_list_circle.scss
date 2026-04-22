@@ -1,0 +1,113 @@
+.flow_list_circle {
+    > li {
+        border-top: 1px solid #ddd;
+        width: 100%;
+        position: relative;
+        &:before {
+            content: "";
+            width: 50px;
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: block;
+            border-bottom: 0px solid rgba(255, 255, 255, 0.3);
+            margin: 0 auto;
+            border-style: solid;
+            border-width: 25px 50px 0 50px;
+            border-color: #ddd transparent transparent transparent;
+            z-index: 1;
+            @include for-size(phone-only) {
+                border-width: 25px 55px 55px;
+            }
+        }
+        &:first-child {
+            border-top: 0;
+            &:before {
+                display: none;
+            }
+        }
+        .content-area {
+            margin-left: auto;
+            margin-right: auto;
+            padding-top: 40px;
+            padding-bottom: 40px;
+            max-width: 1100px;
+            display: flex;
+            align-items: center;
+
+            &.type1 {
+                padding-top: 0;
+            }
+        }
+        .num {
+            position: relative;
+            margin-right: 40px;
+            border-radius: 50%;
+            width: 140px;
+            height: 140px;
+            line-height: 14rem;
+            text-align: center;
+            background: $base_color;
+            color: #fff;
+            font-size: 120%;
+            &.type1 {
+                &:before {
+                    display: none;
+                }
+            }
+        }
+        .title {
+            margin-right: 48px;
+            min-width: 230px;
+            color: #555;
+            font-size: 110%;
+            font-weight: bold;
+            color: $base_color;
+        }
+        .text {
+            flex: 1;
+        }
+        .sttl {
+            color: darken($base_color, 10%);
+            margin-bottom: 10px;
+        }
+        @include for-size(tablet) {
+            border-top: 0;
+            .content-area {
+                padding-top: 35px;
+                padding-bottom: 35px;
+                flex-wrap: wrap;
+            }
+            .num {
+                margin-right: 20px;
+                width: 70px;
+                height: 70px;
+                line-height: 68px;
+                font-size: 14px;
+            }
+            .title {
+                margin-right: 0;
+                max-width: 100%;
+                width: calc(100% - 100px);
+                min-width: 0;
+                flex-basis: auto;
+                font-size: 1.6rem;
+            }
+            .text {
+                margin-top: 10px;
+                margin-left: 0;
+                max-width: 100%;
+                width: 100%;
+                font-weight: normal;
+            }
+            &:last-child {
+                .num {
+                    &:before {
+                        height: 0;
+                    }
+                }
+            }
+        }
+    }
+}

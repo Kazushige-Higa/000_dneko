@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ アコーディオン デモ（API不要）</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+    color: #333;
+  }
+
+  .demo-badge {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .demo-badge span {
+    display: inline-block;
+    background: #e8735a;
+    color: #fff;
+    font-size: 0.75em;
+    font-weight: 700;
+    padding: 4px 14px;
+    border-radius: 20px;
+    letter-spacing: 0.05em;
+  }
+
+  .faq-section {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #333;
+    letter-spacing: 0.05em;
+  }
+
+  .faq-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    background: #fafafa;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.6;
+    gap: 12px;
+    font-family: inherit;
+    transition: background 0.15s ease;
+  }
+
+  .faq-question:hover { background: #f5f5f5; }
+  .faq-question:focus { outline: 2px solid #4a90d9; outline-offset: -2px; }
+
+  .faq-question-text {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .faq-label-q {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px; min-width: 28px;
+    border-radius: 50%;
+    background: #4a90d9;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-label-a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px; height: 28px; min-width: 28px;
+    border-radius: 50%;
+    background: #e8735a;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-icon {
+    width: 20px; height: 20px; min-width: 20px;
+    transition: transform 0.3s ease;
+    color: #999;
+  }
+
+  .faq-item.active .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 20px;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 20px 20px;
+  }
+
+  .faq-answer-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed #e0e0e0;
+  }
+
+  .faq-answer-text {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.8;
+    flex: 1;
+  }
+  .faq-answer-text a { color: #4a90d9; text-decoration: underline; }
+
+  @media (max-width: 600px) {
+    body { padding: 20px 12px; }
+    .faq-question { padding: 14px 16px; font-size: 0.95em; }
+    .faq-answer { padding: 0 16px; }
+    .faq-item.active .faq-answer { padding: 0 16px 16px; }
+    .faq-label-q, .faq-label-a { width: 24px; height: 24px; min-width: 24px; font-size: 0.75em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-badge"><span>DEMO — サンプルデータで表示</span></div>
+
+<div class="faq-section">
+  <p class="faq-section-title">よくあるご質問</p>
+  <div id="faq-container"></div>
+</div>
+
+<script>
+  // =============================================
+  //  デモ用サンプルデータ
+  //  （本番では microCMS API からこの形式で取得されます）
+  // =============================================
+  var DEMO_FAQ_DATA = [
+    {
+      question: 'サービスの利用に必要なものはありますか？',
+      answer: 'インターネット環境とメールアドレスがあればすぐにご利用いただけます。特別なソフトウェアのインストールは不要です。'
+    },
+    {
+      question: '料金プランについて教えてください',
+      answer: '無料プランと有料プランをご用意しております。無料プランでも基本的な機能はすべてお使いいただけます。詳しくは<a href="#">料金ページ</a>をご覧ください。'
+    },
+    {
+      question: '途中でプランの変更はできますか？',
+      answer: 'はい、いつでもプランの変更が可能です。アップグレードは即時反映され、ダウングレードは次回の更新日から適用されます。'
+    },
+    {
+      question: '解約・キャンセルの方法を教えてください',
+      answer: 'マイページの「アカウント設定」からいつでも解約いただけます。解約後も契約期間終了まではサービスをご利用いただけます。'
+    },
+    {
+      question: 'データのバックアップは取れますか？',
+      answer: 'はい、管理画面からCSV形式でデータをエクスポートできます。また、有料プランでは自動バックアップ機能もご利用いただけます。'
+    }
+  ];
+
+  // --- SVG アイコン ---
+  var CHEVRON_SVG = '<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  // --- アコーディオン開閉 ---
+  function toggleFaq(button) {
+    var item = button.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var isActive = item.classList.contains('active');
+
+    if (isActive) {
+      answer.style.maxHeight = '0';
+      item.classList.remove('active');
+      button.setAttribute('aria-expanded', 'false');
+    } else {
+      item.classList.add('active');
+      answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+      button.setAttribute('aria-expanded', 'true');
+    }
+  }
+
+  // --- HTMLエスケープ ---
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // --- 描画 ---
+  function renderFaq(faqList) {
+    var container = document.getElementById('faq-container');
+    var html = '';
+
+    for (var i = 0; i < faqList.length; i++) {
+      html += ''
+        + '<div class="faq-item">'
+        +   '<button class="faq-question" aria-expanded="false">'
+        +     '<span class="faq-question-text">'
+        +       '<span class="faq-label-q">Q</span>'
+        +       '<span>' + escapeHtml(faqList[i].question) + '</span>'
+        +     '</span>'
+        +     CHEVRON_SVG
+        +   '</button>'
+        +   '<div class="faq-answer">'
+        +     '<div class="faq-answer-inner">'
+        +       '<span class="faq-label-a">A</span>'
+        +       '<span class="faq-answer-text">' + faqList[i].answer + '</span>'
+        +     '</div>'
+        +   '</div>'
+        + '</div>';
+    }
+
+    container.innerHTML = html;
+
+    var buttons = container.querySelectorAll('.faq-question');
+    for (var j = 0; j < buttons.length; j++) {
+      buttons[j].addEventListener('click', function() {
+        toggleFaq(this);
+      });
+    }
+  }
+
+  // --- 実行 ---
+  document.addEventListener('DOMContentLoaded', function() {
+    renderFaq(DEMO_FAQ_DATA);
+  });
+</script>
+
+</body>
+</html>

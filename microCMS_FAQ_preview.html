@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAQ アコーディオン プレビュー</title>
+<style>
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+  }
+  .preview-header {
+    text-align: center;
+    color: #888;
+    font-size: 0.85em;
+    margin-bottom: 20px;
+  }
+</style>
+</head>
+<body>
+<p class="preview-header">microCMS FAQ アコーディオン — プレビュー</p>
+
+<!-- ===== ここから microCMS に貼り付けるコード ===== -->
+
+<style>
+  .faq-section {
+    max-width: 800px;
+    margin: 2em auto;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+  }
+
+  .faq-section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #333;
+    letter-spacing: 0.05em;
+  }
+
+  .faq-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    background: #fafafa;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.6;
+    gap: 12px;
+    font-family: inherit;
+  }
+
+  .faq-question:hover {
+    background: #f5f5f5;
+  }
+
+  .faq-question-text {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .faq-label-q {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: #4a90d9;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-label-a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: #e8735a;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    transition: transform 0.3s ease;
+    color: #999;
+  }
+
+  .faq-item.active .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 20px;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 20px 20px;
+  }
+
+  .faq-answer-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed #e0e0e0;
+  }
+
+  .faq-answer-text {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.8;
+    flex: 1;
+  }
+</style>
+
+<div class="faq-section">
+  <p class="faq-section-title">よくあるご質問</p>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>サービスの利用に必要なものはありますか？</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">インターネット環境とメールアドレスがあればすぐにご利用いただけます。特別なソフトウェアのインストールは不要です。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>料金プランについて教えてください</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">無料プランと有料プランをご用意しております。無料プランでも基本的な機能はすべてお使いいただけます。詳しくは料金ページをご覧ください。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>途中でプランの変更はできますか？</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">はい、いつでもプランの変更が可能です。アップグレードは即時反映され、ダウングレードは次回の更新日から適用されます。</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>解約・キャンセルの方法を教えてください</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">マイページの「アカウント設定」からいつでも解約いただけます。解約後も契約期間終了まではサービスをご利用いただけます。</span>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  function toggleFaq(button) {
+    var item = button.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var isActive = item.classList.contains('active');
+
+    if (isActive) {
+      answer.style.maxHeight = '0';
+      item.classList.remove('active');
+    } else {
+      item.classList.add('active');
+      answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+    }
+  }
+</script>
+
+<!-- ===== ここまで ===== -->
+
+</body>
+</html>

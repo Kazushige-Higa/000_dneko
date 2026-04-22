@@ -1,0 +1,45 @@
+<?php
+/*
+サイトマップ自動生成プログラム
+*/
+
+//ドメイン
+$domain = $_SERVER["HTTP_HOST"];
+
+//SSL
+if($_SERVER['HTTPS'] == 'on'){
+	$ssl     = 1;
+}
+
+//コマンドのlsで現ディレクトリのphpファイルを取得
+exec("ls *.php -n --full-time",$list);
+
+header("Content-Type: text/xml");
+?>
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<?php foreach($list as $res){
+	if(preg_match('|^([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +([^ ]+) +(.+)$|',$res,$mathes)){
+		
+		//トップページは最優先
+		if($mathes[9] == 'index.php'){
+			
+			echo '<url>'."\n";
+			echo '<loc>http'.(($ssl=="1")?'s':'').'://'.htmlspecialchars($domain).'/'.$mathes[9].'</loc>'."\n";
+			echo '<lastmod>'.htmlspecialchars($mathes[6]).'</lastmod>'."\n";
+			echo '<priority>1.0</priority>'."\n";
+			echo '</url>'."\n";
+		
+		//よくある読み込み系のファイルは名前から推測し、除外。thanksページ、その他不要ファイルも除外、気が付いたのがあれば適当にカスタムしてください。
+		}elseif($mathes[9] != 'header.php' && $mathes[9] != 'footer.php' && $mathes[9] != 'sitemap.xml.php' && $mathes[9] != 'thanks.php' && $mathes[9] != 'nav.php' && $mathes[9] != 'navi.php' && $mathes[9] != 'entry_list2.php' && $mathes[9] != 'entry02.php' && $mathes[9] != 'entry.php'  && $mathes[9] != 'entry_list.php'){
+			echo '<url>'."\n";
+			echo '<loc>http'.(($ssl=="1")?'s':'').'://'.htmlspecialchars($domain).'/'.$mathes[9].'</loc>'."\n";
+			//ファイルの最終更新日を、サイトの更新日として通知
+			echo '<lastmod>'.htmlspecialchars($mathes[6]).'</lastmod>'."\n";
+			echo '<priority>0.8</priority>'."\n";
+			echo '</url>'."\n";
+		}
+	}
+}
+?>
+</urlset>

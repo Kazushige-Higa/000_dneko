@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>microCMS 設定手順 — ブログカテゴリタブ（デザネコ用）</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 40px 20px; background: #f8f9fa; font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; color: #333; line-height: 1.8; }
+  .guide { max-width: 780px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  h1 { font-size: 1.4em; border-bottom: 3px solid #F9B104; padding-bottom: 12px; margin-top: 0; }
+  h2 { font-size: 1.15em; margin-top: 2.5em; color: #F9B104; border-left: 4px solid #F9B104; padding-left: 12px; }
+  .step { background: #fef7e9; border-left: 4px solid #F9B104; padding: 14px 18px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+  .step-num { display: inline-block; background: #F9B104; color: #fff; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 0.85em; font-weight: 700; margin-right: 8px; }
+  .warn { background: #fff8e1; border-left: 4px solid #f5a623; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .success { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #c7254e; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { border: 1px solid #e0e0e0; padding: 10px 14px; text-align: left; font-size: 0.9em; }
+  th { background: #f5f5f5; font-weight: 600; }
+  .tree { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 24px; margin: 16px 0; font-family: monospace; font-size: 0.9em; line-height: 2; }
+  .demo-tabs { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 20px 0; }
+  .demo-tab { display: inline-block; padding: 8px 20px; border: 2px solid #F9B104; border-radius: 30px; font-size: 90%; font-weight: 600; color: #F9B104; background: #fff; }
+  .demo-tab.active { background: #F9B104; color: #fff; }
+</style>
+</head>
+<body>
+<div class="guide">
+
+<h1>ブログ記事をカテゴリタブで分ける設定手順</h1>
+<p>microCMSの <code>blog</code> APIにカテゴリフィールドを追加し、トップページと一覧ページの両方でタブ切り替え表示を実現します。制作実績（works）と同じ仕組みです。</p>
+
+<p>完成イメージ：</p>
+<div class="demo-tabs">
+  <span class="demo-tab active">すべて</span>
+  <span class="demo-tab">お知らせ</span>
+  <span class="demo-tab">デザイン</span>
+  <span class="demo-tab">Web制作</span>
+  <span class="demo-tab">日記</span>
+</div>
+
+<!-- ============================== -->
+<h2>STEP 1：blog APIにカテゴリフィールドを追加</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  microCMS管理画面 → 左メニュー「blog」→ 右上「API設定」→「APIスキーマ」タブ
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  「フィールドを追加」→ <strong>セレクトフィールド</strong> を作成
+</div>
+
+<table>
+  <tr><th>項目</th><th>設定値</th></tr>
+  <tr><td>フィールドID</td><td><code>category</code></td></tr>
+  <tr><td>表示名</td><td><code>カテゴリ</code></td></tr>
+  <tr><td>種類</td><td><strong>セレクトフィールド</strong></td></tr>
+  <tr><td>必須</td><td><strong>いいえ</strong>（未設定は「その他」に分類）</td></tr>
+</table>
+
+<div class="step">
+  <span class="step-num">3</span>
+  セレクトフィールドの選択肢を追加（例）：
+</div>
+
+<table>
+  <tr><th>値（value）</th><th>表示ラベル</th></tr>
+  <tr><td><code>お知らせ</code></td><td>お知らせ</td></tr>
+  <tr><td><code>デザイン</code></td><td>デザイン</td></tr>
+  <tr><td><code>Web制作</code></td><td>Web制作</td></tr>
+  <tr><td><code>写真・動画</code></td><td>写真・動画</td></tr>
+  <tr><td><code>日記</code></td><td>日記</td></tr>
+</table>
+
+<div class="warn">
+  <strong>ポイント：</strong>選択肢は後からいつでも追加・削除できます。カテゴリ名がそのままタブのラベルとして表示されるので、短くわかりやすい名前にしてください。カテゴリ未設定のブログ記事は「その他」タブに自動分類されます。
+</div>
+
+<div class="warn">
+  <strong>重要：</strong>フィールドIDは必ず <code>category</code> にしてください。制作実績（works）と同じフィールドIDです。これにより、PHPコード側で同じ処理が使えます。
+</div>
+
+<p>完成イメージ：</p>
+<div class="tree">
+blog API（既存）<br>
+├─ title, content, thumbnail ... ← 既存フィールド<br>
+├─ faq（繰り返し）← よくあるご質問<br>
+├─ cta（繰り返し）← CTAボックス<br>
+├─ speech（繰り返し）← 吹き出し<br>
+│<br>
+└─ <strong style="color:#F9B104">category（セレクトフィールド）← 今回追加</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;選択肢: お知らせ / デザイン / Web制作 / 写真・動画 / 日記 ...
+</div>
+
+<!-- ============================== -->
+<h2>STEP 2：既存のブログ記事にカテゴリを設定</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  左メニュー「blog」→ 各記事を開いて「カテゴリ」を選択 →「更新」
+</div>
+
+<div class="success">
+  <strong>補足：</strong>カテゴリを設定していない記事は「その他」に分類されます。既存記事を一つずつ更新する必要がありますが、一度設定すればOKです。
+</div>
+
+<!-- ============================== -->
+<h2>STEP 3：SCSSをコンパイル</h2>
+<!-- ============================== -->
+
+<p>タブのスタイル（<code>_works_tab.scss</code>）は制作実績タブの際に追加済みです。ブログタブも同じスタイルを使用するため、追加のSCSS変更は不要です。</p>
+
+<div class="success">
+  <strong>もしまだSCSSをコンパイルしていない場合は</strong>、SCSSをコンパイルして <code>css/style.css</code> を更新してください。
+</div>
+
+<!-- ============================== -->
+<h2>表示の仕組み</h2>
+<!-- ============================== -->
+
+<table>
+  <tr><th>ページ</th><th>タブの動作</th></tr>
+  <tr><td>トップページ（index.php）</td><td>カテゴリが2種類以上ある場合にタブ表示。各タブ最新4件。カテゴリ1種類以下ならタブなし（従来通り）</td></tr>
+  <tr><td>ブログ一覧（entry_list.php）</td><td>カテゴリが2種類以上ある場合にタブ表示。各タブ全件表示。カテゴリ1種類以下ならタブなし（従来通り）</td></tr>
+</table>
+
+<table>
+  <tr><th>カテゴリ設定</th><th>タブ表示</th></tr>
+  <tr><td>設定あり</td><td>設定されたカテゴリ名のタブに分類</td></tr>
+  <tr><td>未設定（空欄）</td><td>「その他」タブに自動分類</td></tr>
+</table>
+
+<h2>変更したファイル一覧</h2>
+
+<table>
+  <tr><th>ファイル</th><th>変更内容</th></tr>
+  <tr><td><code>index.php</code></td><td>Blog セクションにカテゴリタブを追加</td></tr>
+  <tr><td><code>entry_list.php</code></td><td>ブログ一覧にカテゴリタブを追加</td></tr>
+</table>
+
+<div class="success">
+  <strong>備考：</strong>タブのスタイル（<code>scss/_works_tab.scss</code>）とSCSSの@import設定は制作実績タブの際に追加済みのため、今回は新しいSCSSファイルの作成は不要です。
+</div>
+
+</div>
+</body>
+</html>

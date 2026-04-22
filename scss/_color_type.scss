@@ -1,0 +1,49 @@
+$base_color01: #885f41;
+$base_color02: #111;
+$base_color03: #f49f00;
+
+.base_color01 {
+    color: $base_color01 !important;
+}
+.base_color02 {
+    color: $base_color02 !important;
+}
+.base_color03 {
+    color: $base_color03 !important;
+}
+.bg_base_base01 {
+    background-color: rgba($base_color01, 1) !important;
+}
+.bg_base_base02 {
+    background-color: rgba($base_color02, 1) !important;
+}
+.bg_base_base03 {
+    background-color: rgba($base_color03, 1) !important;
+}
+
+#base01 {
+    .base_color {
+        color: $base_color01 !important;
+        border-color: $base_color01 !important;
+    }
+    .bg_base_color {
+        background-color: $base_color01 !important;
+    }
+    .hr_bar:before {
+        background-color: $base_color01 !important;
+        background-image: linear-gradient(to right, $base_color01 50%, #aaa 50%) !important;
+    }
+    .btn_normal a {
+        background-color: $base_color01 !important;
+    }
+    .btn_normal .white a {
+        background-color: #fff !important;
+    }
+    #pagetop a {
+        color: $base_color01;
+        border: 1px solid $base_color01;
+    }
+    #sp_btn.type1 ul:before {
+        background: rgba($base_color01, 0.7) !important;
+    }
+}

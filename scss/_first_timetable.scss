@@ -1,0 +1,20 @@
+.first_timetable {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+    width: 560px;
+    height: 260px;
+    padding: 20px;
+    background-color: rgba($base_color, 0.6);
+    @include for-size(tablet) {
+        display: none;
+    }
+    .tbl_timetable {
+        font-size: 80% !important;
+        margin: 0;
+        th,
+        td {
+            padding: 15px 2px !important;
+        }
+    }
+}

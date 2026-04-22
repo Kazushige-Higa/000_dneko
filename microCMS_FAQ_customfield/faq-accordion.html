@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>よくあるご質問</title>
+<style>
+  /* ========================================
+     FAQ アコーディオン スタイル
+     ======================================== */
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+    color: #333;
+  }
+
+  /* --- セクション全体 --- */
+  .faq-section {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+
+  .faq-section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #333;
+    letter-spacing: 0.05em;
+  }
+
+  /* --- ローディング --- */
+  .faq-loading {
+    text-align: center;
+    padding: 40px;
+    color: #999;
+    font-size: 0.95em;
+  }
+  .faq-loading::after {
+    content: '';
+    display: inline-block;
+    width: 20px; height: 20px;
+    border: 2px solid #ddd;
+    border-top-color: #4a90d9;
+    border-radius: 50%;
+    margin-left: 8px;
+    vertical-align: middle;
+    animation: faq-spin 0.8s linear infinite;
+  }
+  @keyframes faq-spin {
+    to { transform: rotate(360deg); }
+  }
+
+  /* --- エラー --- */
+  .faq-error {
+    text-align: center;
+    padding: 40px;
+    color: #c0392b;
+    font-size: 0.95em;
+    background: #fef2f2;
+    border-radius: 8px;
+  }
+
+  /* --- 各FAQ項目 --- */
+  .faq-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  /* --- 質問ボタン --- */
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    background: #fafafa;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.6;
+    gap: 12px;
+    font-family: inherit;
+    transition: background 0.15s ease;
+  }
+
+  .faq-question:hover {
+    background: #f5f5f5;
+  }
+
+  .faq-question:focus {
+    outline: 2px solid #4a90d9;
+    outline-offset: -2px;
+  }
+
+  .faq-question-text {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex: 1;
+  }
+
+  /* --- Q / A ラベル --- */
+  .faq-label-q {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: #4a90d9;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-label-a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: #e8735a;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  /* --- 開閉アイコン --- */
+  .faq-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    transition: transform 0.3s ease;
+    color: #999;
+  }
+
+  .faq-item.active .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  /* --- 回答エリア --- */
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 20px;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 20px 20px;
+  }
+
+  .faq-answer-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed #e0e0e0;
+  }
+
+  .faq-answer-text {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.8;
+    flex: 1;
+  }
+
+  /* 回答内のリッチエディタHTML用 */
+  .faq-answer-text p {
+    margin: 0 0 0.8em;
+  }
+  .faq-answer-text p:last-child {
+    margin-bottom: 0;
+  }
+  .faq-answer-text a {
+    color: #4a90d9;
+    text-decoration: underline;
+  }
+  .faq-answer-text ul, .faq-answer-text ol {
+    padding-left: 1.5em;
+    margin: 0.5em 0;
+  }
+
+  /* --- レスポンシブ --- */
+  @media (max-width: 600px) {
+    body { padding: 20px 12px; }
+    .faq-question { padding: 14px 16px; font-size: 0.95em; }
+    .faq-answer { padding: 0 16px; }
+    .faq-item.active .faq-answer { padding: 0 16px 16px; }
+    .faq-label-q, .faq-label-a { width: 24px; height: 24px; min-width: 24px; font-size: 0.75em; }
+  }
+</style>
+</head>
+<body>
+
+<div class="faq-section">
+  <p class="faq-section-title">よくあるご質問</p>
+  <div id="faq-container">
+    <div class="faq-loading">読み込み中</div>
+  </div>
+</div>
+
+<script>
+  // =============================================
+  //  設定 — ここを書き換えてください
+  // =============================================
+  var FAQ_CONFIG = {
+    serviceDomain: 'your-service-id',   // microCMS のサービスID
+    apiKey:        'your-api-key',      // APIキー
+    endpoint:      'blogs',             // エンドポイント名
+    contentId:     'your-content-id',   // 記事のコンテンツID
+    fieldId:       'faq'                // 繰り返しフィールドのフィールドID
+  };
+  // =============================================
+
+  // --- SVG アイコン ---
+  var CHEVRON_SVG = '<svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>';
+
+  // --- アコーディオン開閉 ---
+  function toggleFaq(button) {
+    var item = button.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var isActive = item.classList.contains('active');
+
+    if (isActive) {
+      answer.style.maxHeight = '0';
+      item.classList.remove('active');
+    } else {
+      item.classList.add('active');
+      answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+    }
+  }
+
+  // --- FAQ項目のHTML生成 ---
+  function createFaqItemHTML(question, answer) {
+    return ''
+      + '<div class="faq-item">'
+      +   '<button class="faq-question" aria-expanded="false">'
+      +     '<span class="faq-question-text">'
+      +       '<span class="faq-label-q">Q</span>'
+      +       '<span>' + escapeHtml(question) + '</span>'
+      +     '</span>'
+      +     CHEVRON_SVG
+      +   '</button>'
+      +   '<div class="faq-answer">'
+      +     '<div class="faq-answer-inner">'
+      +       '<span class="faq-label-a">A</span>'
+      +       '<span class="faq-answer-text">' + answer + '</span>'
+      +     '</div>'
+      +   '</div>'
+      + '</div>';
+  }
+
+  // --- HTMLエスケープ（質問テキスト用） ---
+  function escapeHtml(str) {
+    var div = document.createElement('div');
+    div.appendChild(document.createTextNode(str));
+    return div.innerHTML;
+  }
+
+  // --- microCMS API からデータ取得＆描画 ---
+  function loadFaq() {
+    var container = document.getElementById('faq-container');
+    var url = 'https://' + FAQ_CONFIG.serviceDomain + '.microcms.io/api/v1/'
+            + FAQ_CONFIG.endpoint + '/' + FAQ_CONFIG.contentId
+            + '?fields=' + FAQ_CONFIG.fieldId;
+
+    fetch(url, {
+      headers: { 'X-MICROCMS-API-KEY': FAQ_CONFIG.apiKey }
+    })
+    .then(function(res) {
+      if (!res.ok) throw new Error('API Error: ' + res.status);
+      return res.json();
+    })
+    .then(function(data) {
+      var faqList = data[FAQ_CONFIG.fieldId];
+
+      if (!faqList || faqList.length === 0) {
+        container.innerHTML = '<div class="faq-error">FAQデータがありません</div>';
+        return;
+      }
+
+      var html = '';
+      for (var i = 0; i < faqList.length; i++) {
+        html += createFaqItemHTML(faqList[i].question, faqList[i].answer);
+      }
+      container.innerHTML = html;
+
+      // クリックイベントを設定
+      var buttons = container.querySelectorAll('.faq-question');
+      for (var j = 0; j < buttons.length; j++) {
+        buttons[j].addEventListener('click', function() {
+          toggleFaq(this);
+          var expanded = this.getAttribute('aria-expanded') === 'true';
+          this.setAttribute('aria-expanded', !expanded);
+        });
+      }
+    })
+    .catch(function(err) {
+      container.innerHTML = '<div class="faq-error">FAQ の読み込みに失敗しました<br><small>' + err.message + '</small></div>';
+      console.error('FAQ load error:', err);
+    });
+  }
+
+  // --- 実行 ---
+  document.addEventListener('DOMContentLoaded', loadFaq);
+</script>
+
+</body>
+</html>

@@ -1,0 +1,68 @@
+// ==========================================
+//  制作実績 カテゴリタブ
+// ==========================================
+
+.works-tab-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: center;
+  margin-bottom: 1.5em;
+  padding: 0;
+  list-style: none;
+
+  li {
+    display: inline-block;
+  }
+
+  .works-tab-btn {
+    display: inline-block;
+    padding: 8px 20px;
+    border: 2px solid $base_color;
+    border-radius: 30px;
+    background: #fff;
+    color: $base_color;
+    font-size: 90%;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    white-space: nowrap;
+    font-family: inherit;
+    line-height: 1.4;
+
+    &:hover {
+      background: rgba($base_color, 0.1);
+    }
+
+    &.active {
+      background: $base_color;
+      color: #fff;
+    }
+
+    @include for-size(phone-only) {
+      padding: 6px 14px;
+      font-size: 80%;
+    }
+  }
+}
+
+// タブコンテンツ
+.works-tab-content {
+  display: none;
+  animation: worksTabFadeIn 0.4s ease;
+
+  &.active {
+    display: block;
+  }
+}
+
+@keyframes worksTabFadeIn {
+  0% {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

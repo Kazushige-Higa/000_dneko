@@ -1,0 +1,60 @@
+.tbl_flow {
+    width: 100%;
+    background-color: rgba($base_color, 0.1);
+    tr {
+        td {
+            background: #fdeff4;
+            &:nth-child(2n) {
+                background: #fffdeb;
+                font-weight: bold;
+            }
+            &:nth-child(3n) {
+                background: #dbf1fc;
+            }
+        }
+    }
+    tr {
+        th {
+            background: #fdeff4;
+            &:nth-child(2n) {
+                background: #fffdeb;
+                font-weight: bold;
+            }
+            &:nth-child(3n) {
+                background: #dbf1fc;
+            }
+        }
+    }
+    .t-right {
+        text-align: right;
+    }
+    &.bar {
+        td {
+            padding: 25px;
+            border-right: 3px solid #fff;
+        }
+    }
+    th,
+    td {
+        padding: 25px;
+        border-bottom: 1px solid #333;
+        vertical-align: middle;
+        @include for-size(phone-only) {
+            padding: 5px;
+            font-size: 1rem;
+        }
+    }
+    th {
+        width: 33.33%;
+        font-weight: 600;
+        @include for-size(phone-only) {
+            padding: 15px 5px;
+        }
+        &.th-1 {
+            width: 45%;
+        }
+        @include for-size(phone-only) {
+            //  width: 30%;
+        }
+    }
+}

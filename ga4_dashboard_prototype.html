@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>アクセス解析ダッシュボード | サンプル</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", "Meiryo", sans-serif;
+    background: #f1f5f9;
+    color: #0f172a;
+    line-height: 1.6;
+    padding: 24px;
+  }
+  .container { max-width: 1280px; margin: 0 auto; }
+
+  /* Header */
+  .dashboard-header {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    color: #fff;
+    padding: 32px 36px;
+    border-radius: 16px;
+    margin-bottom: 24px;
+    box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+  }
+  .dashboard-header h1 { font-size: 24px; font-weight: 700; margin-bottom: 8px; }
+  .dashboard-header .meta {
+    display: flex; gap: 24px; flex-wrap: wrap;
+    font-size: 13px; opacity: 0.9; margin-top: 6px;
+  }
+  .dashboard-header .period-selector {
+    margin-top: 16px; display: flex; gap: 8px; flex-wrap: wrap;
+  }
+  .period-btn {
+    padding: 6px 14px; border-radius: 999px;
+    background: rgba(255,255,255,0.15); color: #fff;
+    border: 1px solid rgba(255,255,255,0.25);
+    font-size: 13px; cursor: pointer;
+  }
+  .period-btn.active { background: #fff; color: #4f46e5; font-weight: 600; }
+
+  /* KPI Cards */
+  .kpi-grid {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 16px; margin-bottom: 24px;
+  }
+  .kpi-card {
+    background: #fff; padding: 24px; border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    border-top: 3px solid transparent;
+  }
+  .kpi-card.pv { border-top-color: #4f46e5; }
+  .kpi-card.users { border-top-color: #06b6d4; }
+  .kpi-card.cvr { border-top-color: #10b981; }
+  .kpi-card.time { border-top-color: #f59e0b; }
+  .kpi-label { font-size: 12px; color: #64748b; font-weight: 600; letter-spacing: 0.05em; }
+  .kpi-value { font-size: 30px; font-weight: 700; margin: 6px 0 4px; color: #0f172a; }
+  .kpi-change { font-size: 12px; font-weight: 600; }
+  .kpi-change.up { color: #10b981; }
+  .kpi-change.down { color: #ef4444; }
+
+  /* Panels */
+  .grid-2 { display: grid; grid-template-columns: 2fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+  .grid-2-equal { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px; }
+
+  .panel {
+    background: #fff; padding: 24px; border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+  }
+  .panel h2 {
+    font-size: 15px; font-weight: 700; margin-bottom: 16px;
+    color: #0f172a; display: flex; align-items: center; gap: 8px;
+  }
+  .panel h2::before {
+    content: ""; width: 3px; height: 14px; background: #4f46e5; border-radius: 2px;
+  }
+  .chart-wrap { position: relative; height: 280px; }
+  .chart-wrap.small { height: 220px; }
+
+  /* Table */
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th, td { text-align: left; padding: 10px 8px; border-bottom: 1px solid #e2e8f0; }
+  th { font-size: 11px; color: #64748b; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; }
+  td.num { text-align: right; font-variant-numeric: tabular-nums; font-weight: 500; }
+  td.rank {
+    width: 32px; color: #94a3b8; font-weight: 700;
+  }
+  tr:hover td { background: #f8fafc; }
+  .path { color: #334155; font-family: "SF Mono", Menlo, monospace; font-size: 12px; }
+
+  /* Region bars */
+  .region-list { display: flex; flex-direction: column; gap: 10px; }
+  .region-item { display: grid; grid-template-columns: 80px 1fr 60px; align-items: center; gap: 12px; font-size: 13px; }
+  .region-name { color: #334155; font-weight: 500; }
+  .region-bar-bg { background: #e2e8f0; height: 8px; border-radius: 4px; overflow: hidden; }
+  .region-bar { background: linear-gradient(90deg, #4f46e5, #7c3aed); height: 100%; border-radius: 4px; }
+  .region-count { text-align: right; color: #64748b; font-variant-numeric: tabular-nums; }
+
+  /* Footer */
+  .dashboard-footer {
+    text-align: center; color: #94a3b8; font-size: 12px;
+    margin-top: 24px; padding: 16px;
+  }
+
+  /* Responsive */
+  @media (max-width: 960px) {
+    .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+    .grid-2, .grid-3, .grid-2-equal { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 560px) {
+    body { padding: 12px; }
+    .kpi-grid { grid-template-columns: 1fr; }
+    .dashboard-header { padding: 24px; }
+    .dashboard-header h1 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- Header -->
+  <div class="dashboard-header">
+    <h1>アクセス解析ダッシュボード</h1>
+    <div class="meta">
+      <span>対象サイト: example.com</span>
+      <span>最終更新: 2026年4月17日 03:15</span>
+      <span>データソース: Google Analytics 4</span>
+    </div>
+    <div class="period-selector">
+      <button class="period-btn">過去7日間</button>
+      <button class="period-btn active">過去30日間</button>
+      <button class="period-btn">過去90日間</button>
+      <button class="period-btn">今月</button>
+      <button class="period-btn">先月</button>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card pv">
+      <div class="kpi-label">ページビュー (PV)</div>
+      <div class="kpi-value">48,293</div>
+      <div class="kpi-change up">▲ 12.4% (前月比)</div>
+    </div>
+    <div class="kpi-card users">
+      <div class="kpi-label">ユーザー数 (UU)</div>
+      <div class="kpi-value">15,847</div>
+      <div class="kpi-change up">▲ 8.2% (前月比)</div>
+    </div>
+    <div class="kpi-card cvr">
+      <div class="kpi-label">コンバージョン率</div>
+      <div class="kpi-value">3.42%</div>
+      <div class="kpi-change up">▲ 0.6pt (前月比)</div>
+    </div>
+    <div class="kpi-card time">
+      <div class="kpi-label">平均エンゲージメント</div>
+      <div class="kpi-value">2分18秒</div>
+      <div class="kpi-change down">▼ 5.1% (前月比)</div>
+    </div>
+  </div>
+
+  <!-- PV Trend + Traffic Source -->
+  <div class="grid-2">
+    <div class="panel">
+      <h2>ページビュー推移(過去30日)</h2>
+      <div class="chart-wrap"><canvas id="pvTrendChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>流入元</h2>
+      <div class="chart-wrap"><canvas id="sourceChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Gender / Age / Device -->
+  <div class="grid-3">
+    <div class="panel">
+      <h2>男女比</h2>
+      <div class="chart-wrap small"><canvas id="genderChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>年齢層</h2>
+      <div class="chart-wrap small"><canvas id="ageChart"></canvas></div>
+    </div>
+    <div class="panel">
+      <h2>デバイス比率</h2>
+      <div class="chart-wrap small"><canvas id="deviceChart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- Region + Popular Pages -->
+  <div class="grid-2-equal">
+    <div class="panel">
+      <h2>地域別アクセス (TOP10 都道府県)</h2>
+      <div class="region-list" id="regionList"></div>
+    </div>
+    <div class="panel">
+      <h2>人気ページ TOP10</h2>
+      <table>
+        <thead>
+          <tr>
+            <th></th>
+            <th>ページ</th>
+            <th style="text-align:right">PV</th>
+          </tr>
+        </thead>
+        <tbody id="popularPagesBody"></tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="dashboard-footer">
+    ※ これはサンプルデータによるプロトタイプです。<br>
+    本番環境では Google Analytics 4 Data API より自動取得したデータを毎日更新表示します。
+  </div>
+</div>
+
+<script>
+// ===== Chart.js global defaults =====
+Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Hiragino Sans", "Yu Gothic", sans-serif';
+Chart.defaults.font.size = 12;
+Chart.defaults.color = '#475569';
+
+// ===== PV Trend (line chart, 30 days) =====
+const days = Array.from({length: 30}, (_, i) => `${3}/${19 + i > 31 ? (19 + i - 31) : (19 + i)}`);
+const pvData = [1420, 1580, 1490, 1720, 1650, 1380, 1210, 1390, 1620, 1780, 1890, 1750, 1540, 1480, 1720, 1910, 2050, 1880, 1760, 1630, 1520, 1780, 1960, 2120, 2040, 1910, 1740, 1680, 1820, 1990];
+new Chart(document.getElementById('pvTrendChart'), {
+  type: 'line',
+  data: {
+    labels: days,
+    datasets: [{
+      label: 'PV',
+      data: pvData,
+      borderColor: '#4f46e5',
+      backgroundColor: 'rgba(79, 70, 229, 0.1)',
+      fill: true,
+      tension: 0.35,
+      pointRadius: 0,
+      pointHoverRadius: 5,
+      borderWidth: 2.5,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#e2e8f0' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ===== Traffic Source (donut) =====
+new Chart(document.getElementById('sourceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Organic Search', 'Direct', 'Social', 'Referral', 'Paid'],
+    datasets: [{
+      data: [52, 21, 15, 8, 4],
+      backgroundColor: ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '60%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } }
+    }
+  }
+});
+
+// ===== Gender (donut) =====
+new Chart(document.getElementById('genderChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['女性', '男性'],
+    datasets: [{
+      data: [58, 42],
+      backgroundColor: ['#ec4899', '#3b82f6'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10 } }
+    }
+  }
+});
+
+// ===== Age (bar) =====
+new Chart(document.getElementById('ageChart'), {
+  type: 'bar',
+  data: {
+    labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
+    datasets: [{
+      data: [8, 28, 32, 19, 9, 4],
+      backgroundColor: '#7c3aed',
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { callback: v => v + '%' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ===== Device (donut) =====
+new Chart(document.getElementById('deviceChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['Mobile', 'Desktop', 'Tablet'],
+    datasets: [{
+      data: [64, 31, 5],
+      backgroundColor: ['#4f46e5', '#06b6d4', '#a78bfa'],
+      borderWidth: 0
+    }]
+  },
+  options: {
+    responsive: true, maintainAspectRatio: false,
+    cutout: '65%',
+    plugins: {
+      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10 } }
+    }
+  }
+});
+
+// ===== Region list =====
+const regions = [
+  { name: '東京都', count: 5284 },
+  { name: '大阪府', count: 2890 },
+  { name: '神奈川県', count: 2140 },
+  { name: '愛知県', count: 1520 },
+  { name: '埼玉県', count: 1380 },
+  { name: '千葉県', count: 1210 },
+  { name: '福岡県', count: 980 },
+  { name: '兵庫県', count: 860 },
+  { name: '北海道', count: 790 },
+  { name: '京都府', count: 640 },
+];
+const maxRegion = Math.max(...regions.map(r => r.count));
+const regionList = document.getElementById('regionList');
+regions.forEach(r => {
+  const el = document.createElement('div');
+  el.className = 'region-item';
+  el.innerHTML = `
+    <span class="region-name">${r.name}</span>
+    <div class="region-bar-bg"><div class="region-bar" style="width:${(r.count / maxRegion * 100).toFixed(1)}%"></div></div>
+    <span class="region-count">${r.count.toLocaleString()}</span>
+  `;
+  regionList.appendChild(el);
+});
+
+// ===== Popular pages =====
+const pages = [
+  { path: '/', title: 'トップページ', pv: 8420 },
+  { path: '/service/blog', title: 'ブログ制作サービス', pv: 5210 },
+  { path: '/entry/how-to-wordpress', title: 'WordPress構築手順', pv: 3890 },
+  { path: '/service/design', title: 'デザイン制作サービス', pv: 3240 },
+  { path: '/about', title: '会社概要', pv: 2810 },
+  { path: '/entry/seo-tips', title: 'SEO対策の基本', pv: 2490 },
+  { path: '/faq', title: 'よくあるご質問', pv: 1980 },
+  { path: '/voice', title: 'お客様の声', pv: 1640 },
+  { path: '/entry/microcms', title: 'microCMS活用術', pv: 1420 },
+  { path: '/contact', title: 'お問い合わせ', pv: 1180 },
+];
+const tbody = document.getElementById('popularPagesBody');
+pages.forEach((p, i) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `
+    <td class="rank">${i + 1}</td>
+    <td>
+      <div style="font-weight:500;color:#0f172a">${p.title}</div>
+      <div class="path">${p.path}</div>
+    </td>
+    <td class="num">${p.pv.toLocaleString()}</td>
+  `;
+  tbody.appendChild(tr);
+});
+</script>
+</body>
+</html>

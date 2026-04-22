@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>吹き出しデモ</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    padding: 40px 20px;
+    background: #f8f9fa;
+    font-family: "Kiwi Maru", "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif;
+    color: #333; line-height: 2; font-size: 16px;
+  }
+  .demo-badge { text-align: center; margin-bottom: 20px; }
+  .demo-badge span { display: inline-block; background: #8ECC6F; color: #fff; font-size: 0.75em; font-weight: 700; padding: 4px 14px; border-radius: 20px; }
+  .container { max-width: 700px; margin: 0 auto; background: #fff; padding: 30px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+
+  /* === speech_bubble（_blog_article.scss から抜粋） === */
+  .speech_bubble {
+    display: flex;
+    align-items: flex-start;
+    margin: 1em 0;
+    gap: 1em;
+  }
+  .speech_bubble.left { flex-direction: row; }
+  .speech_bubble.right { flex-direction: row-reverse; }
+
+  .speaker_avatar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    min-width: 80px;
+  }
+  .speaker_icon {
+    width: 80px; height: 80px;
+    border-radius: 50%; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+    background: #e0e0e0; color: #555;
+    font-weight: bold; font-size: 1.2em; flex-shrink: 0;
+  }
+  .speaker_icon img { width: 100%; height: 100%; object-fit: cover; display: block; }
+  .speaker_icon__initial { font-size: 1.4em; }
+  .speaker_name { margin-top: 6px; font-size: 0.9em; font-weight: bold; }
+
+  .bubble_content {
+    background: #b0ec88;
+    border-radius: 10px;
+    padding: 1em;
+    position: relative;
+    max-width: 75%; width: 75%;
+  }
+  .bubble_content p { margin: 0 !important; }
+
+  .speech_bubble.left .bubble_content::before {
+    content: "";
+    position: absolute; top: 1em; left: -1.2em;
+    border: 10px solid transparent;
+    border-right-color: #b0ec88;
+  }
+  .speech_bubble.right .bubble_content {
+    background: #f2f288;
+  }
+  .speech_bubble.right .bubble_content::before {
+    content: "";
+    position: absolute; top: 1em; right: -1.2em;
+    border: 10px solid transparent;
+    border-left-color: #f2f288;
+  }
+
+  @media (max-width: 480px) {
+    .speaker_avatar { min-width: 60px; }
+    .speaker_icon { width: 60px; height: 60px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="demo-badge"><span>DEMO — 吹き出しサンプル</span></div>
+
+<div class="container">
+
+  <!-- 左アイコン・右吹き出し -->
+  <div class="speech_bubble left">
+    <div class="speaker_avatar">
+      <div class="speaker_icon">
+        <img src="https://placehold.co/160x160/b0ec88/fff?text=Cat" alt="デザネコ">
+      </div>
+      <div class="speaker_name">デザネコ</div>
+    </div>
+    <div class="bubble_content">
+      <p>こんにちは！今回はWordPressブログの始め方について解説しますにゃ。初心者の方でもわかりやすく説明していきますね！</p>
+    </div>
+  </div>
+
+  <!-- 右アイコン・左吹き出し -->
+  <div class="speech_bubble right">
+    <div class="speaker_avatar">
+      <div class="speaker_icon">
+        <span class="speaker_icon__initial">A</span>
+      </div>
+      <div class="speaker_name">Aさん</div>
+    </div>
+    <div class="bubble_content">
+      <p>ブログを始めたいけど、何からやればいいかわからなくて...</p>
+    </div>
+  </div>
+
+  <!-- 左アイコン・右吹き出し -->
+  <div class="speech_bubble left">
+    <div class="speaker_avatar">
+      <div class="speaker_icon">
+        <img src="https://placehold.co/160x160/b0ec88/fff?text=Cat" alt="デザネコ">
+      </div>
+      <div class="speaker_name">デザネコ</div>
+    </div>
+    <div class="bubble_content">
+      <p>大丈夫ですよ！まずはサーバーとドメインの準備から。デザネコではそこも全部サポートしますので安心してくださいにゃ。</p>
+    </div>
+  </div>
+
+  <!-- 右アイコン・左吹き出し -->
+  <div class="speech_bubble right">
+    <div class="speaker_avatar">
+      <div class="speaker_icon">
+        <span class="speaker_icon__initial">A</span>
+      </div>
+      <div class="speaker_name">Aさん</div>
+    </div>
+    <div class="bubble_content">
+      <p>それなら安心ですね！早速お願いしたいです！</p>
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

@@ -1,0 +1,210 @@
+<!-- ========================================
+  microCMS リッチエディタ用 FAQ アコーディオン
+  ========================================
+  【使い方】
+  1. microCMS の記事編集画面でリッチエディタの「HTML埋め込み」を選択
+  2. 下記コードをすべてコピーして貼り付け
+  3. 質問・回答のテキストをご自身の内容に書き換えてください
+  4. FAQ項目を増やす場合は <div class="faq-item"> ブロックをコピーして追加
+  ======================================== -->
+
+<style>
+  .faq-section {
+    max-width: 800px;
+    margin: 2em auto;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+  }
+
+  .faq-section-title {
+    font-size: 1.4em;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 1.5em;
+    color: #333;
+    letter-spacing: 0.05em;
+  }
+
+  .faq-item {
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin-bottom: 12px;
+    overflow: hidden;
+    background: #fff;
+    transition: box-shadow 0.2s ease;
+  }
+
+  .faq-item:hover {
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  }
+
+  .faq-question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    cursor: pointer;
+    background: #fafafa;
+    border: none;
+    width: 100%;
+    text-align: left;
+    font-size: 1em;
+    font-weight: 600;
+    color: #333;
+    line-height: 1.6;
+    gap: 12px;
+    font-family: inherit;
+  }
+
+  .faq-question:hover {
+    background: #f5f5f5;
+  }
+
+  .faq-question-text {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    flex: 1;
+  }
+
+  .faq-label-q {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: #4a90d9;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-label-a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 28px;
+    height: 28px;
+    min-width: 28px;
+    border-radius: 50%;
+    background: #e8735a;
+    color: #fff;
+    font-size: 0.85em;
+    font-weight: 700;
+    line-height: 1;
+  }
+
+  .faq-icon {
+    width: 20px;
+    height: 20px;
+    min-width: 20px;
+    transition: transform 0.3s ease;
+    color: #999;
+  }
+
+  .faq-item.active .faq-icon {
+    transform: rotate(180deg);
+  }
+
+  .faq-answer {
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.35s ease, padding 0.35s ease;
+    padding: 0 20px;
+  }
+
+  .faq-item.active .faq-answer {
+    padding: 0 20px 20px;
+  }
+
+  .faq-answer-inner {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    padding-top: 12px;
+    border-top: 1px dashed #e0e0e0;
+  }
+
+  .faq-answer-text {
+    font-size: 0.95em;
+    color: #555;
+    line-height: 1.8;
+    flex: 1;
+  }
+</style>
+
+<div class="faq-section">
+  <p class="faq-section-title">よくあるご質問</p>
+
+  <!-- FAQ項目 1 -->
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>ここに質問文を入力してください</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">ここに回答文を入力してください。改行や<strong>太字</strong>なども使えます。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ項目 2 -->
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>料金はいくらですか？</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">料金プランについてはこちらのページをご覧ください。初回は無料でお試しいただけます。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ項目 3 -->
+  <div class="faq-item">
+    <button class="faq-question" onclick="toggleFaq(this)">
+      <span class="faq-question-text">
+        <span class="faq-label-q">Q</span>
+        <span>キャンセルはできますか？</span>
+      </span>
+      <svg class="faq-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>
+    </button>
+    <div class="faq-answer">
+      <div class="faq-answer-inner">
+        <span class="faq-label-a">A</span>
+        <span class="faq-answer-text">はい、いつでもキャンセル可能です。詳しくはご利用規約をご確認ください。</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- FAQ項目を増やす場合は上記ブロックをコピー＆ペーストしてください -->
+
+</div>
+
+<script>
+  function toggleFaq(button) {
+    var item = button.closest('.faq-item');
+    var answer = item.querySelector('.faq-answer');
+    var isActive = item.classList.contains('active');
+
+    if (isActive) {
+      answer.style.maxHeight = '0';
+      item.classList.remove('active');
+    } else {
+      item.classList.add('active');
+      answer.style.maxHeight = answer.scrollHeight + 20 + 'px';
+    }
+  }
+</script>

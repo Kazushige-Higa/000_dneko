@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>microCMS 設定手順 — ブログ記事内FAQ（デザネコ用）</title>
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 40px 20px; background: #f8f9fa; font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; color: #333; line-height: 1.8; }
+  .guide { max-width: 780px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  h1 { font-size: 1.4em; border-bottom: 3px solid #4a90d9; padding-bottom: 12px; margin-top: 0; }
+  h2 { font-size: 1.15em; margin-top: 2.5em; color: #4a90d9; border-left: 4px solid #4a90d9; padding-left: 12px; }
+  .step { background: #f0f6ff; border-left: 4px solid #4a90d9; padding: 14px 18px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+  .step-num { display: inline-block; background: #4a90d9; color: #fff; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 0.85em; font-weight: 700; margin-right: 8px; }
+  .warn { background: #fff8e1; border-left: 4px solid #f5a623; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .success { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #c7254e; }
+  pre { background: #1e1e1e; color: #d4d4d4; padding: 20px; border-radius: 8px; overflow-x: auto; font-size: 0.85em; line-height: 1.6; }
+  .s { color: #ce9178; }
+  .c { color: #6a9955; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { border: 1px solid #e0e0e0; padding: 10px 14px; text-align: left; font-size: 0.9em; }
+  th { background: #f5f5f5; font-weight: 600; }
+  .tree { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 24px; margin: 16px 0; font-family: monospace; font-size: 0.9em; line-height: 2; }
+  .flow { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin: 16px 0; }
+  .flow-item { background: #e8f0fe; padding: 8px 14px; border-radius: 20px; font-size: 0.8em; font-weight: 600; text-align: center; }
+  .flow-arrow { color: #4a90d9; font-weight: bold; }
+</style>
+</head>
+<body>
+<div class="guide">
+
+<h1>ブログ記事内に「よくあるご質問」を追加する設定手順</h1>
+<p>microCMSの既存 <code>blog</code> APIに繰り返しフィールドを追加し、記事ごとにFAQセクションを表示できるようにします。</p>
+
+<div class="flow">
+  <span class="flow-item">STEP 1<br>blog APIに<br>フィールド追加</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-item">STEP 2<br>記事編集で<br>FAQ入力</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-item">STEP 3<br>entry.php<br>を差し替え</span>
+  <span class="flow-arrow">→</span>
+  <span class="flow-item">完了！<br>記事にFAQ表示</span>
+</div>
+
+<!-- ============================== -->
+<h2>STEP 1：既存の blog API にFAQフィールドを追加</h2>
+<!-- ============================== -->
+
+<p>新しいAPIを作る必要はありません。今ある <code>blog</code> APIのスキーマにフィールドを追加するだけです。</p>
+
+<div class="step">
+  <span class="step-num">1</span>
+  microCMS管理画面にログイン → 左メニュー「blog」→ 右上の「API設定」→「APIスキーマ」タブを開く
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  一番下にスクロールし、「フィールドを追加」をクリック
+</div>
+
+<div class="step">
+  <span class="step-num">3</span>
+  以下のように設定して「繰り返し」フィールドを作成：
+</div>
+
+<table>
+  <tr><th>項目</th><th>設定値</th></tr>
+  <tr><td>フィールドID</td><td><code>faq</code></td></tr>
+  <tr><td>表示名</td><td><code>よくあるご質問</code></td></tr>
+  <tr><td>種類</td><td><strong>繰り返し</strong></td></tr>
+  <tr><td>必須</td><td><strong>いいえ</strong>（FAQがない記事もあるため）</td></tr>
+</table>
+
+<div class="step">
+  <span class="step-num">4</span>
+  繰り返しフィールドの中に、以下の <strong>2つのサブフィールド</strong> を追加：
+</div>
+
+<table>
+  <tr><th>フィールドID</th><th>表示名</th><th>種類</th></tr>
+  <tr><td><code>question</code></td><td>質問</td><td>テキストフィールド</td></tr>
+  <tr><td><code>answer</code></td><td>回答</td><td>テキストエリア</td></tr>
+</table>
+
+<div class="warn">
+  <strong>補足：</strong>回答にリンクや太字を使いたい場合は、<code>answer</code> の種類を「リッチエディタ」に変えてください。
+</div>
+
+<p>完成イメージ：</p>
+
+<div class="tree">
+blog API（既存）<br>
+├─ title（テキストフィールド）← 既存<br>
+├─ content（リッチエディタ）← 既存<br>
+├─ thumbnail（画像）← 既存<br>
+├─ ...その他の既存フィールド...<br>
+│<br>
+└─ <strong style="color:#4a90d9">faq（繰り返し）← 今回追加</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ question（テキストフィールド）<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└─ answer（テキストエリア）
+</div>
+
+<!-- ============================== -->
+<h2>STEP 2：記事編集画面でFAQを入力</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  左メニュー「blog」→ FAQを追加したい記事を開く（または新規作成）
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  記事編集画面を下にスクロールすると「よくあるご質問」欄が表示される
+</div>
+
+<div class="step">
+  <span class="step-num">3</span>
+  「＋ 追加」ボタンで質問と回答のペアを入力（何個でも追加可能）
+</div>
+
+<div class="step">
+  <span class="step-num">4</span>
+  入力が終わったら「公開」（または「更新」）をクリック
+</div>
+
+<div class="success">
+  <strong>ポイント：</strong>
+  FAQは任意項目なので、入力しなければFAQセクションは表示されません。必要な記事にだけFAQを付けることができます。
+</div>
+
+<!-- ============================== -->
+<h2>STEP 3：entry.php を差し替え</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  同梱の <code>entry.php</code> で、サーバー上の既存 <code>entry.php</code> を上書き
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  FAQを入力した記事ページにアクセスして確認
+</div>
+
+<p>変更点は1箇所だけです。記事本文（<code>$post->content</code>）の直後に、FAQデータがあればアコーディオンを表示するコードが追加されています。</p>
+
+<pre><span class="c">&lt;!-- 記事本文 --&gt;</span>
+&lt;div id="countPost"&gt;
+  &lt;?php echo $post-&gt;content; ?&gt;
+&lt;/div&gt;
+
+<span class="c">&lt;!-- ↓ ここが追加部分 --&gt;</span>
+&lt;?php if (isset($post-&gt;faq) &amp;&amp; is_array($post-&gt;faq) &amp;&amp; count($post-&gt;faq) &gt; 0): ?&gt;
+  &lt;div class="sbox"&gt;
+    &lt;h2&gt;よくあるご質問&lt;/h2&gt;
+    &lt;dl class='accordion'&gt;
+      &lt;?php foreach ($post-&gt;faq as $faq_item): ?&gt;
+        &lt;dt class='open'&gt;...質問...&lt;/dt&gt;
+        &lt;dd class='panel'&gt;...回答...&lt;/dd&gt;
+      &lt;?php endforeach; ?&gt;
+    &lt;/dl&gt;
+  &lt;/div&gt;
+&lt;?php endif; ?&gt;</pre>
+
+<div class="success">
+  <strong>これで完了！</strong>記事本文の下に、アコーディオン形式のFAQが自動表示されます。既存のCSSとJavaScriptをそのまま使うので、デザインもサイトに統一されます。
+</div>
+
+<h2>動作まとめ</h2>
+
+<table>
+  <tr><th>記事のFAQ欄</th><th>表示結果</th></tr>
+  <tr><td>入力あり（1件以上）</td><td>記事本文の下にアコーディオンFAQが表示される</td></tr>
+  <tr><td>入力なし（空欄）</td><td>何も表示されない（今まで通り）</td></tr>
+</table>
+
+</div>
+</body>
+</html>

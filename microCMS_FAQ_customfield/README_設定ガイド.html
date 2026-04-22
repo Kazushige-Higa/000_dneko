@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>microCMS カスタムフィールド（繰り返し） FAQ設定ガイド</title>
+<style>
+  body {
+    margin: 0;
+    padding: 40px 20px;
+    background: #f8f9fa;
+    font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", "メイリオ", sans-serif;
+    color: #333;
+    line-height: 1.8;
+  }
+  .guide {
+    max-width: 760px;
+    margin: 0 auto;
+    background: #fff;
+    padding: 40px;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  }
+  h1 { font-size: 1.5em; border-bottom: 3px solid #4a90d9; padding-bottom: 12px; }
+  h2 { font-size: 1.15em; margin-top: 2em; color: #4a90d9; }
+  .step {
+    background: #f0f6ff;
+    border-left: 4px solid #4a90d9;
+    padding: 16px 20px;
+    margin: 12px 0;
+    border-radius: 0 8px 8px 0;
+  }
+  .step-num {
+    display: inline-block;
+    background: #4a90d9;
+    color: #fff;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 26px;
+    font-size: 0.85em;
+    font-weight: 700;
+    margin-right: 8px;
+  }
+  code {
+    background: #f4f4f4;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 0.9em;
+    color: #c7254e;
+  }
+  pre {
+    background: #1e1e1e;
+    color: #d4d4d4;
+    padding: 20px;
+    border-radius: 8px;
+    overflow-x: auto;
+    font-size: 0.85em;
+    line-height: 1.6;
+  }
+  .warn {
+    background: #fff8e1;
+    border-left: 4px solid #f5a623;
+    padding: 12px 16px;
+    border-radius: 0 8px 8px 0;
+    margin: 12px 0;
+  }
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 12px 0;
+  }
+  th, td {
+    border: 1px solid #e0e0e0;
+    padding: 10px 14px;
+    text-align: left;
+    font-size: 0.9em;
+  }
+  th { background: #f5f5f5; font-weight: 600; }
+</style>
+</head>
+<body>
+<div class="guide">
+
+<h1>microCMS カスタムフィールド（繰り返し）FAQ 設定ガイド</h1>
+
+<h2>1. microCMS管理画面でのAPI設定</h2>
+
+<div class="step">
+  <span class="step-num">1</span>
+  対象のAPIスキーマ編集画面を開く
+</div>
+<div class="step">
+  <span class="step-num">2</span>
+  「フィールドを追加」→ 種類：<strong>繰り返し</strong> を選択
+</div>
+<div class="step">
+  <span class="step-num">3</span>
+  繰り返しフィールドの設定：
+</div>
+
+<table>
+  <tr><th>項目</th><th>設定値</th></tr>
+  <tr><td>フィールドID</td><td><code>faq</code></td></tr>
+  <tr><td>表示名</td><td>よくあるご質問</td></tr>
+</table>
+
+<div class="step">
+  <span class="step-num">4</span>
+  繰り返しフィールドの中に、以下2つのサブフィールドを追加：
+</div>
+
+<table>
+  <tr><th>フィールドID</th><th>表示名</th><th>種類</th></tr>
+  <tr><td><code>question</code></td><td>質問</td><td>テキストフィールド</td></tr>
+  <tr><td><code>answer</code></td><td>回答</td><td>リッチエディタ または テキストエリア</td></tr>
+</table>
+
+<div class="warn">
+  <strong>補足：</strong>回答に太字・リンクなどを使いたい場合は「リッチエディタ」を選択してください。プレーンテキストで十分な場合は「テキストエリア」でOKです。
+</div>
+
+<h2>2. APIレスポンスの形式</h2>
+<p>上記設定をすると、APIから以下のようなJSONが返ります：</p>
+<pre>{
+  "id": "article-001",
+  "title": "記事タイトル",
+  "faq": [
+    {
+      "fieldId": "faqItem",
+      "question": "サービスの利用に必要なものはありますか？",
+      "answer": "インターネット環境とメールアドレスがあれば..."
+    },
+    {
+      "fieldId": "faqItem",
+      "question": "料金プランについて教えてください",
+      "answer": "無料プランと有料プランをご用意しております..."
+    }
+  ]
+}</pre>
+
+<h2>3. フロント側の実装</h2>
+<p>同梱の <code>faq-accordion.html</code> をご利用ください。設定箇所は2つだけです：</p>
+
+<pre>// ===== ここを書き換えてください =====
+const SERVICE_DOMAIN = 'your-service-id';  // microCMSのサービスID
+const API_KEY        = 'your-api-key';     // APIキー
+const ENDPOINT       = 'blogs';            // エンドポイント名
+const CONTENT_ID     = 'your-content-id';  // 記事のコンテンツID
+// =====================================</pre>
+
+<h2>4. ファイル構成</h2>
+<table>
+  <tr><th>ファイル</th><th>説明</th></tr>
+  <tr><td><code>faq-accordion.html</code></td><td>本番用テンプレート（API連携）</td></tr>
+  <tr><td><code>faq-accordion-demo.html</code></td><td>デモ用（APIなしで動作確認可能）</td></tr>
+  <tr><td><code>README_設定ガイド.html</code></td><td>このファイル</td></tr>
+</table>
+
+</div>
+</body>
+</html>
