@@ -35,6 +35,8 @@ jobs:
             **/node_modules/**
             **/.env
             **/.env.*
+            **/data/pv.json
+            **/data/likes.json
             **/README.md
             **/*.map
             **/scss/**
