@@ -250,7 +250,7 @@ $page_script = '';
 
                                 <p class="tcenter a_end line_height_10 base_color font_kiwi">
                                     <span class="fs_35 fs_sp20 bold font_notob">￥</span>
-                                    <span class="fs_50 fs_sp45 font_notob">8,900</span>
+                                    <span class="fs_50 fs_sp45 font_notob">9,800</span>
                                     <span class="fs_14 fs_sp12 bold font_notob tleft line_height_14">
                                         月契約
                                     </span>
