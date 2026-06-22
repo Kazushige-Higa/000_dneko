@@ -142,7 +142,7 @@ $post = !empty($eid) ? microcms_get($entry_endpoint . "/" . rawurlencode($eid)) 
             </div>
             <div>
               <ul class="breadcrumb">
-                <li><a href="./"><i class="fas fa-home"></i></a></li>
+                <li><a href="./"><i class="fa-solid fa-house"></i></a></li>
                 <li><a href="entry.php?type=<?php echo urlencode($entry_type); ?>&eid=<?php echo urlencode($post->id); ?>"><?php echo htmlspecialchars($post->title, ENT_QUOTES, 'UTF-8'); ?></a></li>
               </ul>
             </div>
@@ -167,13 +167,13 @@ $post = !empty($eid) ? microcms_get($entry_endpoint . "/" . rawurlencode($eid)) 
             </address>
             <div>
               <button id="like-button" class="like-button" data-post-id="<?php echo htmlspecialchars($post->id, ENT_QUOTES, 'UTF-8'); ?>">
-                <i class="fas fa-heart"></i><span id="like-count">0</span><span id="like-text"></span>
+                <i class="fa-solid fa-heart"></i><span id="like-count">0</span><span id="like-text"></span>
               </button>
               <div class="access-count">
-                <i class="fas fa-eye"></i><span id="access-count">-</span>
+                <i class="fa-solid fa-eye"></i><span id="access-count">-</span>
               </div>
               <time class="date-article" itemprop="datePublished" datetime="<?php echo $published_date_attr; ?>"><i class="far fa-clock"></i><?php echo htmlspecialchars($published_date_display, ENT_QUOTES, 'UTF-8'); ?></time>
-              <time class="date-updated" itemprop="dateModified" datetime="<?php echo $updated_date_attr; ?>"><i class="fas fa-undo-alt"></i><?php echo htmlspecialchars($updated_date_display, ENT_QUOTES, 'UTF-8'); ?></time>
+              <time class="date-updated" itemprop="dateModified" datetime="<?php echo $updated_date_attr; ?>"><i class="fa-solid fa-rotate-left"></i><?php echo htmlspecialchars($updated_date_display, ENT_QUOTES, 'UTF-8'); ?></time>
             </div>
 
             <div class="thumbnail">
@@ -358,6 +358,111 @@ $post = !empty($eid) ? microcms_get($entry_endpoint . "/" . rawurlencode($eid)) 
                   <a href="<?php echo htmlspecialchars($cta_item->url_other, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-other" target="_blank" rel="nofollow noopener"><?php echo htmlspecialchars($other_label, ENT_QUOTES, 'UTF-8'); ?></a>
                   <?php endif; ?>
                 </div>
+              </div>
+            </div>
+            <?php endforeach; ?>
+          </div>
+          <?php endif; ?>
+
+          <?php
+          // ==========================================
+          //  クライアント様のご紹介
+          //  繰り返しフィールド「clients」から取得
+          //  データがない記事では何も表示されない
+          // ==========================================
+          if (isset($post->clients) && is_array($post->clients) && count($post->clients) > 0):
+          ?>
+          <div class="space_5 space_sp2"></div>
+          <div class="client-intro-section">
+            <h2 class="client-intro-heading">
+              <span class="client-intro-heading__text">クライアント様のご紹介</span>
+            </h2>
+
+            <?php foreach ($post->clients as $client_item):
+              $cl_name      = isset($client_item->name) ? trim((string)$client_item->name) : '';
+              $cl_address   = isset($client_item->address) ? trim((string)$client_item->address) : '';
+              $cl_image_url = (isset($client_item->image->url) && $client_item->image->url !== '') ? $client_item->image->url : '';
+              $cl_desc      = isset($client_item->description) ? trim((string)$client_item->description) : '';
+              $cl_freetext  = isset($client_item->freetext) ? trim((string)$client_item->freetext) : '';
+
+              // 詳しくみるボタン（自由URL）
+              $cl_detail_url   = isset($client_item->detail_url) ? trim((string)$client_item->detail_url) : '';
+              $cl_detail_label = isset($client_item->detail_label) ? trim((string)$client_item->detail_label) : '詳しくみる';
+
+              // 各種URL
+              $cl_website   = isset($client_item->url_website) ? trim((string)$client_item->url_website) : '';
+              $cl_instagram = isset($client_item->url_instagram) ? trim((string)$client_item->url_instagram) : '';
+              $cl_line      = isset($client_item->url_line) ? trim((string)$client_item->url_line) : '';
+              $cl_x         = isset($client_item->url_x) ? trim((string)$client_item->url_x) : '';
+              $cl_facebook  = isset($client_item->url_facebook) ? trim((string)$client_item->url_facebook) : '';
+              $cl_youtube   = isset($client_item->url_youtube) ? trim((string)$client_item->url_youtube) : '';
+              $cl_tiktok    = isset($client_item->url_tiktok) ? trim((string)$client_item->url_tiktok) : '';
+              $cl_other_url = isset($client_item->url_other) ? trim((string)$client_item->url_other) : '';
+              $cl_other_lbl = isset($client_item->url_other_label) ? trim((string)$client_item->url_other_label) : 'その他リンク';
+
+              $has_sns = ($cl_website !== '' || $cl_instagram !== '' || $cl_line !== '' || $cl_x !== '' || $cl_facebook !== '' || $cl_youtube !== '' || $cl_tiktok !== '' || $cl_other_url !== '');
+            ?>
+            <div class="client-card">
+              <?php if ($cl_image_url !== ''): ?>
+              <div class="client-card__image">
+                <img src="<?php echo htmlspecialchars($cl_image_url, ENT_QUOTES, 'UTF-8'); ?>?w=400" alt="<?php echo htmlspecialchars($cl_name, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+              </div>
+              <?php endif; ?>
+
+              <div class="client-card__body">
+                <?php if ($cl_name !== ''): ?>
+                <h3 class="client-card__name"><?php echo htmlspecialchars($cl_name, ENT_QUOTES, 'UTF-8'); ?></h3>
+                <?php endif; ?>
+
+                <?php if ($cl_address !== ''): ?>
+                <p class="client-card__address">
+                  <i class="fa-solid fa-location-dot"></i>
+                  <?php echo htmlspecialchars($cl_address, ENT_QUOTES, 'UTF-8'); ?>
+                </p>
+                <?php endif; ?>
+
+                <?php if ($cl_desc !== ''): ?>
+                <p class="client-card__desc"><?php echo nl2br(htmlspecialchars($cl_desc, ENT_QUOTES, 'UTF-8')); ?></p>
+                <?php endif; ?>
+
+                <?php if ($cl_freetext !== ''): ?>
+                <div class="client-card__freetext"><?php echo nl2br(htmlspecialchars($cl_freetext, ENT_QUOTES, 'UTF-8')); ?></div>
+                <?php endif; ?>
+
+                <?php if ($has_sns): ?>
+                <ul class="client-card__links">
+                  <?php if ($cl_website !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_website, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Webサイト"><i class="fa-solid fa-globe"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_instagram !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_instagram, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_line !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="LINE"><i class="fa-brands fa-line"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_x !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_x, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="X (Twitter)"><i class="fa-brands fa-twitter"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_facebook !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_facebook, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Facebook"><i class="fa-brands fa-facebook"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_youtube !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_youtube, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="YouTube"><i class="fa-brands fa-youtube"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_tiktok !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_tiktok, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="TikTok"><i class="fa-brands fa-tiktok"></i></a></li>
+                  <?php endif; ?>
+                  <?php if ($cl_other_url !== ''): ?>
+                  <li><a href="<?php echo htmlspecialchars($cl_other_url, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="<?php echo htmlspecialchars($cl_other_lbl, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-solid fa-up-right-from-square"></i></a></li>
+                  <?php endif; ?>
+                </ul>
+                <?php endif; ?>
+
+                <?php if ($cl_detail_url !== ''): ?>
+                <a href="<?php echo htmlspecialchars($cl_detail_url, ENT_QUOTES, 'UTF-8'); ?>" class="client-card__detail-btn" target="_blank" rel="noopener">
+                  <i class="fa-solid fa-arrow-right"></i> <?php echo htmlspecialchars($cl_detail_label, ENT_QUOTES, 'UTF-8'); ?>
+                </a>
+                <?php endif; ?>
               </div>
             </div>
             <?php endforeach; ?>

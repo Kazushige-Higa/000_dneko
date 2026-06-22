@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>microCMS 設定手順 — クライアント様のご紹介（デザネコ用）</title>
+<link href="https://use.fontawesome.com/releases/v6.1.2/css/all.css" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 40px 20px; background: #f8f9fa; font-family: "Hiragino Kaku Gothic ProN", "Noto Sans JP", sans-serif; color: #333; line-height: 1.8; }
+  .guide { max-width: 780px; margin: 0 auto; background: #fff; padding: 40px; border-radius: 12px; box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
+  h1 { font-size: 1.4em; border-bottom: 3px solid #F9B104; padding-bottom: 12px; margin-top: 0; }
+  h2 { font-size: 1.15em; margin-top: 2.5em; color: #F9B104; border-left: 4px solid #F9B104; padding-left: 12px; }
+  h3 { font-size: 1em; margin-top: 1.5em; color: #555; }
+  .step { background: #fef7e9; border-left: 4px solid #F9B104; padding: 14px 18px; margin: 10px 0; border-radius: 0 8px 8px 0; }
+  .step-num { display: inline-block; background: #F9B104; color: #fff; width: 26px; height: 26px; border-radius: 50%; text-align: center; line-height: 26px; font-size: 0.85em; font-weight: 700; margin-right: 8px; }
+  .warn { background: #fff8e1; border-left: 4px solid #f5a623; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  .success { background: #e8f5e9; border-left: 4px solid #4caf50; padding: 12px 16px; border-radius: 0 8px 8px 0; margin: 12px 0; }
+  code { background: #f4f4f4; padding: 2px 6px; border-radius: 4px; font-size: 0.9em; color: #c7254e; }
+  table { width: 100%; border-collapse: collapse; margin: 12px 0; }
+  th, td { border: 1px solid #e0e0e0; padding: 10px 14px; text-align: left; font-size: 0.9em; }
+  th { background: #f5f5f5; font-weight: 600; }
+  .tree { background: #f8f8f8; border: 1px solid #e0e0e0; border-radius: 8px; padding: 20px 24px; margin: 16px 0; font-family: monospace; font-size: 0.9em; line-height: 2; }
+
+  /* デモ */
+  .demo-card { display: flex; gap: 1.2em; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 1.3em; box-shadow: 0 2px 10px rgba(0,0,0,0.05); margin: 20px 0; max-width: 600px; }
+  .demo-card-img { flex-shrink: 0; width: 140px; }
+  .demo-card-img img { width: 100%; border-radius: 8px; }
+  .demo-card-body { flex: 1; }
+  .demo-card-body h4 { font-size: 1.15em; margin: 0 0 0.3em; border-bottom: 2px dotted #ddd; padding-bottom: 0.3em; }
+  .demo-card-body .addr { font-size: 0.85em; color: #666; margin: 0 0 0.4em; }
+  .demo-card-body .addr i { color: #F9B104; margin-right: 0.3em; }
+  .demo-card-body .desc { font-size: 0.9em; color: #444; line-height: 1.7; margin: 0 0 0.6em; }
+  .demo-card-body .free { font-size: 0.85em; background: #f9f9f9; border-left: 3px solid #F9B104; padding: 0.5em 0.8em; margin: 0 0 0.6em; border-radius: 0 6px 6px 0; color: #555; }
+  .demo-sns { display: flex; gap: 8px; list-style: none; padding: 0; margin: 0 0 0.6em; }
+  .demo-sns li a { width: 34px; height: 34px; border-radius: 50%; background: #f2f2f2; display: flex; align-items: center; justify-content: center; color: #555; font-size: 1em; text-decoration: none; }
+  .demo-detail-btn { display: inline-block; padding: 0.4em 1.2em; font-size: 0.8em; font-weight: bold; color: #fff; background: #F9B104; border-radius: 20px; text-decoration: none; }
+  .demo-detail-btn i { margin-right: 0.3em; font-size: 0.9em; }
+  @media (max-width: 600px) { .demo-card { flex-direction: column; } }
+</style>
+</head>
+<body>
+<div class="guide">
+
+<h1>クライアント様のご紹介 設定手順</h1>
+<p>ブログ・制作実績・コラムの各APIに繰り返しフィールド <code>clients</code> を追加し、記事内にクライアント情報をカード形式で紹介できるようにします。</p>
+
+<p>完成イメージ：</p>
+<div class="demo-card">
+  <div class="demo-card-img">
+    <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Crect fill='%23f0f0f0' width='200' height='200' rx='8'/%3E%3Ctext x='50%25' y='50%25' text-anchor='middle' dy='.3em' fill='%23aaa' font-size='14'%3E写真%3C/text%3E%3C/svg%3E" alt="デモ">
+  </div>
+  <div class="demo-card-body">
+    <h4>Sample Cafe</h4>
+    <p class="addr"><i class="fas fa-map-marker-alt"></i> 沖縄県宜野湾市○○1-2-3</p>
+    <p class="desc">海が見えるおしゃれカフェ。自家焙煎コーヒーとスイーツが人気です。</p>
+    <div class="free">営業時間: 10:00〜18:00 / 定休日: 火曜</div>
+    <ul class="demo-sns">
+      <li><a href="#" title="Webサイト"><i class="fas fa-globe"></i></a></li>
+      <li><a href="#" title="Instagram"><i class="fab fa-instagram"></i></a></li>
+      <li><a href="#" title="LINE"><i class="fab fa-line"></i></a></li>
+      <li><a href="#" title="X (Twitter)"><i class="fab fa-twitter"></i></a></li>
+      <li><a href="#" title="YouTube"><i class="fab fa-youtube"></i></a></li>
+      <li><a href="#" title="TikTok"><i class="fab fa-tiktok"></i></a></li>
+    </ul>
+    <span class="demo-detail-btn"><i class="fas fa-arrow-right"></i> 詳しくみる</span>
+  </div>
+</div>
+
+<!-- ============================== -->
+<h2>STEP 1：繰り返しフィールド「clients」を追加</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">1</span>
+  microCMS管理画面 → 対象API（blog / works / column）→ 右上「API設定」→「APIスキーマ」タブ
+</div>
+
+<div class="step">
+  <span class="step-num">2</span>
+  「フィールドを追加」→ <strong>繰り返しフィールド（カスタムフィールド）</strong> を選択
+</div>
+
+<table>
+  <tr><th>項目</th><th>設定値</th></tr>
+  <tr><td>フィールドID</td><td><code>clients</code></td></tr>
+  <tr><td>表示名</td><td><code>クライアント様のご紹介</code></td></tr>
+  <tr><td>種類</td><td><strong>繰り返しフィールド（カスタムフィールド）</strong></td></tr>
+  <tr><td>必須</td><td><strong>いいえ</strong></td></tr>
+</table>
+
+<!-- ============================== -->
+<h2>STEP 2：繰り返しフィールド内のサブフィールドを設定</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">3</span>
+  繰り返しフィールド「clients」の中に以下のサブフィールドを追加
+</div>
+
+<h3>基本情報</h3>
+<table>
+  <tr><th>フィールドID</th><th>表示名</th><th>種類</th><th>必須</th><th>備考</th></tr>
+  <tr><td><code>name</code></td><td>クライアント名</td><td>テキストフィールド</td><td>いいえ</td><td>店名・会社名など</td></tr>
+  <tr><td><code>address</code></td><td>住所</td><td>テキストフィールド</td><td>いいえ</td><td>例: 沖縄県宜野湾市○○1-2-3</td></tr>
+  <tr><td><code>image</code></td><td>画像</td><td>画像</td><td>いいえ</td><td>ロゴ・外観写真など</td></tr>
+  <tr><td><code>description</code></td><td>紹介文</td><td>テキストエリア</td><td>いいえ</td><td>クライアントの説明（改行可）</td></tr>
+  <tr><td><code>freetext</code></td><td>自由欄</td><td>テキストエリア</td><td>いいえ</td><td>営業時間・定休日など何でも</td></tr>
+</table>
+
+<h3>「詳しくみる」ボタン</h3>
+<table>
+  <tr><th>フィールドID</th><th>表示名</th><th>種類</th><th>必須</th><th>備考</th></tr>
+  <tr><td><code>detail_url</code></td><td>詳細リンクURL</td><td>テキストフィールド</td><td>いいえ</td><td>自由なURL（公式サイト、マップ、予約ページなど何でもOK）</td></tr>
+  <tr><td><code>detail_label</code></td><td>詳細リンクの表示名</td><td>テキストフィールド</td><td>いいえ</td><td>未設定時は「詳しくみる」と表示</td></tr>
+</table>
+
+<div class="success">
+  <strong>ボタンの表示名をカスタマイズできます。</strong>例: 「公式サイトはこちら」「Googleマップで見る」「ご予約はこちら」など。<code>detail_label</code> を空欄にすると「詳しくみる」がデフォルト表示されます。
+</div>
+
+<h3>SNS・各種リンク</h3>
+<table>
+  <tr><th>フィールドID</th><th>表示名</th><th>種類</th><th>必須</th><th>アイコン</th></tr>
+  <tr><td><code>url_website</code></td><td>Webサイト URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fas fa-globe"></i> fa-globe</td></tr>
+  <tr><td><code>url_instagram</code></td><td>Instagram URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fab fa-instagram"></i> fa-instagram</td></tr>
+  <tr><td><code>url_line</code></td><td>LINE URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fab fa-line"></i> fa-line</td></tr>
+  <tr><td><code>url_x</code></td><td>X (Twitter) URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fab fa-twitter"></i> fa-twitter</td></tr>
+  <tr><td><code>url_facebook</code></td><td>Facebook URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fab fa-facebook"></i> fa-facebook</td></tr>
+  <tr><td><code>url_youtube</code></td><td>YouTube URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fab fa-youtube"></i> fa-youtube</td></tr>
+  <tr><td><code>url_tiktok</code></td><td>TikTok URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fab fa-tiktok"></i> fa-tiktok</td></tr>
+  <tr><td><code>url_other</code></td><td>その他 URL</td><td>テキストフィールド</td><td>いいえ</td><td><i class="fas fa-external-link-alt"></i> fa-external-link-alt</td></tr>
+  <tr><td><code>url_other_label</code></td><td>その他URLの表示名</td><td>テキストフィールド</td><td>いいえ</td><td>ホバー時のツールチップに使用。未設定時は「その他リンク」</td></tr>
+</table>
+
+<div class="warn">
+  <strong>ポイント：</strong>すべてのフィールドは任意（必須：いいえ）です。使わないフィールドは空欄のままでOK — 空欄のフィールドは表示されません。SNSのURLフィールドは必要なものだけ入力してください。
+</div>
+
+<div class="warn">
+  <strong>重要：</strong>3つのAPI（blog / works / column）すべてに同じ <code>clients</code> 繰り返しフィールドを追加してください。サブフィールドのIDも同じにすることで、PHPコード側で共通の表示処理が使えます。
+</div>
+
+<!-- ============================== -->
+<h2>STEP 3：記事でクライアント情報を入力</h2>
+<!-- ============================== -->
+
+<div class="step">
+  <span class="step-num">4</span>
+  各記事の編集画面で「クライアント様のご紹介」欄の「＋追加」ボタンでクライアントを追加
+</div>
+
+<p>入力例：</p>
+<table>
+  <tr><th>フィールド</th><th>入力例</th></tr>
+  <tr><td>クライアント名</td><td>Sample Cafe</td></tr>
+  <tr><td>住所</td><td>沖縄県宜野湾市○○1-2-3</td></tr>
+  <tr><td>画像</td><td>店舗の外観写真</td></tr>
+  <tr><td>紹介文</td><td>海が見えるおしゃれカフェ。自家焙煎コーヒーとスイーツが人気です。</td></tr>
+  <tr><td>自由欄</td><td>営業時間: 10:00〜18:00 / 定休日: 火曜</td></tr>
+  <tr><td>詳細リンクURL</td><td>https://sample-cafe.com/</td></tr>
+  <tr><td>詳細リンクの表示名</td><td>公式サイトはこちら</td></tr>
+  <tr><td>Instagram URL</td><td>https://www.instagram.com/samplecafe/</td></tr>
+  <tr><td>LINE URL</td><td>https://line.me/R/ti/p/@xxx</td></tr>
+</table>
+
+<div class="success">
+  <strong>補足：</strong>繰り返しフィールドなので、1つの記事に複数のクライアントを追加できます。「＋追加」を押すたびにクライアントカードが増えます。
+</div>
+
+<!-- ============================== -->
+<h2>スキーマ完成イメージ</h2>
+<!-- ============================== -->
+
+<div class="tree">
+blog / works / column API（既存）<br>
+├─ title, content, thumbnail ... ← 既存フィールド<br>
+├─ category（セレクト）← カテゴリタブ用<br>
+├─ faq（繰り返し）← FAQ<br>
+├─ cta（繰り返し）← CTAボックス<br>
+├─ speech（繰り返し）← 吹き出し<br>
+│<br>
+└─ <strong style="color:#F9B104">clients（繰り返しフィールド）← 今回追加</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ name（テキスト）← クライアント名<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ address（テキスト）← 住所<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ image（画像）← ロゴ・写真<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ description（テキストエリア）← 紹介文<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ freetext（テキストエリア）← 自由欄<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ <strong style="color:#F9B104">detail_url（テキスト）← 詳しくみるリンクURL</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ <strong style="color:#F9B104">detail_label（テキスト）← 詳しくみるボタンの表示名</strong><br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_website（テキスト）← <i class="fas fa-globe"></i> Web<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_instagram（テキスト）← <i class="fab fa-instagram"></i> Instagram<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_line（テキスト）← <i class="fab fa-line"></i> LINE<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_x（テキスト）← <i class="fab fa-twitter"></i> X (Twitter)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_facebook（テキスト）← <i class="fab fa-facebook"></i> Facebook<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_youtube（テキスト）← <i class="fab fa-youtube"></i> YouTube<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_tiktok（テキスト）← <i class="fab fa-tiktok"></i> TikTok<br>
+&nbsp;&nbsp;&nbsp;&nbsp;├─ url_other（テキスト）← <i class="fas fa-external-link-alt"></i> その他URL<br>
+&nbsp;&nbsp;&nbsp;&nbsp;└─ url_other_label（テキスト）← その他表示名
+</div>
+
+<!-- ============================== -->
+<h2>表示の仕組み</h2>
+<!-- ============================== -->
+
+<table>
+  <tr><th>条件</th><th>動作</th></tr>
+  <tr><td><code>clients</code> にデータあり</td><td>CTAボックスの後、ライターカードの前にクライアントカードを表示</td></tr>
+  <tr><td><code>clients</code> 未設定</td><td>何も表示されない</td></tr>
+  <tr><td>画像未設定</td><td>画像エリアなしでテキストのみ表示</td></tr>
+  <tr><td>SNS URL未設定</td><td>そのSNSアイコンは非表示</td></tr>
+  <tr><td><code>detail_url</code> 設定あり</td><td>「詳しくみる」ボタンを表示（<code>detail_label</code> で表示名変更可）</td></tr>
+  <tr><td><code>detail_url</code> 未設定</td><td>ボタン非表示</td></tr>
+  <tr><td>自由欄設定あり</td><td>ベースカラーのサイドラインが入ったボックスで表示</td></tr>
+</table>
+
+<h2>SNSアイコン一覧（Font Awesome 6.1.2）</h2>
+<table>
+  <tr><th>サービス</th><th>アイコン</th><th>クラス名</th></tr>
+  <tr><td>Webサイト</td><td><i class="fas fa-globe" style="font-size:1.2em"></i></td><td><code>fas fa-globe</code></td></tr>
+  <tr><td>Instagram</td><td><i class="fab fa-instagram" style="font-size:1.2em"></i></td><td><code>fab fa-instagram</code></td></tr>
+  <tr><td>LINE</td><td><i class="fab fa-line" style="font-size:1.2em"></i></td><td><code>fab fa-line</code></td></tr>
+  <tr><td>X (Twitter)</td><td><i class="fab fa-twitter" style="font-size:1.2em"></i></td><td><code>fab fa-twitter</code></td></tr>
+  <tr><td>Facebook</td><td><i class="fab fa-facebook" style="font-size:1.2em"></i></td><td><code>fab fa-facebook</code></td></tr>
+  <tr><td>YouTube</td><td><i class="fab fa-youtube" style="font-size:1.2em"></i></td><td><code>fab fa-youtube</code></td></tr>
+  <tr><td>TikTok</td><td><i class="fab fa-tiktok" style="font-size:1.2em"></i></td><td><code>fab fa-tiktok</code></td></tr>
+  <tr><td>その他</td><td><i class="fas fa-external-link-alt" style="font-size:1.2em"></i></td><td><code>fas fa-external-link-alt</code></td></tr>
+</table>
+
+<h2>対応ページ</h2>
+<table>
+  <tr><th>記事タイプ</th><th>URL</th></tr>
+  <tr><td>ブログ</td><td><code>entry.php?type=blog&eid=xxx</code></td></tr>
+  <tr><td>制作実績</td><td><code>entry.php?type=works&eid=xxx</code></td></tr>
+  <tr><td>コラム</td><td><code>entry.php?type=column&eid=xxx</code></td></tr>
+</table>
+
+<h2>変更したファイル一覧</h2>
+<table>
+  <tr><th>ファイル</th><th>変更内容</th></tr>
+  <tr><td><code>entry.php</code></td><td>CTAの後にクライアント紹介セクションを追加</td></tr>
+  <tr><td><code>scss/_client_intro.scss</code></td><td>カード型スタイルを新規作成</td></tr>
+  <tr><td><code>scss/style.scss</code></td><td><code>@import "_client_intro.scss"</code>を追加</td></tr>
+</table>
+
+<div class="success">
+  <strong>SCSSコンパイル済み：</strong><code>css/style.css</code> には既にスタイルが反映されています。
+</div>
+
+</div>
+</body>
+</html>
