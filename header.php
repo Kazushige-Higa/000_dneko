@@ -203,7 +203,8 @@
           </div>
           <div class="width_2 pconly">
             <button class='btn_normal bg_line radius center font_ja'>
-              <a href='<?php echo $line; ?>' target='_blank' rel='noopener'>
+              <a href='<?php echo $line; ?>' target='_blank' rel='noopener'
+                onclick="gtag('event','line_click',{'event_category':'contact','event_label':'header_pc'})">
                 <i class="fa-brands fa-line fs_20" aria-hidden="true" style="margin-right:6px;"></i>
                 LINEで無料相談
               </a>
@@ -240,7 +241,8 @@
           <div class='space_3 space_sp1'></div>
           <div>
             <button class='btn_normal bg_line radius center font_ja'>
-              <a href='<?php echo $line; ?>' target='_blank' rel='noopener'>
+              <a href='<?php echo $line; ?>' target='_blank' rel='noopener'
+                onclick="gtag('event','line_click',{'event_category':'contact','event_label':'header_sp'})">
                 <i class="fa-brands fa-line fs_20" aria-hidden="true" style="margin-right:6px;"></i>
                 LINEで無料相談
               </a>
