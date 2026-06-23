@@ -270,21 +270,36 @@ tr:hover td { background: #f8fafc; }
   </div>
 </div>
 
-<!-- ── 検索キーワード + オーガニックランディング ── -->
-<div class="grid-2-equal">
-  <div class="panel">
-    <div class="panel-head"><h2>検索キーワード（サイト内検索）</h2></div>
-    <div id="keywordsSection"></div>
-    <p class="note">※ オーガニック検索キーワード（Googleで何を検索してアクセスしたか）はGoogleのプライバシー保護により取得不可です。外部キーワードは <strong>Google Search Console</strong> で確認できます。</p>
+<!-- ── Search Console 検索キーワード ── -->
+<div class="panel mb16">
+  <div class="panel-head">
+    <h2>検索キーワード（Google Search Console・過去28日）</h2>
+    <span style="font-size:11px;color:#94a3b8">データ反映は1〜2日遅れ</span>
   </div>
-  <div class="panel">
-    <div class="panel-head"><h2>検索流入のランディングページ TOP10</h2></div>
-    <table>
-      <thead><tr><th></th><th>ページ</th><th style="text-align:right">セッション</th></tr></thead>
-      <tbody id="organicLandingBody"></tbody>
-    </table>
-    <p class="note">※ オーガニック検索から最初に訪れたページ一覧。どのページが検索流入を受けているかが分かります。</p>
-  </div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28px"></th>
+        <th>検索クエリ</th>
+        <th style="text-align:right;width:80px">クリック</th>
+        <th style="text-align:right;width:90px">表示回数</th>
+        <th style="width:100px">CTR</th>
+        <th style="text-align:right;width:80px">平均順位</th>
+      </tr>
+    </thead>
+    <tbody id="scKeywordsBody"></tbody>
+  </table>
+  <p class="note" id="scErrorNote" style="display:none;color:#ef4444"></p>
+</div>
+
+<!-- ── オーガニックランディング ── -->
+<div class="panel mb16">
+  <div class="panel-head"><h2>検索流入のランディングページ TOP10</h2></div>
+  <table>
+    <thead><tr><th></th><th>ページ</th><th style="text-align:right">セッション</th></tr></thead>
+    <tbody id="organicLandingBody"></tbody>
+  </table>
+  <p class="note">※ オーガニック検索から最初に訪れたページ一覧。</p>
 </div>
 
 <!-- ── 地域別アクセス ── -->
@@ -416,8 +431,8 @@ function render(d) {
   /* イベント */
   drawEvents(d.events || []);
 
-  /* 検索キーワード */
-  drawKeywords(d.keywords || []);
+  /* Search Console キーワード */
+  drawScKeywords(d.sc_keywords || [], d.sc_error || '');
 
   /* オーガニックランディング */
   drawOrganicLanding(d.organic_landing || []);
@@ -577,23 +592,43 @@ function drawEvents(items) {
   });
 }
 
-function drawKeywords(keywords) {
-  const el = document.getElementById('keywordsSection');
-  if (!el) return;
-  if (!keywords.length) {
-    el.innerHTML = '<p class="no-data">サイト内検索のデータがありません。<br>GA4でサイト内検索の計測を設定すると表示されます。</p>';
+function drawScKeywords(keywords, errorMsg) {
+  const tbody = document.getElementById('scKeywordsBody');
+  const errEl = document.getElementById('scErrorNote');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+
+  if (errorMsg) {
+    errEl.textContent = '⚠️ Search Console取得エラー: ' + errorMsg;
+    errEl.style.display = 'block';
+  }
+  if (!keywords || !keywords.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-data">検索データがありません（Search Consoleにデータが蓄積されるまでお待ちください）</td></tr>';
     return;
   }
-  const table = document.createElement('table');
-  table.innerHTML = '<thead><tr><th></th><th>キーワード</th><th style="text-align:right">セッション</th></tr></thead>';
-  const tbody = document.createElement('tbody');
+  const maxClicks = Math.max(...keywords.map(k => k.clicks), 1);
   keywords.forEach((k, i) => {
+    const ctrColor = k.ctr >= 5 ? '#10b981' : k.ctr >= 2 ? '#f59e0b' : '#94a3b8';
+    const posColor = k.position <= 3 ? '#10b981' : k.position <= 10 ? '#f59e0b' : '#ef4444';
     const tr = document.createElement('tr');
-    tr.innerHTML = `<td class="rank">${i+1}</td><td>${escapeHtml(k.term)}</td><td class="num">${fmtInt(k.sessions)}</td>`;
+    tr.innerHTML = `
+      <td class="rank">${i + 1}</td>
+      <td style="font-weight:500">${escapeHtml(k.query)}</td>
+      <td class="num">
+        <div class="inline-bar">
+          <div class="inline-bar-bg">
+            <div class="inline-bar-fill" style="width:${(k.clicks/maxClicks*100).toFixed(1)}%;background:#4f46e5"></div>
+          </div>
+          <span style="min-width:32px;text-align:right;font-weight:600">${fmtInt(k.clicks)}</span>
+        </div>
+      </td>
+      <td class="num">${fmtInt(k.impressions)}</td>
+      <td>
+        <span style="font-weight:600;color:${ctrColor}">${k.ctr}%</span>
+      </td>
+      <td class="num" style="font-weight:600;color:${posColor}">${k.position}位</td>`;
     tbody.appendChild(tr);
   });
-  table.appendChild(tbody);
-  el.appendChild(table);
 }
 
 function drawOrganicLanding(items) {
