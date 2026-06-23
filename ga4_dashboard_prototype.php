@@ -27,16 +27,17 @@ body {
   color: #fff; padding: 20px 28px 24px; border-radius: 16px;
   margin-bottom: 24px; box-shadow: 0 10px 30px rgba(79,70,229,.2);
 }
-.header-top-bar {
-  display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+.dashboard-topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-bottom: 12px; padding: 0 4px;
 }
-.header-logo img { height: 34px; width: auto; display: block; filter: brightness(0) invert(1); }
+.header-logo img { height: 36px; width: auto; display: block; }
 .top-btn {
-  padding: 7px 18px; border-radius: 999px; background: rgba(255,255,255,.2);
-  color: #fff; text-decoration: none; font-size: 13px; font-weight: 600;
-  border: 1px solid rgba(255,255,255,.4); white-space: nowrap; transition: background .2s;
+  padding: 7px 18px; border-radius: 999px; background: #fff;
+  color: #4f46e5; text-decoration: none; font-size: 13px; font-weight: 700;
+  border: 2px solid #4f46e5; white-space: nowrap; transition: background .2s, color .2s;
 }
-.top-btn:hover { background: rgba(255,255,255,.32); }
+.top-btn:hover { background: #4f46e5; color: #fff; }
 .dashboard-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
 .header-meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; opacity: .9; }
 .header-actions { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -178,8 +179,8 @@ tr:hover td { background: #f8fafc; }
   .kpi-grid, .grid-4 { grid-template-columns: 1fr; }
   .dashboard-header { padding: 16px 16px 20px; }
   .dashboard-header h1 { font-size: 17px; }
-  .header-logo img { height: 28px; }
-  .top-btn { font-size: 12px; padding: 6px 12px; }
+  .header-logo img { height: 26px; }
+  .top-btn { font-size: 12px; padding: 5px 12px; }
   .panel { padding: 16px; }
   .panel-head { flex-wrap: wrap; gap: 8px; }
   .tab-group { flex-wrap: wrap; }
@@ -199,14 +200,16 @@ tr:hover td { background: #f8fafc; }
 <body>
 <div class="container">
 
+<!-- ── Top bar (header外) ── -->
+<div class="dashboard-topbar">
+  <a href="index.php" class="header-logo">
+    <img src="images/logo.png" alt="デザネコ">
+  </a>
+  <a href="index.php" class="top-btn">TOPページをみる →</a>
+</div>
+
 <!-- ── Header ── -->
 <div class="dashboard-header">
-  <div class="header-top-bar">
-    <a href="index.php" class="header-logo">
-      <img src="images/logo.png" alt="デザネコ">
-    </a>
-    <a href="index.php" class="top-btn">TOPページをみる →</a>
-  </div>
   <h1>アクセス解析ダッシュボード</h1>
   <div class="header-meta">
     <span>対象サイト: デザネコ (d-neko.com)</span>
