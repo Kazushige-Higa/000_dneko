@@ -328,9 +328,51 @@ function ga4_build_dashboard($property_id, $token)
         ],
     ]];
 
+    /* ---- バッチ4: ユーザー熱量ファネル 各ステージ ---- */
+    $batch4 = ['requests' => [
+        // 0: Stage2 - サービスページ閲覧ユーザー
+        [
+            'dateRanges' => $cur,
+            'metrics'    => [['name' => 'totalUsers']],
+            'dimensionFilter' => [
+                'orGroup' => [
+                    'expressions' => [
+                        ['filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/service_design.php', 'matchType' => 'EXACT']]],
+                        ['filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/service_blog.php',   'matchType' => 'EXACT']]],
+                    ],
+                ],
+            ],
+        ],
+        // 1: Stage3 - お客様の声閲覧ユーザー
+        [
+            'dateRanges' => $cur,
+            'metrics'    => [['name' => 'totalUsers']],
+            'dimensionFilter' => [
+                'filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/voice.php', 'matchType' => 'EXACT']],
+            ],
+        ],
+        // 2: Stage4 - 特商法ページ閲覧ユーザー（購買直前の確認行動）
+        [
+            'dateRanges' => $cur,
+            'metrics'    => [['name' => 'totalUsers']],
+            'dimensionFilter' => [
+                'filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/law.php', 'matchType' => 'EXACT']],
+            ],
+        ],
+        // 3: Stage5 - LINEクリックユーザー（転換）
+        [
+            'dateRanges' => $cur,
+            'metrics'    => [['name' => 'totalUsers']],
+            'dimensionFilter' => [
+                'filter' => ['fieldName' => 'eventName', 'stringFilter' => ['value' => 'line_click', 'matchType' => 'EXACT']],
+            ],
+        ],
+    ]];
+
     $res1 = ga4_http_post($base . ':batchRunReports', json_encode($batch1), $auth);
     $res2 = ga4_http_post($base . ':batchRunReports', json_encode($batch2), $auth);
     $res3 = ga4_http_post($base . ':batchRunReports', json_encode($batch3), $auth);
+    $res4 = ga4_http_post($base . ':batchRunReports', json_encode($batch4), $auth);
 
     $r1 = json_decode($res1, true);
     if (json_last_error() !== JSON_ERROR_NONE || !is_array($r1)) {
@@ -358,9 +400,19 @@ function ga4_build_dashboard($property_id, $token)
         throw new Exception('GA4 APIエラー(バッチ3): ' . $msg);
     }
 
+    $r4 = json_decode($res4, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($r4)) {
+        throw new Exception('GA4 バッチ4 JSON解析失敗: ' . substr($res4, 0, 500));
+    }
+    if (isset($r4['error'])) {
+        $msg = $r4['error']['message'] ?? json_encode($r4['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('GA4 APIエラー(バッチ4): ' . $msg);
+    }
+
     $rep1 = $r1['reports'] ?? [];
     $rep2 = $r2['reports'] ?? [];
     $rep3 = $r3['reports'] ?? [];
+    $rep4 = $r4['reports'] ?? [];
 
     /* ---- KPI 合計の組み立て ---- */
     $kpi_rows = $rep1[0]['rows'] ?? [];
@@ -572,6 +624,36 @@ function ga4_build_dashboard($property_id, $token)
         $monthly['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
+    /* ---- ユーザー熱量ファネル ---- */
+    $stage_users = [
+        (int)$cur_m['users'],                                                              // Stage1: 全訪問者
+        (int)(($rep4[0]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage2: サービスページ
+        (int)(($rep4[1]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage3: お客様の声
+        (int)(($rep4[2]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage4: 特商法
+        (int)(($rep4[3]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage5: LINEクリック
+    ];
+    $stage_labels = [
+        '認知：サイト訪問',
+        '興味：サービスページ閲覧',
+        '検討：お客様の声閲覧',
+        '意向：特商法ページ閲覧',
+        '転換：LINEクリック',
+    ];
+    $funnel_stages = [];
+    $s1 = $stage_users[0] ?: 1;
+    for ($i = 0; $i < 5; $i++) {
+        $u    = $stage_users[$i];
+        $prev = $i > 0 ? $stage_users[$i - 1] : $u;
+        $funnel_stages[] = [
+            'stage'      => $i + 1,
+            'label'      => $stage_labels[$i],
+            'users'      => $u,
+            'rate_total' => round($u / $s1 * 100, 1),
+            'rate_prev'  => $prev > 0 ? round($u / $prev * 100, 1) : 0,
+            'drop'       => max(0, $prev - $u),
+        ];
+    }
+
     return [
         'kpi'              => $kpi,
         'trend'            => $trend,
@@ -589,6 +671,7 @@ function ga4_build_dashboard($property_id, $token)
         'organic_landing'  => $organic_landing,
         'source_conv'      => $source_conv,
         'events'           => $events,
+        'funnel_stages'    => $funnel_stages,
         'period'           => '過去30日間',
     ];
 }

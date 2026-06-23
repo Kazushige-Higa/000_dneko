@@ -125,6 +125,25 @@ tr:hover td { background: #f8fafc; }
 .event-bar-fill { background: #7c3aed; height: 100%; border-radius: 3px; }
 .event-count { text-align: right; font-weight: 600; font-variant-numeric: tabular-nums; color: #0f172a; }
 
+/* ── Funnel ── */
+.funnel-wrap { padding: 4px 0; }
+.funnel-row { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; }
+.funnel-num { width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 13px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.funnel-content { flex: 1; min-width: 0; }
+.funnel-label { font-size: 13px; color: #334155; font-weight: 600; margin-bottom: 5px; }
+.funnel-bar-outer { background: #f1f5f9; border-radius: 6px; height: 28px; overflow: hidden; }
+.funnel-bar-inner { height: 100%; border-radius: 6px; display: flex; align-items: center; padding: 0 10px; min-width: 4px; transition: width .7s ease; }
+.funnel-bar-lbl { color: rgba(255,255,255,.9); font-size: 11px; font-weight: 600; white-space: nowrap; }
+.funnel-meta { flex-shrink: 0; text-align: right; min-width: 80px; }
+.funnel-users { font-size: 18px; font-weight: 700; color: #0f172a; }
+.funnel-rate { font-size: 12px; color: #64748b; margin-top: 1px; }
+.funnel-drop-row { display: flex; align-items: center; gap: 14px; margin-bottom: 4px; height: 22px; }
+.funnel-drop-vline { width: 30px; display: flex; justify-content: center; flex-shrink: 0; }
+.funnel-drop-vline::after { content: ""; width: 2px; height: 100%; background: #e2e8f0; display: block; margin: 0 auto; }
+.funnel-drop-info { flex: 1; display: flex; justify-content: space-between; font-size: 11px; }
+.funnel-drop-text { color: #ef4444; }
+.funnel-next-text { color: #10b981; font-weight: 600; }
+
 /* ── Notes ── */
 .note { font-size: 11px; color: #94a3b8; margin-top: 10px; line-height: 1.6; }
 .no-data { color: #94a3b8; font-size: 13px; padding: 16px 0; text-align: center; }
@@ -226,6 +245,16 @@ tr:hover td { background: #f8fafc; }
     <div class="panel-head"><h2>新規 vs リピーター</h2></div>
     <div class="chart-wrap sm"><canvas id="nvrChart"></canvas></div>
   </div>
+</div>
+
+<!-- ── ユーザー熱量ファネル ── -->
+<div class="panel mb16">
+  <div class="panel-head">
+    <h2>ユーザー熱量ファネル（過去30日）</h2>
+    <span style="font-size:11px;color:#94a3b8">認知 → 興味 → 検討 → 意向 → 転換</span>
+  </div>
+  <div id="funnelWrap" class="funnel-wrap"></div>
+  <p class="note">※ 各ステージは個別ユーザー数（ページ単体の訪問者）です。Stage5のLINEクリックはヘッダー・フッターのgtag計測が有効なセッション以降に反映されます。</p>
 </div>
 
 <!-- ── ページ別パフォーマンス ── -->
@@ -421,6 +450,9 @@ function render(d) {
   /* 新規vsリピーター */
   drawDonut('nvrChart', (d.new_vs_returning||{}).labels||[], (d.new_vs_returning||{}).data||[],
     ['#4f46e5','#06b6d4'], '65%');
+
+  /* ユーザー熱量ファネル */
+  drawFunnel(d.funnel_stages || []);
 
   /* ページ別パフォーマンス */
   drawPageMetrics(d.page_metrics || []);
@@ -664,6 +696,49 @@ function drawRegions(regions) {
       <span class="region-count">${fmtInt(r.count)}</span>`;
     list.appendChild(el);
   });
+}
+
+function drawFunnel(stages) {
+  const el = document.getElementById('funnelWrap');
+  if (!el) return;
+  if (!stages || !stages.length) {
+    el.innerHTML = '<p class="no-data">ファネルデータがありません</p>'; return;
+  }
+  const colors = ['#4f46e5','#6366f1','#818cf8','#a5b4fc','#10b981'];
+  const maxUsers = stages[0]?.users || 1;
+  let html = '';
+  stages.forEach((s, i) => {
+    const barW = maxUsers > 0 ? (s.users / maxUsers * 100).toFixed(1) : 0;
+    const col  = colors[i] || '#4f46e5';
+    html += `
+      <div class="funnel-row">
+        <div class="funnel-num" style="background:${col}">${s.stage}</div>
+        <div class="funnel-content">
+          <div class="funnel-label">${escapeHtml(s.label)}</div>
+          <div class="funnel-bar-outer">
+            <div class="funnel-bar-inner" style="width:${barW}%;background:${col}">
+              ${s.users > 0 ? `<span class="funnel-bar-lbl">${fmtInt(s.users)}人</span>` : ''}
+            </div>
+          </div>
+        </div>
+        <div class="funnel-meta">
+          <div class="funnel-users">${fmtInt(s.users)}<span style="font-size:12px;font-weight:400;margin-left:2px">人</span></div>
+          <div class="funnel-rate">全体の ${s.rate_total}%</div>
+        </div>
+      </div>`;
+    if (i < stages.length - 1) {
+      const next = stages[i + 1];
+      html += `
+      <div class="funnel-drop-row">
+        <div class="funnel-drop-vline"></div>
+        <div class="funnel-drop-info">
+          <span class="funnel-drop-text">▼ 離脱 ${fmtInt(s.drop)}人 (${(100 - next.rate_prev).toFixed(1)}%)</span>
+          <span class="funnel-next-text">次へ ${fmtInt(next.users)}人 (${next.rate_prev}%)</span>
+        </div>
+      </div>`;
+    }
+  });
+  el.innerHTML = html;
 }
 
 function showError(msg) {
