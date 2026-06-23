@@ -40,3 +40,9 @@ data/ga4/cache.json
 # Build artifacts
 dist/
 build/
+
+# analytics フォルダ内の秘密鍵・トークン・キャッシュ
+analytics/data/ga4/service_account.json
+analytics/data/ga4/token.json
+analytics/data/ga4/sc_token.json
+analytics/data/ga4/cache.json
