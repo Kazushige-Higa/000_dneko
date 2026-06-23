@@ -133,16 +133,12 @@
   <div class="dashboard-header">
     <h1>アクセス解析ダッシュボード</h1>
     <div class="meta">
-      <span>対象サイト: example.com</span>
-      <span>最終更新: 2026年4月17日 03:15</span>
+      <span>対象サイト: デザネコ (d-neko.com)</span>
+      <span id="lastUpdated">最終更新: 取得中…</span>
       <span>データソース: Google Analytics 4</span>
     </div>
     <div class="period-selector">
-      <button class="period-btn">過去7日間</button>
       <button class="period-btn active">過去30日間</button>
-      <button class="period-btn">過去90日間</button>
-      <button class="period-btn">今月</button>
-      <button class="period-btn">先月</button>
     </div>
   </div>
 
@@ -150,23 +146,23 @@
   <div class="kpi-grid">
     <div class="kpi-card pv">
       <div class="kpi-label">ページビュー (PV)</div>
-      <div class="kpi-value">48,293</div>
-      <div class="kpi-change up">▲ 12.4% (前月比)</div>
+      <div class="kpi-value" id="kpiPv">–</div>
+      <div class="kpi-change" id="kpiPvChange"></div>
     </div>
     <div class="kpi-card users">
       <div class="kpi-label">ユーザー数 (UU)</div>
-      <div class="kpi-value">15,847</div>
-      <div class="kpi-change up">▲ 8.2% (前月比)</div>
+      <div class="kpi-value" id="kpiUsers">–</div>
+      <div class="kpi-change" id="kpiUsersChange"></div>
     </div>
     <div class="kpi-card cvr">
       <div class="kpi-label">コンバージョン率</div>
-      <div class="kpi-value">3.42%</div>
-      <div class="kpi-change up">▲ 0.6pt (前月比)</div>
+      <div class="kpi-value" id="kpiCvr">–</div>
+      <div class="kpi-change" id="kpiCvrChange"></div>
     </div>
     <div class="kpi-card time">
       <div class="kpi-label">平均エンゲージメント</div>
-      <div class="kpi-value">2分18秒</div>
-      <div class="kpi-change down">▼ 5.1% (前月比)</div>
+      <div class="kpi-value" id="kpiEng">–</div>
+      <div class="kpi-change" id="kpiEngChange"></div>
     </div>
   </div>
 
@@ -220,8 +216,7 @@
   </div>
 
   <div class="dashboard-footer">
-    ※ これはサンプルデータによるプロトタイプです。<br>
-    本番環境では Google Analytics 4 Data API より自動取得したデータを毎日更新表示します。
+    <span id="footerNote">Google Analytics 4 Data API から取得した実データを表示しています（過去30日間）。</span>
   </div>
 </div>
 
@@ -231,168 +226,164 @@ Chart.defaults.font.family = '-apple-system, BlinkMacSystemFont, "Hiragino Sans"
 Chart.defaults.font.size = 12;
 Chart.defaults.color = '#475569';
 
-// ===== PV Trend (line chart, 30 days) =====
-const days = Array.from({length: 30}, (_, i) => `${3}/${19 + i > 31 ? (19 + i - 31) : (19 + i)}`);
-const pvData = [1420, 1580, 1490, 1720, 1650, 1380, 1210, 1390, 1620, 1780, 1890, 1750, 1540, 1480, 1720, 1910, 2050, 1880, 1760, 1630, 1520, 1780, 1960, 2120, 2040, 1910, 1740, 1680, 1820, 1990];
-new Chart(document.getElementById('pvTrendChart'), {
-  type: 'line',
-  data: {
-    labels: days,
-    datasets: [{
-      label: 'PV',
-      data: pvData,
-      borderColor: '#4f46e5',
-      backgroundColor: 'rgba(79, 70, 229, 0.1)',
-      fill: true,
-      tension: 0.35,
-      pointRadius: 0,
-      pointHoverRadius: 5,
-      borderWidth: 2.5,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { beginAtZero: true, grid: { color: '#e2e8f0' } },
-      x: { grid: { display: false } }
-    }
+const PALETTE = ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ef4444', '#a78bfa', '#ec4899'];
+const charts = {};
+
+// ===== ユーティリティ =====
+function fmtInt(n) { return Number(n || 0).toLocaleString(); }
+function fmtDuration(sec) {
+  sec = Math.round(Number(sec) || 0);
+  const m = Math.floor(sec / 60);
+  const s = sec % 60;
+  return m + '分' + s + '秒';
+}
+function setChange(el, change, unit, isPoint) {
+  if (change === null || change === undefined || isNaN(change)) {
+    el.textContent = '前月データなし';
+    el.className = 'kpi-change';
+    return;
   }
-});
+  const up = change >= 0;
+  const arrow = up ? '▲' : '▼';
+  const val = Math.abs(change);
+  const suffix = isPoint ? 'pt' : (unit || '%');
+  el.textContent = `${arrow} ${val}${suffix} (前月比)`;
+  el.className = 'kpi-change ' + (up ? 'up' : 'down');
+}
 
-// ===== Traffic Source (donut) =====
-new Chart(document.getElementById('sourceChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Organic Search', 'Direct', 'Social', 'Referral', 'Paid'],
-    datasets: [{
-      data: [52, 21, 15, 8, 4],
-      backgroundColor: ['#4f46e5', '#06b6d4', '#10b981', '#f59e0b', '#ef4444'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '60%',
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 12 } }
-    }
+// ===== データ反映 =====
+function render(d) {
+  // KPI
+  document.getElementById('kpiPv').textContent = fmtInt(d.kpi.pv.value);
+  setChange(document.getElementById('kpiPvChange'), d.kpi.pv.change);
+  document.getElementById('kpiUsers').textContent = fmtInt(d.kpi.users.value);
+  setChange(document.getElementById('kpiUsersChange'), d.kpi.users.change);
+  document.getElementById('kpiCvr').textContent = (d.kpi.cvr.value ?? 0) + '%';
+  setChange(document.getElementById('kpiCvrChange'), d.kpi.cvr.change, null, true);
+  document.getElementById('kpiEng').textContent = fmtDuration(d.kpi.engagement.seconds);
+  setChange(document.getElementById('kpiEngChange'), d.kpi.engagement.change);
+
+  // 最終更新
+  if (d.generated_at) {
+    const dt = new Date(d.generated_at);
+    document.getElementById('lastUpdated').textContent =
+      '最終更新: ' + dt.toLocaleString('ja-JP', { year:'numeric', month:'long', day:'numeric', hour:'2-digit', minute:'2-digit' });
   }
-});
-
-// ===== Gender (donut) =====
-new Chart(document.getElementById('genderChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['女性', '男性'],
-    datasets: [{
-      data: [58, 42],
-      backgroundColor: ['#ec4899', '#3b82f6'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '65%',
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10 } }
-    }
+  if (d.stale) {
+    document.getElementById('footerNote').textContent =
+      '※ 最新の取得に失敗したため、前回取得分を表示しています。';
   }
-});
 
-// ===== Age (bar) =====
-new Chart(document.getElementById('ageChart'), {
-  type: 'bar',
-  data: {
-    labels: ['18-24', '25-34', '35-44', '45-54', '55-64', '65+'],
-    datasets: [{
-      data: [8, 28, 32, 19, 9, 4],
-      backgroundColor: '#7c3aed',
-      borderRadius: 6,
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    plugins: { legend: { display: false } },
-    scales: {
-      y: { beginAtZero: true, grid: { color: '#e2e8f0' }, ticks: { callback: v => v + '%' } },
-      x: { grid: { display: false } }
+  // PV推移
+  drawLine('pvTrendChart', d.trend.labels, d.trend.data);
+  // 流入元
+  drawDonut('sourceChart', d.source.labels, d.source.data, PALETTE, '60%');
+  // 男女比
+  drawDonut('genderChart', d.gender.labels, d.gender.data,
+    d.gender.labels.map(l => l === '女性' ? '#ec4899' : '#3b82f6'), '65%');
+  // 年齢層
+  drawBar('ageChart', d.age.labels, d.age.data);
+  // デバイス
+  drawDonut('deviceChart', d.device.labels, d.device.data, PALETTE, '65%');
+  // 地域
+  drawRegions(d.region);
+  // 人気ページ
+  drawPages(d.pages);
+}
+
+function drawLine(id, labels, data) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), {
+    type: 'line',
+    data: { labels, datasets: [{
+      label: 'PV', data,
+      borderColor: '#4f46e5', backgroundColor: 'rgba(79,70,229,0.1)',
+      fill: true, tension: 0.35, pointRadius: 0, pointHoverRadius: 5, borderWidth: 2.5,
+    }]},
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' } }, x: { grid: { display: false } } }
     }
-  }
-});
+  });
+}
 
-// ===== Device (donut) =====
-new Chart(document.getElementById('deviceChart'), {
-  type: 'doughnut',
-  data: {
-    labels: ['Mobile', 'Desktop', 'Tablet'],
-    datasets: [{
-      data: [64, 31, 5],
-      backgroundColor: ['#4f46e5', '#06b6d4', '#a78bfa'],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: true, maintainAspectRatio: false,
-    cutout: '65%',
-    plugins: {
-      legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10 } }
+function drawDonut(id, labels, data, colors, cutout) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), {
+    type: 'doughnut',
+    data: { labels, datasets: [{ data, backgroundColor: colors, borderWidth: 0 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false, cutout,
+      plugins: { legend: { position: 'bottom', labels: { boxWidth: 12, padding: 10 } } }
     }
-  }
-});
+  });
+}
 
-// ===== Region list =====
-const regions = [
-  { name: '東京都', count: 5284 },
-  { name: '大阪府', count: 2890 },
-  { name: '神奈川県', count: 2140 },
-  { name: '愛知県', count: 1520 },
-  { name: '埼玉県', count: 1380 },
-  { name: '千葉県', count: 1210 },
-  { name: '福岡県', count: 980 },
-  { name: '兵庫県', count: 860 },
-  { name: '北海道', count: 790 },
-  { name: '京都府', count: 640 },
-];
-const maxRegion = Math.max(...regions.map(r => r.count));
-const regionList = document.getElementById('regionList');
-regions.forEach(r => {
-  const el = document.createElement('div');
-  el.className = 'region-item';
-  el.innerHTML = `
-    <span class="region-name">${r.name}</span>
-    <div class="region-bar-bg"><div class="region-bar" style="width:${(r.count / maxRegion * 100).toFixed(1)}%"></div></div>
-    <span class="region-count">${r.count.toLocaleString()}</span>
-  `;
-  regionList.appendChild(el);
-});
+function drawBar(id, labels, data) {
+  if (charts[id]) charts[id].destroy();
+  charts[id] = new Chart(document.getElementById(id), {
+    type: 'bar',
+    data: { labels, datasets: [{ data, backgroundColor: '#7c3aed', borderRadius: 6 }] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: { y: { beginAtZero: true, grid: { color: '#e2e8f0' } }, x: { grid: { display: false } } }
+    }
+  });
+}
 
-// ===== Popular pages =====
-const pages = [
-  { path: '/', title: 'トップページ', pv: 8420 },
-  { path: '/service/blog', title: 'ブログ制作サービス', pv: 5210 },
-  { path: '/entry/how-to-wordpress', title: 'WordPress構築手順', pv: 3890 },
-  { path: '/service/design', title: 'デザイン制作サービス', pv: 3240 },
-  { path: '/about', title: '会社概要', pv: 2810 },
-  { path: '/entry/seo-tips', title: 'SEO対策の基本', pv: 2490 },
-  { path: '/faq', title: 'よくあるご質問', pv: 1980 },
-  { path: '/voice', title: 'お客様の声', pv: 1640 },
-  { path: '/entry/microcms', title: 'microCMS活用術', pv: 1420 },
-  { path: '/contact', title: 'お問い合わせ', pv: 1180 },
-];
-const tbody = document.getElementById('popularPagesBody');
-pages.forEach((p, i) => {
-  const tr = document.createElement('tr');
-  tr.innerHTML = `
-    <td class="rank">${i + 1}</td>
-    <td>
-      <div style="font-weight:500;color:#0f172a">${p.title}</div>
-      <div class="path">${p.path}</div>
-    </td>
-    <td class="num">${p.pv.toLocaleString()}</td>
-  `;
-  tbody.appendChild(tr);
-});
+function drawRegions(regions) {
+  const list = document.getElementById('regionList');
+  list.innerHTML = '';
+  if (!regions || !regions.length) { list.innerHTML = '<div style="color:#94a3b8;font-size:13px">データがありません</div>'; return; }
+  const max = Math.max(...regions.map(r => r.count), 1);
+  regions.forEach(r => {
+    const el = document.createElement('div');
+    el.className = 'region-item';
+    el.innerHTML = `
+      <span class="region-name">${r.name}</span>
+      <div class="region-bar-bg"><div class="region-bar" style="width:${(r.count / max * 100).toFixed(1)}%"></div></div>
+      <span class="region-count">${fmtInt(r.count)}</span>`;
+    list.appendChild(el);
+  });
+}
+
+function drawPages(pages) {
+  const tbody = document.getElementById('popularPagesBody');
+  tbody.innerHTML = '';
+  if (!pages || !pages.length) { tbody.innerHTML = '<tr><td colspan="3" style="color:#94a3b8">データがありません</td></tr>'; return; }
+  pages.forEach((p, i) => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="rank">${i + 1}</td>
+      <td>
+        <div style="font-weight:500;color:#0f172a">${escapeHtml(p.title)}</div>
+        <div class="path">${escapeHtml(p.path)}</div>
+      </td>
+      <td class="num">${fmtInt(p.pv)}</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function showError(msg) {
+  document.getElementById('lastUpdated').textContent = '最終更新: 取得失敗';
+  document.getElementById('footerNote').innerHTML =
+    '⚠️ データの取得に失敗しました。サービスアカウント鍵の配置・権限設定をご確認ください。<br><span style="font-size:11px">' + escapeHtml(msg || '') + '</span>';
+}
+
+// ===== 取得開始 =====
+fetch('ga4_api.php')
+  .then(r => r.json())
+  .then(d => {
+    if (d.error && !d.kpi) { showError(d.error); return; }
+    render(d);
+  })
+  .catch(e => showError(e.message));
 </script>
 </body>
 </html>
