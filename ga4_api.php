@@ -112,8 +112,9 @@ function ga4_get_access_token($key_file, $token_file)
     $signing_input = implode('.', $segments);
 
     $signature = '';
-    if (!openssl_sign($signing_input, $signature, $key['private_key'], 'sha256')) {
-        throw new Exception('JWTの署名に失敗しました(openssl)');
+    if (!openssl_sign($signing_input, $signature, $key['private_key'], OPENSSL_ALGO_SHA256)) {
+        $ssl_err = openssl_error_string() ?: 'unknown';
+        throw new Exception('JWTの署名に失敗しました(openssl): ' . $ssl_err);
     }
     $jwt = $signing_input . '.' . ga4_b64url($signature);
 
@@ -127,8 +128,12 @@ function ga4_get_access_token($key_file, $token_file)
         ['Content-Type: application/x-www-form-urlencoded']
     );
     $tok = json_decode($res, true);
+    if (json_last_error() !== JSON_ERROR_NONE) {
+        throw new Exception('トークンレスポンスのJSON解析失敗: ' . $res);
+    }
     if (!is_array($tok) || empty($tok['access_token'])) {
-        throw new Exception('アクセストークンの取得に失敗しました: ' . $res);
+        $detail = isset($tok['error_description']) ? $tok['error_description'] : $res;
+        throw new Exception('アクセストークンの取得に失敗しました: ' . $detail);
     }
 
     // トークンをキャッシュ
@@ -165,7 +170,7 @@ function ga4_build_dashboard($property_id, $token)
                 ['name' => 'totalUsers'],
                 ['name' => 'sessions'],
                 ['name' => 'averageSessionDuration'],
-                ['name' => 'keyEvents'],
+                ['name' => 'conversions'],
             ],
         ],
         // 1: PV推移(日別)
@@ -198,9 +203,23 @@ function ga4_build_dashboard($property_id, $token)
             'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
             'limit' => 10,
         ],
+        // 5: オーガニック検索のランディングページ TOP10
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'landingPage']],
+            'metrics'    => [['name' => 'sessions']],
+            'dimensionFilter' => [
+                'filter' => [
+                    'fieldName'    => 'sessionDefaultChannelGroup',
+                    'stringFilter' => ['value' => 'Organic Search', 'matchType' => 'EXACT'],
+                ],
+            ],
+            'orderBys' => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
+            'limit' => 10,
+        ],
     ]];
 
-    /* ---- バッチ2: 男女比, 年齢, 地域 ---- */
+    /* ---- バッチ2: 男女比, 年齢, 地域, 検索キーワード, 新規vs継続 ---- */
     $batch2 = ['requests' => [
         // 0: 男女比
         [
@@ -229,16 +248,105 @@ function ga4_build_dashboard($property_id, $token)
             'orderBys' => [['metric' => ['metricName' => 'totalUsers'], 'desc' => true]],
             'limit' => 10,
         ],
+        // 3: 検索キーワード（サイト内検索）
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'searchTerm']],
+            'metrics'    => [['name' => 'sessions']],
+            'orderBys'   => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
+            'limit'      => 10,
+        ],
+        // 4: 新規vs継続ユーザー
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'newVsReturning']],
+            'metrics'    => [['name' => 'totalUsers']],
+        ],
     ]];
 
-    $r1 = json_decode(ga4_http_post($base . ':batchRunReports', json_encode($batch1), $auth), true);
-    $r2 = json_decode(ga4_http_post($base . ':batchRunReports', json_encode($batch2), $auth), true);
+    /* ---- バッチ3: ページ指標, 流入元×CV, イベント, 週別推移, 月別推移 ---- */
+    $batch3 = ['requests' => [
+        // 0: ページ別エンゲージメント指標
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'pagePath'], ['name' => 'pageTitle']],
+            'metrics'    => [
+                ['name' => 'screenPageViews'],
+                ['name' => 'engagementRate'],
+                ['name' => 'bounceRate'],
+                ['name' => 'userEngagementDuration'],
+            ],
+            'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
+            'limit' => 10,
+        ],
+        // 1: 流入元×コンバージョン
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'sessionDefaultChannelGroup']],
+            'metrics'    => [['name' => 'sessions'], ['name' => 'conversions']],
+            'orderBys'   => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
+            'limit' => 8,
+        ],
+        // 2: イベント別集計
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'eventName']],
+            'metrics'    => [['name' => 'eventCount']],
+            'orderBys'   => [['metric' => ['metricName' => 'eventCount'], 'desc' => true]],
+            'limit' => 15,
+        ],
+        // 3: 週別PV推移(過去12週)
+        [
+            'dateRanges' => [['startDate' => '83daysAgo', 'endDate' => 'yesterday']],
+            'dimensions' => [['name' => 'year'], ['name' => 'week']],
+            'metrics'    => [['name' => 'screenPageViews']],
+            'orderBys'   => [
+                ['dimension' => ['dimensionName' => 'year']],
+                ['dimension' => ['dimensionName' => 'week']],
+            ],
+        ],
+        // 4: 月別PV推移(過去12ヶ月)
+        [
+            'dateRanges' => [['startDate' => '364daysAgo', 'endDate' => 'yesterday']],
+            'dimensions' => [['name' => 'yearMonth']],
+            'metrics'    => [['name' => 'screenPageViews']],
+            'orderBys'   => [['dimension' => ['dimensionName' => 'yearMonth']]],
+        ],
+    ]];
 
-    if (isset($r1['error'])) throw new Exception('GA4 APIエラー: ' . json_encode($r1['error'], JSON_UNESCAPED_UNICODE));
-    if (isset($r2['error'])) throw new Exception('GA4 APIエラー: ' . json_encode($r2['error'], JSON_UNESCAPED_UNICODE));
+    $res1 = ga4_http_post($base . ':batchRunReports', json_encode($batch1), $auth);
+    $res2 = ga4_http_post($base . ':batchRunReports', json_encode($batch2), $auth);
+    $res3 = ga4_http_post($base . ':batchRunReports', json_encode($batch3), $auth);
+
+    $r1 = json_decode($res1, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($r1)) {
+        throw new Exception('GA4 バッチ1 JSON解析失敗: ' . substr($res1, 0, 500));
+    }
+    $r2 = json_decode($res2, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($r2)) {
+        throw new Exception('GA4 バッチ2 JSON解析失敗: ' . substr($res2, 0, 500));
+    }
+
+    if (isset($r1['error'])) {
+        $msg = $r1['error']['message'] ?? json_encode($r1['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('GA4 APIエラー(バッチ1): ' . $msg);
+    }
+    if (isset($r2['error'])) {
+        $msg = $r2['error']['message'] ?? json_encode($r2['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('GA4 APIエラー(バッチ2): ' . $msg);
+    }
+    $r3 = json_decode($res3, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($r3)) {
+        throw new Exception('GA4 バッチ3 JSON解析失敗: ' . substr($res3, 0, 500));
+    }
+    if (isset($r3['error'])) {
+        $msg = $r3['error']['message'] ?? json_encode($r3['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('GA4 APIエラー(バッチ3): ' . $msg);
+    }
 
     $rep1 = $r1['reports'] ?? [];
     $rep2 = $r2['reports'] ?? [];
+    $rep3 = $r3['reports'] ?? [];
 
     /* ---- KPI 合計の組み立て ---- */
     $kpi_rows = $rep1[0]['rows'] ?? [];
@@ -293,10 +401,28 @@ function ga4_build_dashboard($property_id, $token)
         $trend['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
-    /* ---- 流入元 ---- */
+    /* ---- 流入元 (日本語変換) ---- */
+    $channel_map = [
+        'Direct'           => 'ダイレクト',
+        'Organic Search'   => 'オーガニック検索',
+        'Referral'         => '参照サイト',
+        'Organic Social'   => 'SNS（自然流入）',
+        'Paid Search'      => '有料検索',
+        'Email'            => 'メール',
+        'Affiliates'       => 'アフィリエイト',
+        'Display'          => 'ディスプレイ広告',
+        'Paid Social'      => 'SNS（有料）',
+        'Paid Video'       => '動画広告',
+        'Paid Shopping'    => 'ショッピング広告',
+        'Organic Video'    => '動画（自然流入）',
+        'Organic Shopping' => 'ショッピング（自然流入）',
+        'Unassigned'       => '未割り当て',
+        '(other)'          => 'その他',
+    ];
     $source = ['labels' => [], 'data' => []];
     foreach (($rep1[2]['rows'] ?? []) as $row) {
-        $source['labels'][] = $row['dimensionValues'][0]['value'];
+        $raw = $row['dimensionValues'][0]['value'];
+        $source['labels'][] = $channel_map[$raw] ?? $raw;
         $source['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
@@ -314,6 +440,15 @@ function ga4_build_dashboard($property_id, $token)
             'path'  => $row['dimensionValues'][0]['value'],
             'title' => $row['dimensionValues'][1]['value'] ?: $row['dimensionValues'][0]['value'],
             'pv'    => (int)($row['metricValues'][0]['value'] ?? 0),
+        ];
+    }
+
+    /* ---- オーガニック検索ランディングページ ---- */
+    $organic_landing = [];
+    foreach (($rep1[5]['rows'] ?? []) as $row) {
+        $organic_landing[] = [
+            'path'     => $row['dimensionValues'][0]['value'],
+            'sessions' => (int)($row['metricValues'][0]['value'] ?? 0),
         ];
     }
 
@@ -346,16 +481,101 @@ function ga4_build_dashboard($property_id, $token)
         ];
     }
 
+    /* ---- 検索キーワード（サイト内検索） ---- */
+    $keywords = [];
+    foreach (($rep2[3]['rows'] ?? []) as $row) {
+        $term = $row['dimensionValues'][0]['value'];
+        if ($term === '(not set)' || $term === '') continue;
+        $keywords[] = [
+            'term'     => $term,
+            'sessions' => (int)($row['metricValues'][0]['value'] ?? 0),
+        ];
+    }
+
+    /* ---- 新規vs継続ユーザー ---- */
+    $nvr_map = ['new' => '新規ユーザー', 'returning' => 'リピーター'];
+    $new_vs_returning = ['labels' => [], 'data' => []];
+    foreach (($rep2[4]['rows'] ?? []) as $row) {
+        $key = $row['dimensionValues'][0]['value'];
+        $new_vs_returning['labels'][] = $nvr_map[$key] ?? $key;
+        $new_vs_returning['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
+    }
+
+    /* ---- ページ別エンゲージメント指標 ---- */
+    $page_metrics = [];
+    foreach (($rep3[0]['rows'] ?? []) as $row) {
+        $path    = $row['dimensionValues'][0]['value'];
+        $title   = $row['dimensionValues'][1]['value'] ?: $path;
+        $pv      = (int)($row['metricValues'][0]['value'] ?? 0);
+        $eng_dur = (float)($row['metricValues'][3]['value'] ?? 0);
+        $page_metrics[] = [
+            'path'        => $path,
+            'title'       => $title,
+            'pv'          => $pv,
+            'engagement'  => round((float)($row['metricValues'][1]['value'] ?? 0) * 100, 1),
+            'bounce'      => round((float)($row['metricValues'][2]['value'] ?? 0) * 100, 1),
+            'avg_time'    => $pv > 0 ? round($eng_dur / $pv) : 0,
+        ];
+    }
+
+    /* ---- 流入元×コンバージョン ---- */
+    $source_conv = [];
+    foreach (($rep3[1]['rows'] ?? []) as $row) {
+        $raw      = $row['dimensionValues'][0]['value'];
+        $sessions = (int)($row['metricValues'][0]['value'] ?? 0);
+        $conv     = (int)($row['metricValues'][1]['value'] ?? 0);
+        $source_conv[] = [
+            'channel'     => $channel_map[$raw] ?? $raw,
+            'sessions'    => $sessions,
+            'conversions' => $conv,
+            'cvr'         => $sessions > 0 ? round($conv / $sessions * 100, 2) : 0,
+        ];
+    }
+
+    /* ---- イベント別集計 ---- */
+    $events = [];
+    foreach (($rep3[2]['rows'] ?? []) as $row) {
+        $events[] = [
+            'name'  => $row['dimensionValues'][0]['value'],
+            'count' => (int)($row['metricValues'][0]['value'] ?? 0),
+        ];
+    }
+
+    /* ---- 週別PV推移 ---- */
+    $weekly = ['labels' => [], 'data' => []];
+    foreach (($rep3[3]['rows'] ?? []) as $row) {
+        $year = $row['dimensionValues'][0]['value'];
+        $week = str_pad($row['dimensionValues'][1]['value'], 2, '0', STR_PAD_LEFT);
+        $weekly['labels'][] = $year . '/W' . $week;
+        $weekly['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
+    }
+
+    /* ---- 月別PV推移 ---- */
+    $monthly = ['labels' => [], 'data' => []];
+    foreach (($rep3[4]['rows'] ?? []) as $row) {
+        $ym = $row['dimensionValues'][0]['value']; // YYYYMM
+        $monthly['labels'][] = (int)substr($ym, 0, 4) . '/' . (int)substr($ym, 4, 2) . '月';
+        $monthly['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
+    }
+
     return [
-        'kpi'     => $kpi,
-        'trend'   => $trend,
-        'source'  => $source,
-        'device'  => $device,
-        'gender'  => $gender,
-        'age'     => $age,
-        'region'  => $region,
-        'pages'   => $pages,
-        'period'  => '過去30日間',
+        'kpi'              => $kpi,
+        'trend'            => $trend,
+        'weekly'           => $weekly,
+        'monthly'          => $monthly,
+        'source'           => $source,
+        'device'           => $device,
+        'gender'           => $gender,
+        'age'              => $age,
+        'region'           => $region,
+        'pages'            => $pages,
+        'page_metrics'     => $page_metrics,
+        'keywords'         => $keywords,
+        'new_vs_returning' => $new_vs_returning,
+        'organic_landing'  => $organic_landing,
+        'source_conv'      => $source_conv,
+        'events'           => $events,
+        'period'           => '過去30日間',
     ];
 }
 
@@ -383,13 +603,23 @@ function ga4_http_post($url, $body, $headers)
         CURLOPT_POSTFIELDS     => $body,
         CURLOPT_HTTPHEADER     => $headers,
         CURLOPT_TIMEOUT        => 30,
+        CURLOPT_CONNECTTIMEOUT => 10,
     ]);
-    $res = curl_exec($ch);
+    $res  = curl_exec($ch);
+    $code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     if ($res === false) {
         $err = curl_error($ch);
         curl_close($ch);
         throw new Exception('通信エラー: ' . $err);
     }
     curl_close($ch);
+    // 4xx/5xx はそのままボディを返す（呼び出し元で json_decode してエラーを解析）
+    if ($code >= 400) {
+        // ボディにエラー詳細が入っているのでそのまま返す（呼び出し元で処理）
+        // ただしボディが空の場合はここでスロー
+        if (trim($res) === '') {
+            throw new Exception('HTTPエラー ' . $code . ' (レスポンスボディなし): ' . $url);
+        }
+    }
     return $res;
 }
