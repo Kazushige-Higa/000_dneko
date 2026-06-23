@@ -226,20 +226,6 @@ function ga4_build_dashboard($property_id, $token)
             'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
             'limit' => 10,
         ],
-        // 5: オーガニック検索のランディングページ TOP10
-        [
-            'dateRanges' => $cur,
-            'dimensions' => [['name' => 'landingPage']],
-            'metrics'    => [['name' => 'sessions']],
-            'dimensionFilter' => [
-                'filter' => [
-                    'fieldName'    => 'sessionDefaultChannelGroup',
-                    'stringFilter' => ['value' => 'Organic Search', 'matchType' => 'EXACT'],
-                ],
-            ],
-            'orderBys' => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
-            'limit' => 10,
-        ],
     ]];
 
     /* ---- バッチ2: 男女比, 年齢, 地域, 検索キーワード, 新規vs継続 ---- */
@@ -337,9 +323,23 @@ function ga4_build_dashboard($property_id, $token)
         ],
     ]];
 
-    /* ---- バッチ4: ユーザー熱量ファネル 各ステージ ---- */
+    /* ---- バッチ4: オーガニックランディング + ユーザー熱量ファネル ---- */
     $batch4 = ['requests' => [
-        // 0: Stage2 - サービスページ閲覧ユーザー
+        // 0: オーガニック検索のランディングページ TOP10（batch1が5件上限のため移動）
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'landingPage']],
+            'metrics'    => [['name' => 'sessions']],
+            'dimensionFilter' => [
+                'filter' => [
+                    'fieldName'    => 'sessionDefaultChannelGroup',
+                    'stringFilter' => ['value' => 'Organic Search', 'matchType' => 'EXACT'],
+                ],
+            ],
+            'orderBys' => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
+            'limit' => 10,
+        ],
+        // 1: Stage2 - サービスページ閲覧ユーザー
         [
             'dateRanges' => $cur,
             'metrics'    => [['name' => 'totalUsers']],
@@ -352,7 +352,7 @@ function ga4_build_dashboard($property_id, $token)
                 ],
             ],
         ],
-        // 1: Stage3 - お客様の声閲覧ユーザー
+        // 2: Stage3 - お客様の声閲覧ユーザー
         [
             'dateRanges' => $cur,
             'metrics'    => [['name' => 'totalUsers']],
@@ -360,7 +360,7 @@ function ga4_build_dashboard($property_id, $token)
                 'filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/voice.php', 'matchType' => 'EXACT']],
             ],
         ],
-        // 2: Stage4 - 特商法ページ閲覧ユーザー（購買直前の確認行動）
+        // 3: Stage4 - 特商法ページ閲覧ユーザー（購買直前の確認行動）
         [
             'dateRanges' => $cur,
             'metrics'    => [['name' => 'totalUsers']],
@@ -368,7 +368,7 @@ function ga4_build_dashboard($property_id, $token)
                 'filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/law.php', 'matchType' => 'EXACT']],
             ],
         ],
-        // 3: Stage5 - LINEクリックユーザー（転換）
+        // 4: Stage5 - LINEクリックユーザー（転換）
         [
             'dateRanges' => $cur,
             'metrics'    => [['name' => 'totalUsers']],
@@ -518,9 +518,9 @@ function ga4_build_dashboard($property_id, $token)
         ];
     }
 
-    /* ---- オーガニック検索ランディングページ ---- */
+    /* ---- オーガニック検索ランディングページ (rep4[0]) ---- */
     $organic_landing = [];
-    foreach (($rep1[5]['rows'] ?? []) as $row) {
+    foreach (($rep4[0]['rows'] ?? []) as $row) {
         $organic_landing[] = [
             'path'     => $row['dimensionValues'][0]['value'],
             'sessions' => (int)($row['metricValues'][0]['value'] ?? 0),
@@ -636,10 +636,10 @@ function ga4_build_dashboard($property_id, $token)
     /* ---- ユーザー熱量ファネル ---- */
     $stage_users = [
         (int)$cur_m['users'],                                                              // Stage1: 全訪問者
-        (int)(($rep4[0]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage2: サービスページ
-        (int)(($rep4[1]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage3: お客様の声
-        (int)(($rep4[2]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage4: 特商法
-        (int)(($rep4[3]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage5: LINEクリック
+        (int)(($rep4[1]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage2: サービスページ
+        (int)(($rep4[2]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage3: お客様の声
+        (int)(($rep4[3]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage4: 特商法
+        (int)(($rep4[4]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage5: LINEクリック
     ];
     $stage_labels = [
         '認知：サイト訪問',
