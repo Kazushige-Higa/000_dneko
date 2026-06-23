@@ -1,4 +1,5 @@
 <?php
+ob_start(); // 意図しない出力をバッファして headers already sent を防ぐ
 /**
  * GA4 ダッシュボード用 データ取得 API (ga4_api.php)
  *
@@ -71,19 +72,27 @@ try {
     @file_put_contents($cache_file, $json, LOCK_EX);
 
     echo $json;
-} catch (Exception $e) {
+} catch (\Throwable $e) {
+    ob_clean();
     http_response_code(500);
     // エラー時、古いキャッシュがあればそれを返す(フォールバック)
-    if (file_exists($cache_file)) {
+    if (!empty($cache_file) && file_exists($cache_file)) {
         $stale = json_decode(file_get_contents($cache_file), true);
         if (is_array($stale)) {
             $stale['stale'] = true;
             $stale['error'] = $e->getMessage();
+            ob_end_clean();
             echo json_encode($stale, JSON_UNESCAPED_UNICODE);
             exit;
         }
     }
-    echo json_encode(['error' => $e->getMessage()], JSON_UNESCAPED_UNICODE);
+    ob_end_clean();
+    echo json_encode([
+        'error' => $e->getMessage(),
+        'type'  => get_class($e),
+        'file'  => basename($e->getFile()),
+        'line'  => $e->getLine(),
+    ], JSON_UNESCAPED_UNICODE);
 }
 exit;
 
