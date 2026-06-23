@@ -24,9 +24,19 @@ body {
 /* ── Header ── */
 .dashboard-header {
   background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
-  color: #fff; padding: 28px 36px; border-radius: 16px;
+  color: #fff; padding: 20px 28px 24px; border-radius: 16px;
   margin-bottom: 24px; box-shadow: 0 10px 30px rgba(79,70,229,.2);
 }
+.header-top-bar {
+  display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px;
+}
+.header-logo img { height: 34px; width: auto; display: block; filter: brightness(0) invert(1); }
+.top-btn {
+  padding: 7px 18px; border-radius: 999px; background: rgba(255,255,255,.2);
+  color: #fff; text-decoration: none; font-size: 13px; font-weight: 600;
+  border: 1px solid rgba(255,255,255,.4); white-space: nowrap; transition: background .2s;
+}
+.top-btn:hover { background: rgba(255,255,255,.32); }
 .dashboard-header h1 { font-size: 22px; font-weight: 700; margin-bottom: 6px; }
 .header-meta { display: flex; gap: 20px; flex-wrap: wrap; font-size: 13px; opacity: .9; }
 .header-actions { margin-top: 14px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
@@ -151,6 +161,9 @@ tr:hover td { background: #f8fafc; }
 /* ── Footer ── */
 .dashboard-footer { text-align: center; color: #94a3b8; font-size: 12px; margin-top: 24px; padding: 16px; }
 
+/* ── Grid children overflow fix ── */
+.kpi-grid > *, .grid-2 > *, .grid-2-equal > *, .grid-3 > *, .grid-4 > * { min-width: 0; }
+
 /* ── Responsive ── */
 @media (max-width: 1100px) {
   .grid-4 { grid-template-columns: repeat(2,1fr); }
@@ -160,10 +173,26 @@ tr:hover td { background: #f8fafc; }
   .grid-2, .grid-2-equal, .grid-3 { grid-template-columns: 1fr; }
 }
 @media (max-width: 560px) {
+  html, body { overflow-x: hidden; }
   body { padding: 12px; }
   .kpi-grid, .grid-4 { grid-template-columns: 1fr; }
-  .dashboard-header { padding: 20px; }
-  .dashboard-header h1 { font-size: 18px; }
+  .dashboard-header { padding: 16px 16px 20px; }
+  .dashboard-header h1 { font-size: 17px; }
+  .header-logo img { height: 28px; }
+  .top-btn { font-size: 12px; padding: 6px 12px; }
+  .panel { padding: 16px; }
+  .panel-head { flex-wrap: wrap; gap: 8px; }
+  .tab-group { flex-wrap: wrap; }
+  /* テーブル横スクロール */
+  .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+  th, td { padding: 8px 6px; font-size: 12px; }
+  /* イベントリスト */
+  .event-item { grid-template-columns: 1fr 48px; }
+  .event-bar-bg { display: none; }
+  /* ファネル */
+  .funnel-meta { min-width: 60px; }
+  .funnel-users { font-size: 14px; }
+  .funnel-drop-info { flex-direction: column; gap: 2px; }
 }
 </style>
 </head>
@@ -172,6 +201,12 @@ tr:hover td { background: #f8fafc; }
 
 <!-- ── Header ── -->
 <div class="dashboard-header">
+  <div class="header-top-bar">
+    <a href="index.php" class="header-logo">
+      <img src="images/logo.png" alt="デザネコ">
+    </a>
+    <a href="index.php" class="top-btn">TOPページをみる →</a>
+  </div>
   <h1>アクセス解析ダッシュボード</h1>
   <div class="header-meta">
     <span>対象サイト: デザネコ (d-neko.com)</span>
@@ -260,6 +295,7 @@ tr:hover td { background: #f8fafc; }
 <!-- ── ページ別パフォーマンス ── -->
 <div class="panel mb16">
   <div class="panel-head"><h2>ページ別パフォーマンス（過去30日 TOP10）</h2></div>
+  <div class="table-scroll">
   <table>
     <thead>
       <tr>
@@ -273,6 +309,7 @@ tr:hover td { background: #f8fafc; }
     </thead>
     <tbody id="pageMetricsBody"></tbody>
   </table>
+  </div>
   <p class="note">※ GA4の直帰率 = エンゲージメントセッション以外の割合（10秒未満 / CV無し / 1ページのみ閲覧）。UAの直帰率とは定義が異なります。<br>※ 平均エンゲージ時間 = そのページでのユーザーエンゲージメント時間 ÷ PV数</p>
 </div>
 
@@ -280,6 +317,7 @@ tr:hover td { background: #f8fafc; }
 <div class="grid-2-equal">
   <div class="panel">
     <div class="panel-head"><h2>流入元 × コンバージョン</h2></div>
+    <div class="table-scroll">
     <table>
       <thead>
         <tr>
@@ -291,6 +329,7 @@ tr:hover td { background: #f8fafc; }
       </thead>
       <tbody id="sourceConvBody"></tbody>
     </table>
+    </div>
     <p class="note">※ コンバージョンはGA4プロパティで設定したキーイベントの合計件数です。</p>
   </div>
   <div class="panel">
@@ -305,6 +344,7 @@ tr:hover td { background: #f8fafc; }
     <h2>検索キーワード（Google Search Console・過去28日）</h2>
     <span style="font-size:11px;color:#94a3b8">データ反映は1〜2日遅れ</span>
   </div>
+  <div class="table-scroll">
   <table>
     <thead>
       <tr>
@@ -318,16 +358,19 @@ tr:hover td { background: #f8fafc; }
     </thead>
     <tbody id="scKeywordsBody"></tbody>
   </table>
+  </div>
   <p class="note" id="scErrorNote" style="display:none;color:#ef4444"></p>
 </div>
 
 <!-- ── オーガニックランディング ── -->
 <div class="panel mb16">
   <div class="panel-head"><h2>検索流入のランディングページ TOP10</h2></div>
+  <div class="table-scroll">
   <table>
     <thead><tr><th></th><th>ページ</th><th style="text-align:right">セッション</th></tr></thead>
     <tbody id="organicLandingBody"></tbody>
   </table>
+  </div>
   <p class="note">※ オーガニック検索から最初に訪れたページ一覧。</p>
 </div>
 
