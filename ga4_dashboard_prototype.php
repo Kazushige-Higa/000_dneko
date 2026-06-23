@@ -310,6 +310,26 @@ const PALETTE = ['#4f46e5','#06b6d4','#10b981','#f59e0b','#ef4444','#a78bfa','#e
 const charts  = {};
 let trendCache = {};
 
+/* 流入元チャンネル名 日本語マップ（APIが英語で返した場合のフォールバック） */
+const CHANNEL_MAP = {
+  'Direct':            'ダイレクト',
+  'Organic Search':    'オーガニック検索',
+  'Referral':          '参照サイト',
+  'Organic Social':    'SNS（自然流入）',
+  'Paid Search':       '有料検索',
+  'Email':             'メール',
+  'Affiliates':        'アフィリエイト',
+  'Display':           'ディスプレイ広告',
+  'Paid Social':       'SNS（有料）',
+  'Paid Video':        '動画広告',
+  'Paid Shopping':     'ショッピング広告',
+  'Organic Video':     '動画（自然流入）',
+  'Organic Shopping':  'ショッピング（自然流入）',
+  'Unassigned':        '未割り当て',
+  '(other)':           'その他',
+};
+function jaChannel(label) { return CHANNEL_MAP[label] || label; }
+
 /* ===== ユーティリティ ===== */
 function fmtInt(n) { return Number(n || 0).toLocaleString(); }
 function fmtDuration(sec) {
@@ -368,9 +388,10 @@ function render(d) {
   };
   drawLine('pvTrendChart', trendCache.daily.labels, trendCache.daily.data);
 
-  /* 流入元 */
-  drawDonut('sourceChart', d.source.labels, d.source.data, PALETTE, '55%');
-  drawSourceList(d.source);
+  /* 流入元（ラベルを日本語に変換） */
+  const srcLabels = (d.source.labels || []).map(jaChannel);
+  drawDonut('sourceChart', srcLabels, d.source.data, PALETTE, '55%');
+  drawSourceList({ labels: srcLabels, data: d.source.data });
 
   /* 男女比 */
   const gColors = d.gender.labels.map(l => l === '女性' ? '#ec4899' : '#3b82f6');
@@ -528,7 +549,7 @@ function drawSourceConv(items) {
   items.forEach(item => {
     const tr = document.createElement('tr');
     tr.innerHTML = `
-      <td>${escapeHtml(item.channel)}</td>
+      <td>${escapeHtml(jaChannel(item.channel))}</td>
       <td class="num">${fmtInt(item.sessions)}</td>
       <td class="num">${fmtInt(item.conversions)}</td>
       <td class="num">${item.cvr}%</td>`;
