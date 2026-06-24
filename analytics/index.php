@@ -387,7 +387,7 @@ tr:hover td { background: #f8fafc; }
 <div class="panel mb16">
   <div class="panel-head">
     <h2>沖縄県内アクセス（市区町村別）</h2>
-    <span style="font-size:11px;color:#94a3b8">過去90日間</span>
+    <span style="font-size:11px;color:#94a3b8">過去180日間</span>
   </div>
   <div class="region-list" id="okinawaCityList"></div>
   <p class="note">※ GoogleのIPジオロケーションに基づくため、実際の地域と多少誤差が生じる場合があります。</p>
@@ -527,7 +527,8 @@ function render(d) {
 
   /* 地域 */
   drawRegions(d.region || []);
-  drawOkinawaCities(d.okinawa_cities || []);
+  const okinawaTotal = (d.region || []).find(r => r.name === 'Okinawa' || r.name === '沖縄');
+  drawOkinawaCities(d.okinawa_cities || [], okinawaTotal ? okinawaTotal.count : 0);
 }
 
 /* ===== グラフ描画 ===== */
@@ -798,12 +799,15 @@ function drawFunnel(stages) {
   el.innerHTML = html;
 }
 
-function drawOkinawaCities(cities) {
+function drawOkinawaCities(cities, okinawaTotal) {
   const list = document.getElementById('okinawaCityList');
   if (!list) return;
   list.innerHTML = '';
   if (!cities || !cities.length) {
-    list.innerHTML = '<div class="no-data">沖縄県内のデータがありません（ユーザー数が少ない場合、Googleのプライバシー保護により非表示になることがあります）</div>';
+    const totalMsg = okinawaTotal
+      ? `沖縄県からのアクセスは過去30日で <strong>${okinawaTotal}人</strong> です。<br>市区町村別の内訳は、ユーザー数が少ないためGoogleのプライバシー保護により表示できません（過去180日のデータを集計中）。`
+      : '沖縄県内のデータがありません（ユーザー数が少ない場合、Googleのプライバシー保護により非表示になることがあります）';
+    list.innerHTML = `<div class="no-data" style="line-height:1.7">${totalMsg}</div>`;
     return;
   }
   const max = Math.max(...cities.map(c => c.count), 1);
