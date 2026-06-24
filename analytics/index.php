@@ -814,12 +814,12 @@ function drawOkinawaCities(cities, okinawaTotal) {
   cities.forEach(c => {
     const el = document.createElement('div');
     el.className = 'region-item';
-    el.innerHTML = \`
-      <span style="color:#334155;font-weight:500">\${escapeHtml(c.name)}</span>
+    el.innerHTML = `
+      <span style="color:#334155;font-weight:500">${escapeHtml(c.name)}</span>
       <div class="region-bar-bg">
-        <div class="region-bar" style="width:\${(c.count/max*100).toFixed(1)}%;background:linear-gradient(90deg,#10b981,#06b6d4)"></div>
+        <div class="region-bar" style="width:${(c.count/max*100).toFixed(1)}%;background:linear-gradient(90deg,#10b981,#06b6d4)"></div>
       </div>
-      <span class="region-count">\${fmtInt(c.count)}</span>\`;
+      <span class="region-count">${fmtInt(c.count)}</span>`;
     list.appendChild(el);
   });
 }

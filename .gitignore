@@ -35,6 +35,7 @@ data/likes.json
 # GA4 ダッシュボード（秘密鍵・トークン・キャッシュは絶対にコミットしない）
 data/ga4/service_account.json
 data/ga4/token.json
+data/ga4/sc_token.json
 data/ga4/cache.json
 
 # Build artifacts
