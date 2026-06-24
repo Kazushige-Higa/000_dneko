@@ -378,10 +378,10 @@ function ga4_build_dashboard($property_id, $token)
         ],
     ]];
 
-    /* ---- バッチ5: 沖縄県内 市区町村別 ---- */
+    /* ---- バッチ5: 沖縄県内 市区町村別（90日間／プライバシーしきい値対策） ---- */
     $batch5 = ['requests' => [
         [
-            'dateRanges' => $cur,
+            'dateRanges' => [['startDate' => '89daysAgo', 'endDate' => 'yesterday']],
             'dimensions' => [['name' => 'city']],
             'metrics'    => [['name' => 'totalUsers']],
             'dimensionFilter' => [

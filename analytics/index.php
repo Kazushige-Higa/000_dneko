@@ -387,7 +387,7 @@ tr:hover td { background: #f8fafc; }
 <div class="panel mb16">
   <div class="panel-head">
     <h2>沖縄県内アクセス（市区町村別）</h2>
-    <span style="font-size:11px;color:#94a3b8">過去30日間</span>
+    <span style="font-size:11px;color:#94a3b8">過去90日間</span>
   </div>
   <div class="region-list" id="okinawaCityList"></div>
   <p class="note">※ GoogleのIPジオロケーションに基づくため、実際の地域と多少誤差が生じる場合があります。</p>
