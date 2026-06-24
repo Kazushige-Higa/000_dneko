@@ -383,6 +383,16 @@ tr:hover td { background: #f8fafc; }
   <div class="region-list" id="regionList"></div>
 </div>
 
+<!-- ── 沖縄県内 市区町村別 ── -->
+<div class="panel mb16">
+  <div class="panel-head">
+    <h2>沖縄県内アクセス（市区町村別）</h2>
+    <span style="font-size:11px;color:#94a3b8">過去30日間</span>
+  </div>
+  <div class="region-list" id="okinawaCityList"></div>
+  <p class="note">※ GoogleのIPジオロケーションに基づくため、実際の地域と多少誤差が生じる場合があります。</p>
+</div>
+
 <!-- ── Footer ── -->
 <div class="dashboard-footer">
   <span id="footerNote">Google Analytics 4 Data API から取得した実データを表示しています（過去30日間）。</span>
@@ -517,6 +527,7 @@ function render(d) {
 
   /* 地域 */
   drawRegions(d.region || []);
+  drawOkinawaCities(d.okinawa_cities || []);
 }
 
 /* ===== グラフ描画 ===== */
@@ -785,6 +796,28 @@ function drawFunnel(stages) {
     }
   });
   el.innerHTML = html;
+}
+
+function drawOkinawaCities(cities) {
+  const list = document.getElementById('okinawaCityList');
+  if (!list) return;
+  list.innerHTML = '';
+  if (!cities || !cities.length) {
+    list.innerHTML = '<div class="no-data">沖縄県内のデータがありません（ユーザー数が少ない場合、Googleのプライバシー保護により非表示になることがあります）</div>';
+    return;
+  }
+  const max = Math.max(...cities.map(c => c.count), 1);
+  cities.forEach(c => {
+    const el = document.createElement('div');
+    el.className = 'region-item';
+    el.innerHTML = \`
+      <span style="color:#334155;font-weight:500">\${escapeHtml(c.name)}</span>
+      <div class="region-bar-bg">
+        <div class="region-bar" style="width:\${(c.count/max*100).toFixed(1)}%;background:linear-gradient(90deg,#10b981,#06b6d4)"></div>
+      </div>
+      <span class="region-count">\${fmtInt(c.count)}</span>\`;
+    list.appendChild(el);
+  });
 }
 
 function showError(msg) {

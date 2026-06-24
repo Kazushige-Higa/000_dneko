@@ -378,10 +378,28 @@ function ga4_build_dashboard($property_id, $token)
         ],
     ]];
 
+    /* ---- バッチ5: 沖縄県内 市区町村別 ---- */
+    $batch5 = ['requests' => [
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'city']],
+            'metrics'    => [['name' => 'totalUsers']],
+            'dimensionFilter' => [
+                'filter' => [
+                    'fieldName'    => 'region',
+                    'stringFilter' => ['value' => 'Okinawa Prefecture', 'matchType' => 'EXACT'],
+                ],
+            ],
+            'orderBys' => [['metric' => ['metricName' => 'totalUsers'], 'desc' => true]],
+            'limit' => 15,
+        ],
+    ]];
+
     $res1 = ga4_http_post($base . ':batchRunReports', json_encode($batch1), $auth);
     $res2 = ga4_http_post($base . ':batchRunReports', json_encode($batch2), $auth);
     $res3 = ga4_http_post($base . ':batchRunReports', json_encode($batch3), $auth);
     $res4 = ga4_http_post($base . ':batchRunReports', json_encode($batch4), $auth);
+    $res5 = ga4_http_post($base . ':batchRunReports', json_encode($batch5), $auth);
 
     $r1 = json_decode($res1, true);
     if (json_last_error() !== JSON_ERROR_NONE || !is_array($r1)) {
@@ -418,10 +436,20 @@ function ga4_build_dashboard($property_id, $token)
         throw new Exception('GA4 APIエラー(バッチ4): ' . $msg);
     }
 
+    $r5 = json_decode($res5, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($r5)) {
+        throw new Exception('GA4 バッチ5 JSON解析失敗: ' . substr($res5, 0, 500));
+    }
+    if (isset($r5['error'])) {
+        $msg = $r5['error']['message'] ?? json_encode($r5['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('GA4 APIエラー(バッチ5): ' . $msg);
+    }
+
     $rep1 = $r1['reports'] ?? [];
     $rep2 = $r2['reports'] ?? [];
     $rep3 = $r3['reports'] ?? [];
     $rep4 = $r4['reports'] ?? [];
+    $rep5 = $r5['reports'] ?? [];
 
     /* ---- KPI 合計の組み立て ---- */
     $kpi_rows = $rep1[0]['rows'] ?? [];
@@ -633,6 +661,53 @@ function ga4_build_dashboard($property_id, $token)
         $monthly['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
+    /* ---- 沖縄県内 市区町村別 ---- */
+    $okinawa_city_map = [
+        'Naha'             => '那覇市',
+        'Urasoe'           => '浦添市',
+        'Ginowan'          => '宜野湾市',
+        'Okinawa'          => '沖縄市',
+        'Uruma'            => 'うるま市',
+        'Tomigusuku'       => '豊見城市',
+        'Itoman'           => '糸満市',
+        'Nanjo'            => '南城市',
+        'Nago'             => '名護市',
+        'Ishigaki'         => '石垣市',
+        'Miyakojima'       => '宮古島市',
+        'Chatan'           => '北谷町',
+        'Kadena'           => '嘉手納町',
+        'Yomitan'          => '読谷村',
+        'Nishihara'        => '西原町',
+        'Haebaru'          => '南風原町',
+        'Yaese'            => '八重瀬町',
+        'Yonabaru'         => '与那原町',
+        'Kitanakagusuku'   => '北中城村',
+        'Nakagusuku'       => '中城村',
+        'Kin'              => '金武町',
+        'Ginoza'           => '宜野座村',
+        'Motobu'           => '本部町',
+        'Nakijin'          => '今帰仁村',
+        'Ogimi'            => '大宜味村',
+        'Kunigami'         => '国頭村',
+        'Higashi'          => '東村',
+        'Ie'               => '伊江村',
+        'Iheya'            => '伊平屋村',
+        'Izena'            => '伊是名村',
+        'Kume Island'      => '久米島町',
+        'Tarama'           => '多良間村',
+        'Yonaguni'         => '与那国町',
+        'Taketomi'         => '竹富町',
+    ];
+    $okinawa_cities = [];
+    foreach (($rep5[0]['rows'] ?? []) as $row) {
+        $city_en = $row['dimensionValues'][0]['value'];
+        if ($city_en === '(not set)' || $city_en === '') continue;
+        $okinawa_cities[] = [
+            'name'  => $okinawa_city_map[$city_en] ?? $city_en,
+            'count' => (int)($row['metricValues'][0]['value'] ?? 0),
+        ];
+    }
+
     /* ---- ユーザー熱量ファネル ---- */
     $stage_users = [
         (int)$cur_m['users'],                                                              // Stage1: 全訪問者
@@ -681,6 +756,7 @@ function ga4_build_dashboard($property_id, $token)
         'source_conv'      => $source_conv,
         'events'           => $events,
         'funnel_stages'    => $funnel_stages,
+        'okinawa_cities'   => $okinawa_cities,
         'period'           => '過去30日間',
     ];
 }
