@@ -387,7 +387,7 @@ function ga4_build_dashboard($property_id, $token)
             'dimensionFilter' => [
                 'filter' => [
                     'fieldName'    => 'region',
-                    'stringFilter' => ['value' => 'Okinawa Prefecture', 'matchType' => 'EXACT'],
+                    'stringFilter' => ['value' => 'Okinawa', 'matchType' => 'EXACT'],
                 ],
             ],
             'orderBys' => [['metric' => ['metricName' => 'totalUsers'], 'desc' => true]],
