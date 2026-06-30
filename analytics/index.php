@@ -5,13 +5,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>アクセス解析ダッシュボード | デザネコ</title>
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-T46Y45V5X6"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){ dataLayer.push(arguments); }
-  gtag('js', new Date());
-  gtag('config', 'G-T46Y45V5X6');
-</script>
+<!-- GA4トラッキング除外: ダッシュボード自身のPVをデータに混入させないため計測しない -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
 * { box-sizing: border-box; margin: 0; padding: 0; }
