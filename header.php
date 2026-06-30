@@ -146,6 +146,7 @@
     gtag('config', 'G-T46Y45V5X6');
   </script>
   <script src="//kitchen.juicer.cc/?color=ND+ngZfbDgU=" async></script>
+  <script src="/js/visitor_tracker.js" defer></script>
 </head>
 
 <body id="top">

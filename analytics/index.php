@@ -149,6 +149,30 @@ tr:hover td { background: #f8fafc; }
 .funnel-drop-text { color: #ef4444; }
 .funnel-next-text { color: #10b981; font-weight: 600; }
 
+/* ── Heat Score ── */
+.heat-summary { display: flex; align-items: center; gap: 24px; margin-bottom: 18px; flex-wrap: wrap; }
+.heat-total { font-size: 13px; color: #64748b; }
+.heat-total strong { font-size: 22px; font-weight: 700; color: #0f172a; margin-right: 2px; }
+.heat-avg { font-size: 13px; color: #64748b; }
+.heat-avg strong { font-size: 22px; font-weight: 700; color: #4f46e5; margin-right: 2px; }
+
+.heat-dist { display: grid; grid-template-columns: repeat(4,1fr); gap: 12px; margin-bottom: 18px; }
+.heat-tier-card { border-radius: 10px; padding: 14px 16px; text-align: center; }
+.heat-tier-card .tier-label { font-size: 14px; font-weight: 700; margin-bottom: 4px; }
+.heat-tier-card .tier-count { font-size: 26px; font-weight: 800; }
+.heat-tier-card .tier-unit  { font-size: 12px; opacity: .7; }
+
+.hot-list  { display: flex; flex-direction: column; gap: 6px; }
+.hot-item  { display: grid; grid-template-columns: 32px 1fr auto auto; align-items: center;
+             gap: 10px; padding: 8px 10px; border-radius: 8px; background: #f8fafc; font-size: 13px; }
+.hot-rank  { color: #94a3b8; font-weight: 700; font-size: 12px; text-align: center; }
+.hot-id    { color: #475569; font-family: "SF Mono", Menlo, monospace; font-size: 11px;
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.hot-sessions { font-size: 11px; color: #94a3b8; white-space: nowrap; }
+.hot-score { font-weight: 700; font-size: 14px; }
+.tier-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px;
+              border-radius: 999px; white-space: nowrap; margin-left: 4px; }
+
 /* ── Notes ── */
 .note { font-size: 11px; color: #94a3b8; margin-top: 10px; line-height: 1.6; }
 .no-data { color: #94a3b8; font-size: 13px; padding: 16px 0; text-align: center; }
@@ -287,6 +311,31 @@ tr:hover td { background: #f8fafc; }
   </div>
   <div id="funnelWrap" class="funnel-wrap"></div>
   <p class="note">※ 各ステージは個別ユーザー数（ページ単体の訪問者）です。Stage5のLINEクリックはヘッダー・フッターのgtag計測が有効なセッション以降に反映されます。</p>
+</div>
+
+<!-- ── 個別熱量スコア ── -->
+<div class="grid-2-equal mb16">
+  <div class="panel">
+    <div class="panel-head">
+      <h2>個別熱量スコア — ティア分布</h2>
+      <span id="heatUpdated" style="font-size:11px;color:#94a3b8">読み込み中…</span>
+    </div>
+    <div id="heatSummary" class="heat-summary">
+      <div class="heat-total">訪問者数 <strong id="heatTotal">—</strong>人</div>
+      <div class="heat-avg">平均スコア <strong id="heatAvg">—</strong>点</div>
+    </div>
+    <div id="heatDist" class="heat-dist">
+      <div class="heat-tier-card" style="background:#fef2f2"><div class="tier-label" style="color:#ef4444">🔥 Hot</div><div class="tier-count" style="color:#ef4444" id="heatHot">—</div><div class="tier-unit">人 (80点〜)</div></div>
+      <div class="heat-tier-card" style="background:#fffbeb"><div class="tier-label" style="color:#f59e0b">☀️ Warm</div><div class="tier-count" style="color:#f59e0b" id="heatWarm">—</div><div class="tier-unit">人 (50〜79点)</div></div>
+      <div class="heat-tier-card" style="background:#eff6ff"><div class="tier-label" style="color:#3b82f6">🌡️ Cool</div><div class="tier-count" style="color:#3b82f6" id="heatCool">—</div><div class="tier-unit">人 (20〜49点)</div></div>
+      <div class="heat-tier-card" style="background:#f8fafc"><div class="tier-label" style="color:#94a3b8">❄️ Cold</div><div class="tier-count" style="color:#94a3b8" id="heatCold">—</div><div class="tier-unit">人 (〜19点)</div></div>
+    </div>
+    <p class="note">※ スコアはCookie IDで識別した個別訪問者の行動から自動集計（ページ閲覧・滞在時間・スクロール・CTAクリック等）</p>
+  </div>
+  <div class="panel">
+    <div class="panel-head"><h2>ホットユーザー TOP15</h2></div>
+    <div id="hotList" class="hot-list"><p class="no-data">読み込み中…</p></div>
+  </div>
 </div>
 
 <!-- ── ページ別パフォーマンス ── -->
@@ -836,6 +885,55 @@ fetch('ga4_api.php')
   .then(r => r.json())
   .then(d => { if (d.error && !d.kpi) { showError(d.error); return; } render(d); })
   .catch(e => showError(e.message));
+
+/* ===== 個別熱量スコア取得 ===== */
+const TIER_META = {
+  hot:  { label: '🔥 Hot',  color: '#ef4444', bg: '#fef2f2' },
+  warm: { label: '☀️ Warm', color: '#f59e0b', bg: '#fffbeb' },
+  cool: { label: '🌡️ Cool', color: '#3b82f6', bg: '#eff6ff' },
+  cold: { label: '❄️ Cold', color: '#94a3b8', bg: '#f8fafc' },
+};
+
+function renderHeatScore(h) {
+  document.getElementById('heatTotal').textContent = fmtInt(h.total);
+  document.getElementById('heatAvg').textContent   = h.avg_score;
+  document.getElementById('heatHot').textContent   = fmtInt(h.dist.hot  || 0);
+  document.getElementById('heatWarm').textContent  = fmtInt(h.dist.warm || 0);
+  document.getElementById('heatCool').textContent  = fmtInt(h.dist.cool || 0);
+  document.getElementById('heatCold').textContent  = fmtInt(h.dist.cold || 0);
+  document.getElementById('heatUpdated').textContent = '自サイト計測データ';
+
+  const listEl = document.getElementById('hotList');
+  if (!h.hot_list || h.hot_list.length === 0) {
+    listEl.innerHTML = '<p class="no-data">まだデータが蓄積されていません（訪問者が増えると表示されます）</p>';
+    return;
+  }
+  listEl.innerHTML = h.hot_list.map((v, i) => {
+    const tm = TIER_META[v.tier] || TIER_META.cold;
+    const badge = `<span class="tier-badge" style="background:${tm.bg};color:${tm.color}">${tm.label}</span>`;
+    const pages = (v.top_pages || []).map(p => p.p).join(' / ') || '—';
+    return `<div class="hot-item">
+      <div class="hot-rank">${i + 1}</div>
+      <div>
+        <div class="hot-id">${escapeHtml(v.id)}</div>
+        <div style="font-size:11px;color:#94a3b8;margin-top:2px">${escapeHtml(pages)}</div>
+      </div>
+      <div class="hot-sessions" title="訪問回数">${v.sessions}回訪問</div>
+      <div>
+        <span class="hot-score" style="color:${tm.color}">${v.score}pt</span>
+        ${badge}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+fetch('../visitor_tracker.php?action=stats')
+  .then(r => r.json())
+  .then(h => renderHeatScore(h))
+  .catch(() => {
+    document.getElementById('heatUpdated').textContent = '取得失敗';
+    document.getElementById('hotList').innerHTML = '<p class="no-data">データ取得に失敗しました</p>';
+  });
 </script>
 </body>
 </html>
