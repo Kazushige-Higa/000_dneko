@@ -25,7 +25,10 @@
   $head_og_type = ($is_entry_page && !empty($entry_title)) ? 'article' : 'website';
   $head_og_title = ($is_entry_page && !empty($entry_title)) ? $entry_title : $title;
   $head_og_description = ($is_entry_page && !empty($entry_description)) ? $entry_description : $description;
-  $head_og_image = ($is_entry_page && !empty($entry_og_image)) ? $entry_og_image : $default_og_image;
+  // ページ独自OGP画像対応（個別ページで $page_og_image を設定すると差し替えられる）
+  $head_og_image = ($is_entry_page && !empty($entry_og_image))
+    ? $entry_og_image
+    : (!empty($page_og_image) ? $page_og_image : $default_og_image);
   ?>
   <link rel="canonical" href="<?php echo htmlspecialchars(nowUrl(), ENT_QUOTES, 'UTF-8'); ?>">
   <title><?php echo htmlspecialchars($head_prefix . $head_title_suffix, ENT_QUOTES, 'UTF-8'); ?></title>
@@ -184,7 +187,7 @@
                 <li>
                   <a href="moja-cat.php">
                     <span>Moja cat</span>
-                    もじゃネコについて
+                    もじゃねこについて
                   </a>
                 </li>
                 <li>

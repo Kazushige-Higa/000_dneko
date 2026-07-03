@@ -58,7 +58,7 @@
     <div class="child">
         <div class="title">ブログ新着情報</div>
         <?php
-        $sidebar_blog_posts = microcms_get("/blog?limit=3&orders=-publishedAt");
+        $sidebar_blog_posts = microcms_get_list("/blog", "limit=3&orders=-publishedAt");
         ?>
         <?php
         $loop_posts = ($sidebar_blog_posts && !empty($sidebar_blog_posts->contents)) ? $sidebar_blog_posts->contents : [];
@@ -73,7 +73,7 @@
     <div class="child">
         <div class="title">制作実績新着情報</div>
         <?php
-        $sidebar_works_posts = microcms_get("/works?limit=3&orders=-publishedAt");
+        $sidebar_works_posts = microcms_get_list("/works", "limit=3&orders=-publishedAt");
         ?>
         <?php
         $loop_posts = ($sidebar_works_posts && !empty($sidebar_works_posts->contents)) ? $sidebar_works_posts->contents : [];

@@ -139,8 +139,8 @@
                 <div class='space_3 space_sp2'></div>
 
                 <?php
-                // Fetch portfolio items from microCMS works endpoint (多めに取得してカテゴリ分け)
-                $portfolio_response = microcms_get("/works?limit=100&orders=-publishedAt");
+                // Fetch portfolio items from microCMS works endpoint (公開済みのみ、多めに取得してカテゴリ分け)
+                $portfolio_response = microcms_get_list("/works", "limit=100&orders=-publishedAt");
                 $portfolio_posts = ($portfolio_response && !empty($portfolio_response->contents)) ? $portfolio_response->contents : [];
 
                 // カテゴリ別にグループ化
@@ -240,8 +240,8 @@
                 </h2>
                 <div class='space_3 space_sp2'></div>
                 <?php
-                // Fetch blog posts from microCMS blog endpoint (多めに取得してカテゴリ分け)
-                $blog_response = microcms_get("/blog?limit=100&orders=-publishedAt");
+                // Fetch blog posts from microCMS blog endpoint (公開済みのみ、多めに取得してカテゴリ分け)
+                $blog_response = microcms_get_list("/blog", "limit=100&orders=-publishedAt");
                 $blog_posts = ($blog_response && !empty($blog_response->contents)) ? $blog_response->contents : [];
 
                 // カテゴリ別にグループ化
@@ -341,8 +341,8 @@
                 </h2>
                 <div class='space_3 space_sp2'></div>
                 <?php
-                // Fetch column posts from microCMS column endpoint (多めに取得してカテゴリ分け)
-                $column_response = microcms_get("/column?limit=100&orders=-publishedAt");
+                // Fetch column posts from microCMS column endpoint (公開済みのみ、多めに取得してカテゴリ分け)
+                $column_response = microcms_get_list("/column", "limit=100&orders=-publishedAt");
                 $column_posts = ($column_response && !empty($column_response->contents)) ? $column_response->contents : [];
 
                 // カテゴリ別にグループ化

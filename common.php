@@ -45,9 +45,11 @@ ini_set('display_errors', "Off");
 // blog CMS (ros-cp.com)
 $requested_eid = isset($_GET["eid"]) ? trim((string)$_GET["eid"]) : '';
 $requested_entry_type = isset($_GET["type"]) ? trim((string)$_GET["type"]) : 'blog';
-if ($requested_entry_type !== 'works') {
+if ($requested_entry_type !== 'works' && $requested_entry_type !== 'column') {
     $requested_entry_type = 'blog';
 }
+// microCMS プレビュー用 draftKey
+$requested_draft_key = isset($_GET["draftKey"]) ? trim((string)$_GET["draftKey"]) : '';
 $blog_title = '';
 if ($requested_eid !== '' && !empty($cmsID)) {
     $ros_blog_title = @file_get_contents(
@@ -99,12 +101,54 @@ function microcms_get($endpoint)
  * @param string $eid  Content ID from URL parameter
  * @return object|null Blog entry object or null
  */
-function microcms_get_entry($eid, $entry_type = 'blog')
+function microcms_get_entry($eid, $entry_type = 'blog', $draft_key = '')
 {
     $eid = trim((string)$eid);
     if ($eid === '') return null;
-    $endpoint = ($entry_type === 'works') ? '/works' : '/blog';
-    return microcms_get($endpoint . "/" . rawurlencode($eid));
+    if ($entry_type === 'works') {
+        $endpoint = '/works';
+    } elseif ($entry_type === 'column') {
+        $endpoint = '/column';
+    } else {
+        $endpoint = '/blog';
+    }
+    $path = $endpoint . "/" . rawurlencode($eid);
+    if ($draft_key !== '') {
+        $path .= "?draftKey=" . rawurlencode($draft_key);
+    }
+    $entry = microcms_get($path);
+
+    // draftKey が指定されていない場合、下書き記事（publishedAt が Null）は
+    // 一般公開対象から除外する。APIキーを持つ HP バックエンドでは下書きも
+    // 取得できてしまうため、ここで明示的にブロックする。
+    if ($draft_key === '' && $entry !== null) {
+        $is_published = isset($entry->publishedAt)
+            && $entry->publishedAt !== null
+            && trim((string)$entry->publishedAt) !== '';
+        if (!$is_published) {
+            return null;
+        }
+    }
+    return $entry;
+}
+
+/**
+ * microCMS リスト取得（公開済みのみ）
+ * 記事一覧など、一般公開ページで下書き記事を混入させないためのヘルパー。
+ *
+ * @param string $endpoint  '/column' | '/blog' | '/works'
+ * @param string $extra     追加クエリ（先頭 & 不要、例: 'limit=10&orders=-publishedAt'）
+ * @return object|null      レスポンス
+ */
+function microcms_get_list($endpoint, $extra = '')
+{
+    $endpoint = '/' . ltrim(trim((string)$endpoint), '/');
+    // publishedAt が存在する（＝公開済み）のみを取得
+    $query = 'filters=publishedAt[exists]';
+    if ($extra !== '') {
+        $query .= '&' . ltrim($extra, '&?');
+    }
+    return microcms_get($endpoint . '?' . $query);
 }
 
 /**
@@ -202,7 +246,7 @@ function microcms_extract_blog_image($entry)
 }
 
 // microCMS blog meta (used for entry pages)
-$microcms_blog_entry = microcms_get_entry($requested_eid, $requested_entry_type);
+$microcms_blog_entry = microcms_get_entry($requested_eid, $requested_entry_type, $requested_draft_key);
 $microcms_blog_title = microcms_extract_blog_title($microcms_blog_entry);
 $microcms_blog_description = microcms_extract_blog_description($microcms_blog_entry);
 $microcms_blog_image = microcms_extract_blog_image($microcms_blog_entry);

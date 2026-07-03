@@ -85,7 +85,8 @@ $page_script = '';
           $list_total = 0;
 
           do {
-            $list_response = microcms_get($list_endpoint . "?limit=" . $list_limit . "&offset=" . $list_offset . "&orders=-publishedAt");
+            // 下書き記事を除外して公開済みのみ取得
+            $list_response = microcms_get_list($list_endpoint, "limit=" . $list_limit . "&offset=" . $list_offset . "&orders=-publishedAt");
             if (!$list_response || empty($list_response->contents)) {
               break;
             }

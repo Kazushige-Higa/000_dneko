@@ -23,6 +23,8 @@ $page_script = '';
 <?php
 // Get article ID from URL parameter
 $eid = isset($_GET["eid"]) ? trim($_GET["eid"]) : '';
+// microCMSプレビュー用 draftKey（下書き取得時に使用）
+$draft_key = isset($_GET["draftKey"]) ? trim($_GET["draftKey"]) : '';
 $entry_endpoint = ($entry_type === 'works') ? "/works" : (($entry_type === 'column') ? "/column" : "/blog");
 $list_back_link = "entry_list.php?type=" . urlencode($entry_type);
 if ($entry_type === 'works') {
@@ -35,8 +37,20 @@ if ($entry_type === 'works') {
   $list_back_text = "記事一覧へ戻る";
   $related_heading = "関連記事";
 }
-$post = !empty($eid) ? microcms_get($entry_endpoint . "/" . rawurlencode($eid)) : null;
+// 記事取得（draftKeyがある場合は下書きプレビュー、ない場合は公開版）
+$fetch_path = $entry_endpoint . "/" . rawurlencode($eid);
+if ($draft_key !== '') {
+  $fetch_path .= "?draftKey=" . rawurlencode($draft_key);
+}
+$post = !empty($eid) ? microcms_get($fetch_path) : null;
 ?>
+
+<?php if ($post && $draft_key !== ''): ?>
+<!-- microCMSプレビューモード：管理者用の目印バー -->
+<div style="background:#F6921E;color:#fff;padding:12px 20px;text-align:center;font-weight:bold;font-size:14px;position:sticky;top:0;z-index:9999;">
+  🔍 プレビューモード（下書きを表示中）｜このバーは公開ページでは表示されません
+</div>
+<?php endif; ?>
 
 <div class='space_10 space_sp8'></div>
 <div class="blog_wrap">

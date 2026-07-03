@@ -1,24 +1,96 @@
 <?php
-$page_title = "もじゃネコについて";
-$page_title_eng = "Moja cat";
-$page_description = "";
-$page_style = "";
+$page_title = "もじゃねこ｜デザネコ公式キャラクター｜黒猫もじゃ・白猫くるる";
+$page_title_eng = "Moja Cats";
+$page_description = "もじゃねこは沖縄のデザインブランド「デザネコ」公式キャラクター。黒猫「もじゃ」と白猫「くるる」のプロフィール・誕生ストーリー、LINEスタンプ・オリジナルグッズをご紹介します。";
+
+// もじゃねこ専用OGP画像（差し替え用：images/ogp_moja-cat.jpg）
+$page_og_image = ((isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/' . ltrim($img, '/') . '/ogp_moja-cat.jpg');
+
+// JSON-LD構造化データ（もじゃねこ専用 / WebPage + CreativeWork + Character / BreadcrumbList）
+$current_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$home_url = (isset($_SERVER['HTTPS']) ? 'https' : 'http') . '://' . $_SERVER['HTTP_HOST'] . '/';
+$moja_img_url = $home_url . ltrim($img, '/') . '/moja-cats_moja.webp';
+$kururu_img_url = $home_url . ltrim($img, '/') . '/moja-cats_kururu.webp';
+
+$page_style = '
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": "もじゃねこ｜デザネコ公式キャラクター｜黒猫もじゃ・白猫くるる",
+  "url": "' . htmlspecialchars($current_url, ENT_QUOTES, 'UTF-8') . '",
+  "description": "もじゃねこは沖縄のデザインブランド「デザネコ」公式キャラクター。黒猫「もじゃ」と白猫「くるる」のプロフィール・誕生ストーリー、LINEスタンプ・オリジナルグッズをご紹介します。",
+  "inLanguage": "ja",
+  "isPartOf": {
+    "@type": "WebSite",
+    "name": "デザネコ",
+    "url": "' . htmlspecialchars($home_url, ENT_QUOTES, 'UTF-8') . '"
+  },
+  "mainEntity": {
+    "@type": "CreativeWork",
+    "name": "もじゃねこ",
+    "alternateName": ["もじゃネコ", "Moja Cats"],
+    "description": "デザネコ公式キャラクター。黒猫「もじゃ」と白猫「くるる」の2匹で構成される、ねこの兄妹キャラクター。",
+    "creator": {
+      "@type": "Organization",
+      "name": "デザネコ",
+      "url": "' . htmlspecialchars($home_url, ENT_QUOTES, 'UTF-8') . '",
+      "sameAs": [
+        "https://www.instagram.com/dezaneko/",
+        "https://www.youtube.com/@design-cat",
+        "https://line.me/R/ti/p/@quy1014b",
+        "https://store.line.me/stickershop/author/5708453/ja",
+        "https://suzuri.jp/design_cat",
+        "https://dic.pixiv.net/a/もじゃねこ"
+      ]
+    },
+    "character": [
+      {
+        "@type": "Person",
+        "name": "もじゃ",
+        "alternateName": "もじゃねこのもじゃ",
+        "description": "黒い毛並みと黄色い瞳、もじゃもじゃヘアが特徴の黒猫。デザインが得意で、みんなの『らしさ』をカタチにする。",
+        "image": "' . htmlspecialchars($moja_img_url, ENT_QUOTES, 'UTF-8') . '"
+      },
+      {
+        "@type": "Person",
+        "name": "くるる",
+        "alternateName": "もじゃねこのくるる",
+        "description": "白い毛並みと青い瞳、カールヘアが特徴の白猫。明るく好奇心旺盛で、なんでもチャレンジする性格。",
+        "image": "' . htmlspecialchars($kururu_img_url, ENT_QUOTES, 'UTF-8') . '"
+      }
+    ]
+  }
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {"@type": "ListItem", "position": 1, "name": "ホーム", "item": "' . htmlspecialchars($home_url, ENT_QUOTES, 'UTF-8') . '"},
+    {"@type": "ListItem", "position": 2, "name": "もじゃねこ", "item": "' . htmlspecialchars($current_url, ENT_QUOTES, 'UTF-8') . '"}
+  ]
+}
+</script>
+';
+
 $page_script = '';
 ?>
 <?php include_once './header.php'; ?>
 
-<!-- もじゃネコ moja-cat.php -->
+<!-- もじゃねこ moja-cat.php -->
 <div class='overflow'>
 
     <section>
         <div class="overflow relative bg_pink">
 
             <div class="puton tcenter center line_height_10 shadow width_sp10">
-                <h2>
+                <h1>
                     <span class="act02 txt_split type_up fs_120 fs_sp80 line_height_14 tcenter white bold shadow font_kiwi">moja-cats</span>
                     <br>
-                    <span class="act03 blur fs_40 fs_sp30 line_height_14 tcenter white bold shadow font_kiwi">もじゃねこの「もじゃ」と「くるる」</span>
-                </h2>
+                    <span class="act03 blur fs_40 fs_sp30 line_height_14 tcenter white bold shadow font_kiwi">もじゃねこ｜デザネコ公式キャラクターの「もじゃ」と「くるる」</span>
+                </h1>
                 <div class='space_3 space_sp6'></div>
                 <div class="act04 blur width_3 width_sp7">
                     <button class='btn_normal bg_line radius center'>
@@ -51,6 +123,25 @@ $page_script = '';
         </div>
     </section>
 
+    <!-- ▼ 導入リード文（SEO的に重要・キーワード密度向上） ▼ -->
+    <section>
+        <div class='bg_pink'>
+            <div class='single02'>
+                <div class='mbox'>
+                    <div class="tcenter act blur">
+                        <p class="fs_22 fs_sp16 bold line_height_18 tjustify">
+                            <strong>もじゃねこ</strong>は、沖縄県を拠点とするデザインブランド「<a href="./">デザネコ</a>」の公式キャラクターです。黒猫の「もじゃ」と白猫の「くるる」の2匹で構成され、デザネコのコラム記事やSNS、LINEスタンプ、オリジナルグッズに登場しています。
+                        </p>
+                        <div class='space_1 space_sp1'></div>
+                        <p class="fs_18 fs_sp14 line_height_18 tjustify">
+                            このページでは、<strong>もじゃねこ</strong>の2匹それぞれの誕生ストーリー・性格・トレードマーク、そしてLINEスタンプ・オリジナルグッズの情報をご紹介します。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section>
         <div class='bg_pink'>
             <div class='space_1 space_sp1'></div>
@@ -58,7 +149,7 @@ $page_script = '';
 
                 <!-- // youtube -->
                 <li class="youtube">
-                    <a href="<?php echo $youtube; ?>" target="_blank" rel="nofollow">
+                    <a href="<?php echo $youtube; ?>" target="_blank" rel="nofollow" aria-label="もじゃねこ公式YouTube">
                         <svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.1 13.37">
                             <path class="b" d="M18.7,2.09c-.22-.82-.87-1.47-1.69-1.69-1.49-.4-7.46-.4-7.46-.4,0,0-5.97,0-7.46,.4-.82,.22-1.47,.87-1.69,1.69-.4,1.49-.4,4.6-.4,4.6,0,0,0,3.11,.4,4.6,.22,.82,.87,1.47,1.69,1.69,1.49,.4,7.46,.4,7.46,.4,0,0,5.97,0,7.46-.4,.82-.22,1.47-.87,1.69-1.69,.4-1.49,.4-4.6,.4-4.6,0,0,0-3.11-.4-4.6ZM7.64,9.55V3.82l4.96,2.86-4.96,2.86Z" />
                         </svg>
@@ -66,7 +157,7 @@ $page_script = '';
                 </li>
                 <!-- // instagram -->
                 <li class="instagram">
-                    <a href="<?php echo $instagram; ?>" target="_blank" rel="nofollow">
+                    <a href="<?php echo $instagram; ?>" target="_blank" rel="nofollow" aria-label="もじゃねこ公式Instagram">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 17.9">
                             <g>
                                 <path class="c" d="M9,1.6c2.4,0,2.7,0,3.6,.1,.9,0,1.3,.2,1.7,.3,.4,.2,.7,.4,1,.7s.5,.6,.7,1c.1,.3,.3,.8,.3,1.7s.1,1.2,.1,3.6,0,2.7-.1,3.6c0,.9-.2,1.3-.3,1.7-.2,.4-.4,.7-.7,1s-.6,.5-1,.7c-.3,.1-.8,.3-1.7,.3s-1.2,.1-3.6,.1-2.7,0-3.6-.1c-.9,0-1.3-.2-1.7-.3-.4-.2-.7-.4-1-.7s-.5-.6-.7-1c-.1-.4-.3-.9-.3-1.8s-.1-1.2-.1-3.6,0-2.7,.1-3.6c0-.9,.2-1.3,.3-1.7,.2-.4,.4-.7,.7-1s.6-.5,1-.7c.3-.1,.8-.3,1.7-.3h3.6m0-1.6c-2.4,0-2.7,0-3.7,.1-1,0-1.6,.2-2.2,.4-.6,.2-1.1,.5-1.6,1-.5,.5-.8,1-1,1.6-.2,.5-.4,1.2-.4,2.1,0,1-.1,1.3-.1,3.7s0,2.7,.1,3.7c0,1,.2,1.6,.4,2.2,.2,.6,.5,1.1,1,1.6,.5,.5,1,.8,1.6,1s1.2,.4,2.2,.4,1.3,.1,3.7,.1,2.7,0,3.7-.1c1,0,1.6-.2,2.2-.4,.6-.2,1.1-.5,1.6-1s.8-1,1-1.6,.4-1.2,.4-2.2,.1-1.3,.1-3.7,0-2.7-.1-3.7c0-1-.2-1.6-.4-2.2-.2-.6-.5-1.1-1-1.6-.5-.5-1-.8-1.6-1S13.7,0,12.7,0h-3.7Zm0,4.3c-2.6,0-4.6,2.1-4.6,4.6s2.1,4.6,4.6,4.6,4.6-2.1,4.6-4.6-2.1-4.6-4.6-4.6Zm0,7.6c-1.6,0-3-1.3-3-3,0-1.6,1.3-3,3-3,1.6,0,3,1.3,3,3-.1,1.6-1.4,3-3,3ZM13.7,3.1c-.6,0-1.1,.5-1.1,1.1s.5,1.1,1.1,1.1,1.1-.5,1.1-1.1-.5-1.1-1.1-1.1Z" />
@@ -76,7 +167,7 @@ $page_script = '';
                 </li>
                 <!-- // line -->
                 <li class="line">
-                    <a href="<?php echo $line; ?>" target='_blank' rel='noopener'>
+                    <a href="<?php echo $line; ?>" target='_blank' rel='noopener' aria-label="もじゃねこ公式LINE">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.9 18.12">
                             <path d="M18.9,7.7C18.9,3.4,14.6,0,9.4,0S0,3.4,0,7.7c0,3.8,3.4,7,7.9,7.6,.3,.1,.7,.2,.8,.5,.1,.2,.1,.6,0,.9,0,0-.1,.7-.1,.8,0,.2-.2,.9,.8,.5s5.4-3.2,7.4-5.5h0c1.4-1.6,2.1-3.1,2.1-4.8Zm-13.2,2.5h-1.9c-.3,0-.5-.2-.5-.5v-3.8c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.3h1.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5Zm2-.5c0,.3-.2,.5-.5,.5s-.5-.2-.5-.5v-3.8c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.8Zm4.5,0c0,.2-.1,.4-.3,.5h-.2c-.2,0-.3-.1-.4-.2l-1.9-2.6v2.3c0,.3-.2,.5-.5,.5s-.5-.2-.5-.5v-3.8c0-.2,.1-.4,.3-.5h.2c.2,0,.3,.1,.4,.2l1.9,2.6v-2.3c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.8Zm3-2.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.4v.9h1.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.9c-.3,0-.5-.2-.5-.5v-1.9h0v-1.9h0c0-.3,.2-.5,.5-.5h1.9c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.4v.9h1.4Z" />
                         </svg>
@@ -89,20 +180,20 @@ $page_script = '';
             <div class='single02'>
                 <div class='flexbox'>
                     <div class='width_5 width_sp10 act blur'>
-                        <img class="radius" src='<?php echo $img; ?>/moja-cats_moja.webp' alt='もじゃネコの黒ネコ「もじゃ」' loading='lazy'>
+                        <img class="radius" src='<?php echo $img; ?>/moja-cats_moja.webp' alt='もじゃねこの黒猫「もじゃ」もじゃもじゃヘアと黄色い瞳が特徴のキャラクター' loading='lazy'>
                     </div>
                     <div class='width_4 width_sp10 p10 act inup'>
                         <div>
                             <h2>
                                 <span class='bold border_bottom fs_35 fs_sp24 font_kiwi'>
-                                    もじゃネコの黒ネコ「もじゃ」
+                                    もじゃねこの黒猫「もじゃ」
                                 </span>
                             </h2>
                             <div class='space_2 space_sp1'></div>
 
                             <div class="tjustify bold">
                                 <p>
-                                    黒い毛並みと黄色い瞳、そしてトレードマークの“もじゃもじゃヘア”が特徴の黒ネコ。<br>
+                                    黒い毛並みと黄色い瞳、トレードマークの“もじゃもじゃヘア”が特徴の、<strong>もじゃねこの黒猫「もじゃ」</strong>。<br>
                                     幼い頃はこのくせ毛がコンプレックスで、まわりのネコたちにからかわれることもありました。
                                 </p>
                                 <p>
@@ -130,20 +221,20 @@ $page_script = '';
             <div class='single02'>
                 <div class='flexbox reversal'>
                     <div class='width_5 width_sp10 act blur'>
-                        <img class="radius" src='<?php echo $img; ?>/moja-cats_kururu.webp' alt='もじゃネコの黒ネコ「もじゃ」' loading='lazy'>
+                        <img class="radius" src='<?php echo $img; ?>/moja-cats_kururu.webp' alt='もじゃねこの白猫「くるる」白い毛並みと青い瞳、カールヘアが特徴のキャラクター' loading='lazy'>
                     </div>
                     <div class='width_4 width_sp10 p10 act inup'>
                         <div>
                             <h2>
                                 <span class='bold pink border_bottom fs_35 fs_sp24 font_kiwi'>
-                                    もじゃネコの白ネコ「くるる」
+                                    もじゃねこの白猫「くるる」
                                 </span>
                             </h2>
                             <div class='space_2 space_sp1'></div>
 
                             <div class="tjustify bold">
                                 <p>
-                                    白い毛並みと青い瞳、そしてまるでパーマをかけたような美しいカールヘアが特徴の白ネコ。<br>
+                                    白い毛並みと青い瞳、まるでパーマをかけたような美しいカールヘアが特徴の、<strong>もじゃねこの白猫「くるる」</strong>。<br>
                                     明るくて好奇心旺盛、気になることがあればなんでもチャレンジ！<br>
                                     ピアノにダンス、料理や接客まで、くるるの毎日はワクワクでいっぱい。
                                 </p>
@@ -170,21 +261,21 @@ $page_script = '';
         <div class="bg_pink">
             <div class="gallery_slider radius set4 left">
                 <ul>
-                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃネコのグッズ01" /></li>
-                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃネコのグッズ02" /></li>
-                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃネコのグッズ03" /></li>
-                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃネコのグッズ04" /></li>
+                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃねこLINEスタンプ もじゃとくるるの楽しい表情" /></li>
+                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃねこオリジナルグッズ 黒猫もじゃと白猫くるるのデザイン" /></li>
+                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃねこグッズ かわいい2匹のキャラクターアイテム" /></li>
+                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃねこグッズ デザネコ公式キャラクターのアイテム" /></li>
                 </ul>
                 <ul>
-                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃネコのグッズ01" /></li>
-                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃネコのグッズ02" /></li>
-                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃネコのグッズ03" /></li>
-                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃネコのグッズ04" /></li>
+                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃねこLINEスタンプ もじゃとくるるの楽しい表情" /></li>
+                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃねこオリジナルグッズ 黒猫もじゃと白猫くるるのデザイン" /></li>
+                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃねこグッズ かわいい2匹のキャラクターアイテム" /></li>
+                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃねこグッズ デザネコ公式キャラクターのアイテム" /></li>
                 </ul>
             </div>
             <div class='space_3 space_sp4'></div>
             <div class="tcenter b_m5">
-                <img width="80px" src='<?php echo $img; ?>/favicon_goods.webp' alt='イメージ画像' loading='lazy'>
+                <img width="80px" src='<?php echo $img; ?>/favicon_goods.webp' alt='もじゃねこグッズイメージ' loading='lazy'>
             </div>
             <h2 class="tcenter line_height_20 tcenter">
                 <span class="pink fs_30 fs_sp20 eng act txt_split type_popup">Purrfect Items to Make Cat Lovers Happy!
@@ -202,7 +293,7 @@ $page_script = '';
 
                     <div class="tcenter">
                         <p>
-                            そんなもじゃネコの「もじゃ」と「くるる」のLINEスタンプと、かわいいオリジナルグッズができました！<br>
+                            そんな<strong>もじゃねこ</strong>の「もじゃ」と「くるる」のLINEスタンプと、かわいいオリジナルグッズができました！<br>
                             2匹のゆるくて楽しい表情がたっぷり詰まっています。<br>
                             下記のリンクからご購入いただけます。
                         </p>
@@ -222,13 +313,13 @@ $page_script = '';
                         </a>
                     </button>
                     <div class='space_1 space_sp1'></div>
-                    <button class='btn_hologram center'><a href='https://suzuri.jp/design_cat' target='_blank' rel='noopener'>「もじゃネコ」のオリジナルグッズ販売中</a></button>
+                    <button class='btn_hologram center'><a href='https://suzuri.jp/design_cat' target='_blank' rel='noopener'>「もじゃねこ」のオリジナルグッズ販売中</a></button>
                     <div class='space_1 space_sp1'></div>
                     <ul class="sns_btn a_center j_center">
 
                         <!-- // youtube -->
                         <li class="youtube">
-                            <a href="<?php echo $youtube; ?>" target="_blank" rel="nofollow">
+                            <a href="<?php echo $youtube; ?>" target="_blank" rel="nofollow" aria-label="もじゃねこ公式YouTube">
                                 <svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.1 13.37">
                                     <path class="b" d="M18.7,2.09c-.22-.82-.87-1.47-1.69-1.69-1.49-.4-7.46-.4-7.46-.4,0,0-5.97,0-7.46,.4-.82,.22-1.47,.87-1.69,1.69-.4,1.49-.4,4.6-.4,4.6,0,0,0,3.11,.4,4.6,.22,.82,.87,1.47,1.69,1.69,1.49,.4,7.46,.4,7.46,.4,0,0,5.97,0,7.46-.4,.82-.22,1.47-.87,1.69-1.69,.4-1.49,.4-4.6,.4-4.6,0,0,0-3.11-.4-4.6ZM7.64,9.55V3.82l4.96,2.86-4.96,2.86Z" />
                                 </svg>
@@ -236,7 +327,7 @@ $page_script = '';
                         </li>
                         <!-- // instagram -->
                         <li class="instagram">
-                            <a href="<?php echo $instagram; ?>" target="_blank" rel="nofollow">
+                            <a href="<?php echo $instagram; ?>" target="_blank" rel="nofollow" aria-label="もじゃねこ公式Instagram">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 17.9">
                                     <g>
                                         <path class="c" d="M9,1.6c2.4,0,2.7,0,3.6,.1,.9,0,1.3,.2,1.7,.3,.4,.2,.7,.4,1,.7s.5,.6,.7,1c.1,.3,.3,.8,.3,1.7s.1,1.2,.1,3.6,0,2.7-.1,3.6c0,.9-.2,1.3-.3,1.7-.2,.4-.4,.7-.7,1s-.6,.5-1,.7c-.3,.1-.8,.3-1.7,.3s-1.2,.1-3.6,.1-2.7,0-3.6-.1c-.9,0-1.3-.2-1.7-.3-.4-.2-.7-.4-1-.7s-.5-.6-.7-1c-.1-.4-.3-.9-.3-1.8s-.1-1.2-.1-3.6,0-2.7,.1-3.6c0-.9,.2-1.3,.3-1.7,.2-.4,.4-.7,.7-1s.6-.5,1-.7c.3-.1,.8-.3,1.7-.3h3.6m0-1.6c-2.4,0-2.7,0-3.7,.1-1,0-1.6,.2-2.2,.4-.6,.2-1.1,.5-1.6,1-.5,.5-.8,1-1,1.6-.2,.5-.4,1.2-.4,2.1,0,1-.1,1.3-.1,3.7s0,2.7,.1,3.7c0,1,.2,1.6,.4,2.2,.2,.6,.5,1.1,1,1.6,.5,.5,1,.8,1.6,1s1.2,.4,2.2,.4,1.3,.1,3.7,.1,2.7,0,3.7-.1c1,0,1.6-.2,2.2-.4,.6-.2,1.1-.5,1.6-1s.8-1,1-1.6,.4-1.2,.4-2.2,.1-1.3,.1-3.7,0-2.7-.1-3.7c0-1-.2-1.6-.4-2.2-.2-.6-.5-1.1-1-1.6-.5-.5-1-.8-1.6-1S13.7,0,12.7,0h-3.7Zm0,4.3c-2.6,0-4.6,2.1-4.6,4.6s2.1,4.6,4.6,4.6,4.6-2.1,4.6-4.6-2.1-4.6-4.6-4.6Zm0,7.6c-1.6,0-3-1.3-3-3,0-1.6,1.3-3,3-3,1.6,0,3,1.3,3,3-.1,1.6-1.4,3-3,3ZM13.7,3.1c-.6,0-1.1,.5-1.1,1.1s.5,1.1,1.1,1.1,1.1-.5,1.1-1.1-.5-1.1-1.1-1.1Z" />
@@ -246,7 +337,7 @@ $page_script = '';
                         </li>
                         <!-- // line -->
                         <li class="line">
-                            <a href="<?php echo $line; ?>" target='_blank' rel='noopener'>
+                            <a href="<?php echo $line; ?>" target='_blank' rel='noopener' aria-label="もじゃねこ公式LINE">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.9 18.12">
                                     <path d="M18.9,7.7C18.9,3.4,14.6,0,9.4,0S0,3.4,0,7.7c0,3.8,3.4,7,7.9,7.6,.3,.1,.7,.2,.8,.5,.1,.2,.1,.6,0,.9,0,0-.1,.7-.1,.8,0,.2-.2,.9,.8,.5s5.4-3.2,7.4-5.5h0c1.4-1.6,2.1-3.1,2.1-4.8Zm-13.2,2.5h-1.9c-.3,0-.5-.2-.5-.5v-3.8c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.3h1.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5Zm2-.5c0,.3-.2,.5-.5,.5s-.5-.2-.5-.5v-3.8c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.8Zm4.5,0c0,.2-.1,.4-.3,.5h-.2c-.2,0-.3-.1-.4-.2l-1.9-2.6v2.3c0,.3-.2,.5-.5,.5s-.5-.2-.5-.5v-3.8c0-.2,.1-.4,.3-.5h.2c.2,0,.3,.1,.4,.2l1.9,2.6v-2.3c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.8Zm3-2.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.4v.9h1.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.9c-.3,0-.5-.2-.5-.5v-1.9h0v-1.9h0c0-.3,.2-.5,.5-.5h1.9c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.4v.9h1.4Z" />
                                 </svg>
@@ -260,388 +351,52 @@ $page_script = '';
 
             <div class="gallery_slider radius set4 right act blur">
                 <ul>
-                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃネコのグッズ01" /></li>
-                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃネコのグッズ02" /></li>
-                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃネコのグッズ03" /></li>
-                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃネコのグッズ04" /></li>
+                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃねこLINEスタンプ もじゃとくるるの楽しい表情" /></li>
+                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃねこオリジナルグッズ 黒猫もじゃと白猫くるるのデザイン" /></li>
+                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃねこグッズ かわいい2匹のキャラクターアイテム" /></li>
+                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃねこグッズ デザネコ公式キャラクターのアイテム" /></li>
                 </ul>
                 <ul>
-                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃネコのグッズ01" /></li>
-                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃネコのグッズ02" /></li>
-                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃネコのグッズ03" /></li>
-                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃネコのグッズ04" /></li>
+                    <li><img src="<?php echo $img; ?>/goods01.webp" alt="もじゃねこLINEスタンプ もじゃとくるるの楽しい表情" /></li>
+                    <li><img src="<?php echo $img; ?>/goods02.webp" alt="もじゃねこオリジナルグッズ 黒猫もじゃと白猫くるるのデザイン" /></li>
+                    <li><img src="<?php echo $img; ?>/goods03.webp" alt="もじゃねこグッズ かわいい2匹のキャラクターアイテム" /></li>
+                    <li><img src="<?php echo $img; ?>/goods04.webp" alt="もじゃねこグッズ デザネコ公式キャラクターのアイテム" /></li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <!-- <section>
-        <div class="bg_pink">
-            <div class='single'>
-                <div>
-                    <div class="tcenter b_m5">
-                        <img width="80px" src='<?php echo $img; ?>/favicon_goods.webp' alt='イメージ画像' loading='lazy'>
-                    </div>
-                    <h2 class="line_height_14 tcenter">
-                        <span class="eng pink fs_40 act txt_split type_popup">Recommended
-                        </span><br>
-                        <span class="fs_40 fs_sp30 act blur font_kiwi">
-                            こんな方におすすめ
-                        </span>
-                    </h2>
-                    <div class='space_3 space_sp3'></div>
-                    <ul class="voice grid set2 gap1">
-
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w01.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">グッズ制作がはじめてで、何から始めたらいいかわからない⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w02.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">自分だけのオリジナルアイテムを作ってみたい⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w03.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">イベントやライブで配るグッズを用意したい⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w04.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">少ない数量で気軽に販売したい⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w05.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">デザインに自信がなく、相談しながら進めたい⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w06.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">自社のノベルティや商品パッケージのデザインを作りたい⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w07.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">お友達や家族へのプレゼントとしてオリジナルグッズを作りたい⋯</p>
-                            </div>
-                        </li>
-                        <li>
-                            <div class="figure">
-                                <img src="<?php echo $img; ?>/w08.webp" alt="">
-                            </div>
-                            <div class="speech act inleft">
-                                <p class="fs_size_m">ショップやブランドのオリジナル商品を試作で販売したい⋯</p>
-                            </div>
-                        </li>
-
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section> -->
-
-    <!--  <section>
-        <div class='bg_pink'>
-            <div class='single02'>
-                <div class='mbox '>
-                    <div class="tcenter b_m5">
-                        <img width="80px" src='<?php echo $img; ?>/favicon_goods.webp' alt='イメージ画像' loading='lazy'>
-                    </div>
-                    <h2 class="line_height_14 tcenter">
-                        <span class="eng pink fs_40 act txt_split type_popup">Voice
-                        </span><br>
-                        <span class="fs_40 fs_sp30 act blur font_kiwi">
-                            お客様からのうれしい声
-                        </span>
-                    </h2>
-                    <div class='space_3 space_sp3'></div>
-                    <ul class="grid2 voice_box">
-                        <li class="b_m20 radius">
-                            <div class='mbox bg_white'>
-                                <div class='flexbox gap3'>
-                                    <div class="width_3 width_sp10">
-                                        <div class="picture">
-                                            <img src='<?php echo $img; ?>/voice03.webp' alt='イメージ画像' loading='lazy'>
-                                        </div>
-                                    </div>
-                                    <div class='width_7 width_sp10 act inup'>
-                                        <p class="bold b_m10 fs_30 fs_sp22">
-                                            <span class="pink border_bottom">カフェ経営／Dさん／Aさん</span><br>
-                                        </p>
-
-                                        <dl class="dl_list pink radius b_m10">
-                                            <dt>年齢</dt>
-                                            <dd>50代</dd>
-                                            <dt>地域</dt>
-                                            <dd>沖縄・宜野湾</dd>
-                                        </dl>
-
-                                        <div class="memo">
-                                            <p>
-                                                <b class="pink">デザインに自信がなかったけど、丁寧にサポートしてくれて安心でした！</b><br>
-                                                初めての商品開発のシールデザインで不安でしたが、イメージやこちらの要望を伝えるだけで形にしてもらえて感動しました。仕上がりも大満足です！
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="b_m20 radius">
-                            <div class='mbox bg_white b_m20'>
-                                <div class='flexbox gap3'>
-                                    <div class="width_3 width_sp10">
-                                        <div class="picture">
-                                            <img src='<?php echo $img; ?>/voice02.webp' alt='イメージ画像' loading='lazy'>
-                                        </div>
-                                    </div>
-                                    <div class='width_7 width_sp10 act inup'>
-                                        <p class="bold b_m10 fs_30 fs_sp22">
-                                            <span class="pink border_bottom">Sさん</span><br>
-                                        </p>
-
-                                        <dl class="dl_list pink radius b_m10">
-                                            <dt>年齢</dt>
-                                            <dd>30代</dd>
-                                            <dt>地域</dt>
-                                            <dd>沖縄・宜野湾</dd>
-                                        </dl>
-
-                                        <div class="memo">
-                                            <p>
-                                                <b class="pink">プレゼントで渡したらすごく喜ばれました！</b><br>
-                                                家族のペットの写真を使ってタンブラーを作りプレゼント！世界に一つだけの贈り物になって、サプライズ大成功でした！
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="b_m20 radius">
-                            <div class='mbox bg_white b_m20'>
-                                <div class='flexbox gap3'>
-                                    <div class="width_3 width_sp10">
-                                        <div class="picture">
-                                            <img src='<?php echo $img; ?>/voice01.webp' alt='イメージ画像' loading='lazy'>
-                                        </div>
-                                    </div>
-                                    <div class='width_7 width_sp10 act inup'>
-                                        <p class="bold b_m10 fs_30 fs_sp22">
-                                            <span class="pink border_bottom">Hさん</span><br>
-                                        </p>
-
-                                        <dl class="dl_list pink radius b_m10">
-                                            <dt>年齢</dt>
-                                            <dd>40代</dd>
-                                            <dt>地域</dt>
-                                            <dd>沖縄・宜野湾</dd>
-                                        </dl>
-
-                                        <div class="memo">
-                                            <p>
-                                                <b class="pink">少ない数でも販売できて助かりました！</b><br>
-                                                イベント用に10個だけ作りたかったのですが、気軽にお願いできて本当にありがたかったです。次は別のアイテムも作りたいです！
-                                            </p>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-
-                </div>
-
-            </div>
-        </div>
-    </section> -->
-    <!-- 
-    <section>
-        <div class="bg_pink">
-            <div class="single03">
-                <div class="mbox bg_white radius">
-                    <div class="tcenter b_m5">
-                        <img width="80px" src='<?php echo $img; ?>/favicon_goods.webp' alt='イメージ画像' loading='lazy'>
-                    </div>
-                    <h2 class="line_height_14 tcenter">
-                        <span class="eng pink fs_40 act txt_split type_popup">Question
-                        </span><br>
-                        <span class="fs_40 fs_sp30 act blur font_kiwi">
-                            よくあるご質問
-                        </span>
-                    </h2>
-                    <div class='space_3 space_sp1'></div>
-
-                    <div class="sbox act blur">
-                        <dl class='accordion pink'>
-                            <dt class='open'>はじめてのグッズ制作でも大丈夫ですか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>はい、もちろん大丈夫です！<br>
-                                        デザインのご相談から制作の流れまで、スタッフが丁寧にサポートいたします。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>デザインのデータがなくても注文できますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>はい、手描きのイメージやイメージ写真があればOKです。こちらでデータ化やデザインの調整も承ります。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>何個から注文できますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>商品によって異なりますが、1個から注文できるアイテムも多数ご用意しています。お気軽にご相談ください。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>納期はどのくらいかかりますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>ご注文内容や数量によって異なりますが、通常はご注文確定から約1〜2週間程度でお届け可能です。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>グッズの色や素材は選べますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>はい、商品によってカラーバリエーションや素材が複数ございます。選べる選択肢をご案内します。</p>
-                                </div>
-                            </dd>
-                        </dl>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-    </section> -->
-    <!-- 
-    <section>
-        <div class="bg_pink">
-            <div class="single">
-                <div class="tcenter b_m5">
-                    <img width="80px" src='<?php echo $img; ?>/favicon_goods.webp' alt='イメージ画像' loading='lazy'>
-                </div>
-                <h2 class="line_height_14 tcenter">
-                    <span class="eng pink fs_40 act txt_split type_popup">Flow
-                    </span><br>
-                    <span class="fs_40 fs_sp30 act blur font_kiwi">
-                        ご利用の流れ
-                    </span>
-                </h2>
-                <div class='space_3 space_sp1'></div>
-                <div class="mbox radius bg_white">
-                    <div class="sbox">
-                        <dl class="flow_dl pink">
-                            <div class="inner">
-                                <dt class="act set">Step.1</dt>
-                                <dd class="act inright">
-                                    <b class="pink">お問い合わせ・ご相談（無料）</b><br>
-                                    「こんなグッズを作りたい」「デザインが決まっていないけど大丈夫？」など、どんな内容でもお気軽にご相談ください。
-                                </dd>
-                            </div>
-                            <div class="inner">
-                                <dt class="act set">Step.2</dt>
-                                <dd class="act inright">
-                                    <b class="pink">ヒアリング・ご提案</b><br>
-                                    ご希望のアイテム、用途、数量、デザインのイメージなどをお伺いし、ぴったりのプランや商品をご提案します。
-                                </dd>
-                            </div>
-                            <div class="inner">
-
-                                <dt class="act set">Step.3</dt>
-                                <dd class="act inright">
-                                    <b class="pink">お見積りのご確認</b><br>
-                                    内容に応じてお見積りをお出しします。ご納得いただけた場合、正式にご注文となります。
-                                </dd>
-                            </div>
-                            <div class="inner">
-
-                                <dt class="act set">Step.4</dt>
-                                <dd class="act inright">
-                                    <b class="pink">デザイン制作・最終確認</b><br>
-                                    お持ちのデザインデータを元に調整したり、こちらでデザインを作成したり、ご要望に合わせて対応します。完成イメージをご確認いただきます。
-                                </dd>
-                            </div>
-                            <div class="inner">
-
-                                <dt class="act set">Step.5</dt>
-                                <dd class="act inright">
-                                    <b class="pink">制作・印刷</b><br>
-                                    ご確認後、グッズの制作・印刷に入ります。心を込めて丁寧に仕上げます。
-                                </dd>
-                            </div>
-                            <div class="inner">
-
-                                <dt class="act set">Step.6</dt>
-                                <dd class="act inright">
-                                    <b class="pink">納品・お届け</b><br>
-                                    完成した商品をご指定の場所へお届けします。全国発送にも対応しています。
-                                </dd>
-                            </div>
-                        </dl>
-                    </div>
-                </div>
-
-            </div>
-        </div>
-    </section> -->
-    <!-- 
+    <!-- ▼ 関連リンク・外部参照（被リンク先からの相互リンク強化） ▼ -->
     <section>
         <div class='bg_pink'>
             <div class='single02'>
-                <div class='flexbox reversal'>
-                    <div class='width_5 width_sp10 act blur'>
-                        <img class="radius" src='<?php echo $img; ?>/goods_img02.webp' alt='「作って終わり」ではありませんイメージ画像' loading='lazy'>
-                    </div>
-                    <div class='width_4 width_sp10 p10 act inup'>
-                        <div>
-                            <h3>
-                                <span class='bold pink border_bottom fs_35 fs_sp28 font_kiwi'>
-                                    「作って終わり」ではありません
-                                </span>
-                            </h3>
-                            <div class='space_2 space_sp1'></div>
-
-                            <div class="tjustify bold">
-                                <p>
-                                    オリジナルグッズは、ただ作るだけではなく、そのあとに「どう届けるか」もとても大切です。<br>
-                                    デザネコでは、デザイン制作や発注のお手伝いだけでなく、完成したグッズをどう届けるかまで、一緒に考えていきます。<br>
-                                </p>
-                                <p>
-                                    たとえば、SNSでの紹介方法や、チラシやWebでの配布アイデアなど<span class="underline_y pink">「作ったあと」にこそ、あなたの商品が生きる場所</span>があります。<br>
-                                    作って終わりじゃない。<b class="pink">“あなたの想い”</b>を届けるところまでのお手伝いもお任せください。
-                                </p>
-                            </div>
-
-                        </div>
+                <div class='mbox act blur'>
+                    <h2 class="tcenter line_height_14">
+                        <span class="eng pink fs_30 fs_sp22">Related Links</span><br>
+                        <span class="fs_30 fs_sp22 font_kiwi bold">もじゃねこの関連リンク</span>
+                    </h2>
+                    <div class='space_2 space_sp1'></div>
+                    <div class="sbox bold">
+                        <p class="tjustify">
+                            もじゃねこのプロフィールは、ピクシブ百科事典にも掲載されています。<br>
+                            また、もじゃねこ関連のSNS・グッズ販売ページは以下からアクセスいただけます。
+                        </p>
+                        <div class='space_2 space_sp1'></div>
+                        <ul class="link_list bold">
+                            <li>📘 <a href="https://dic.pixiv.net/a/もじゃねこ" target="_blank" rel="noopener">もじゃねこ｜ピクシブ百科事典</a></li>
+                            <li>🎨 <a href="https://store.line.me/stickershop/author/5708453/ja" target="_blank" rel="noopener">もじゃねこLINEスタンプ</a></li>
+                            <li>👕 <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">もじゃねこオリジナルグッズ（SUZURI）</a></li>
+                            <li>📷 <a href="<?php echo $instagram; ?>" target="_blank" rel="noopener">もじゃねこ公式Instagram</a></li>
+                            <li>▶️ <a href="<?php echo $youtube; ?>" target="_blank" rel="noopener">もじゃねこ公式YouTube</a></li>
+                        </ul>
                     </div>
                 </div>
-
             </div>
         </div>
-    </section> -->
+    </section>
 
 </div>
-<!-- もじゃネコ -->
+<!-- もじゃねこ -->
 
 
 <?php include_once './footer.php'; ?>
