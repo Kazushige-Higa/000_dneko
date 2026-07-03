@@ -37,12 +37,10 @@ if ($entry_type === 'works') {
   $list_back_text = "記事一覧へ戻る";
   $related_heading = "関連記事";
 }
-// 記事取得（draftKeyがある場合は下書きプレビュー、ない場合は公開版）
-$fetch_path = $entry_endpoint . "/" . rawurlencode($eid);
-if ($draft_key !== '') {
-  $fetch_path .= "?draftKey=" . rawurlencode($draft_key);
-}
-$post = !empty($eid) ? microcms_get($fetch_path) : null;
+// 記事取得（draftKey がある場合は下書きプレビュー、ない場合は公開版のみ）
+// microcms_get_entry() 経由で取得することで、draftKey なしのアクセスでは
+// 下書き記事（publishedAt が Null）を返さないガードが適用される
+$post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
 ?>
 
 <?php if ($post && $draft_key !== ''): ?>
