@@ -120,6 +120,7 @@
                 </ul>
 
                 <div class='space_3 space_sp1'></div>
+                <button class='btn_normal radius center'><a href='about.php'>デザネコについて</a></button>
 
             </div>
         </div>
@@ -430,5 +431,30 @@
     </section>
 
 </div>
+
+<section>
+    <div class="bg_white">
+        <div class="single03">
+            <ul class="grid set2 sp1 gap1">
+                <li>
+                    <a href="voice.php" class="link">
+                        <picture>
+                            <source srcset="<?php echo $img; ?>/banners/banner-voice.webp" type="image/webp">
+                            <img src="<?php echo $img; ?>/banners/banner-voice.png" alt="お客様の声を見る" loading="lazy">
+                        </picture>
+                    </a>
+                </li>
+                <li>
+                    <a href="faq.php" class="link">
+                        <picture>
+                            <source srcset="<?php echo $img; ?>/banners/banner-faq.webp" type="image/webp">
+                            <img src="<?php echo $img; ?>/banners/banner-faq.png" alt="よくあるご質問を見る" loading="lazy">
+                        </picture>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</section>
 
 <?php include_once './footer.php'; ?>
