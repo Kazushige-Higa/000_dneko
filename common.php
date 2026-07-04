@@ -152,6 +152,47 @@ function microcms_get_list($endpoint, $extra = '')
 }
 
 /**
+ * Extract a readable category name from a microCMS field.
+ *
+ * microCMS category-like fields may be returned as a string, array, or object
+ * depending on field type/settings. This keeps tabs from showing "Array".
+ *
+ * @param mixed  $category_value  microCMS category field value
+ * @param string $fallback        Label to use when category is empty
+ * @return string
+ */
+function microcms_extract_category_name($category_value, $fallback = 'その他')
+{
+    if (is_string($category_value) || is_numeric($category_value)) {
+        $category_name = trim((string)$category_value);
+        return ($category_name !== '') ? $category_name : $fallback;
+    }
+
+    if (is_array($category_value)) {
+        foreach ($category_value as $item) {
+            $category_name = microcms_extract_category_name($item, '');
+            if ($category_name !== '') {
+                return $category_name;
+            }
+        }
+        return $fallback;
+    }
+
+    if (is_object($category_value)) {
+        foreach (['name', 'title', 'label', 'value', 'id'] as $key) {
+            if (isset($category_value->{$key})) {
+                $category_name = microcms_extract_category_name($category_value->{$key}, '');
+                if ($category_name !== '') {
+                    return $category_name;
+                }
+            }
+        }
+    }
+
+    return $fallback;
+}
+
+/**
  * Extract blog title from microCMS entry object.
  *
  * @param object|null $entry  microCMS blog entry

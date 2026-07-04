@@ -147,7 +147,7 @@
                 $idx_works_categories = [];
                 $idx_works_by_category = [];
                 foreach ($portfolio_posts as $pw) {
-                    $pcat = (isset($pw->category) && trim((string)$pw->category) !== '') ? trim((string)$pw->category) : 'その他';
+                    $pcat = microcms_extract_category_name($pw->category ?? null);
                     if (!in_array($pcat, $idx_works_categories)) {
                         $idx_works_categories[] = $pcat;
                     }
@@ -248,7 +248,7 @@
                 $idx_blog_categories = [];
                 $idx_blog_by_category = [];
                 foreach ($blog_posts as $pb) {
-                    $pbcat = (isset($pb->category) && trim((string)$pb->category) !== '') ? trim((string)$pb->category) : 'その他';
+                    $pbcat = microcms_extract_category_name($pb->category ?? null);
                     if (!in_array($pbcat, $idx_blog_categories)) {
                         $idx_blog_categories[] = $pbcat;
                     }
@@ -349,7 +349,7 @@
                 $idx_column_categories = [];
                 $idx_column_by_category = [];
                 foreach ($column_posts as $pc) {
-                    $pccat = (isset($pc->category) && trim((string)$pc->category) !== '') ? trim((string)$pc->category) : 'その他';
+                    $pccat = microcms_extract_category_name($pc->category ?? null);
                     if (!in_array($pccat, $idx_column_categories)) {
                         $idx_column_categories[] = $pccat;
                     }

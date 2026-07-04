@@ -173,6 +173,11 @@
                     <span>Home</span>
                     ホーム
                   </a>
+                  <ul>
+                    <li><a href="entry_list.php?type=works">制作実績一覧</a></li>
+                    <li><a href="entry_list.php?type=blog">ブログ一覧</a></li>
+                    <li><a href="entry_list.php?type=column">コラム一覧</a></li>
+                  </ul>
                 </li>
                 <li>
                   <a href="about.php">

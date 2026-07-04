@@ -37,11 +37,8 @@ $page_script = '';
 <?php include_once './header.php'; ?>
 <?php include_once './page_title.php'; ?>
 
-<div class="blog_wrap">
-  <div class="column">
-
-    <!-- main -->
-    <main class="mainwrap">
+<div class="single03">
+  <main>
 
       <section>
         <?php
@@ -142,7 +139,7 @@ $page_script = '';
           $works_categories = [];
           $works_by_category = [];
           foreach ($sidebar_posts as $wp) {
-            $cat = (isset($wp->category) && trim((string)$wp->category) !== '') ? trim((string)$wp->category) : 'その他';
+            $cat = microcms_extract_category_name($wp->category ?? null);
             if (!in_array($cat, $works_categories)) {
               $works_categories[] = $cat;
             }
@@ -162,7 +159,7 @@ $page_script = '';
           <?php
           $loop_posts = $sidebar_posts;
           $loop_type = 'works';
-          $loop_ul_class = 'post_list';
+          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -175,7 +172,7 @@ $page_script = '';
           <?php
           $loop_posts = $works_by_category[$wcat];
           $loop_type = 'works';
-          $loop_ul_class = 'post_list';
+          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -207,7 +204,7 @@ $page_script = '';
           $blog_categories = [];
           $blog_by_category = [];
           foreach ($sidebar_posts as $bp) {
-            $bcat = (isset($bp->category) && trim((string)$bp->category) !== '') ? trim((string)$bp->category) : 'その他';
+            $bcat = microcms_extract_category_name($bp->category ?? null);
             if (!in_array($bcat, $blog_categories)) {
               $blog_categories[] = $bcat;
             }
@@ -229,7 +226,7 @@ $page_script = '';
           <?php
           $loop_posts = $sidebar_posts;
           $loop_type = 'blog';
-          $loop_ul_class = 'post_list';
+          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -242,7 +239,7 @@ $page_script = '';
           <?php
           $loop_posts = $blog_by_category[$bcat];
           $loop_type = 'blog';
-          $loop_ul_class = 'post_list';
+          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -271,7 +268,7 @@ $page_script = '';
         <?php
         $loop_posts = $sidebar_posts;
         $loop_type = 'blog';
-        $loop_ul_class = 'post_list';
+        $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
         $loop_show_desc = true;
         $loop_empty_message = '該当する記事がありません。';
         include 'loop_post.php';
@@ -283,7 +280,7 @@ $page_script = '';
           $column_categories = [];
           $column_by_category = [];
           foreach ($sidebar_posts as $cp) {
-            $ccat = (isset($cp->category) && trim((string)$cp->category) !== '') ? trim((string)$cp->category) : 'その他';
+            $ccat = microcms_extract_category_name($cp->category ?? null);
             if (!in_array($ccat, $column_categories)) {
               $column_categories[] = $ccat;
             }
@@ -305,7 +302,7 @@ $page_script = '';
           <?php
           $loop_posts = $sidebar_posts;
           $loop_type = 'column';
-          $loop_ul_class = 'post_list';
+          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -318,7 +315,7 @@ $page_script = '';
           <?php
           $loop_posts = $column_by_category[$ccat];
           $loop_type = 'column';
-          $loop_ul_class = 'post_list';
+          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -347,7 +344,7 @@ $page_script = '';
         <?php
         $loop_posts = $sidebar_posts;
         $loop_type = 'column';
-        $loop_ul_class = 'post_list';
+        $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
         $loop_show_desc = true;
         $loop_empty_message = '該当するコラムがありません。';
         include 'loop_post.php';
@@ -358,7 +355,7 @@ $page_script = '';
         <?php
         $loop_posts = $sidebar_posts;
         $loop_type = $list_type;
-        $loop_ul_class = 'post_list';
+        $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
         $loop_show_desc = true;
         if ($list_type === 'works') {
           $loop_empty_message = '該当する制作実績がありません。';
@@ -463,12 +460,7 @@ $page_script = '';
         <?php endif; ?>
 
       </section>
-    </main>
-
-    <!-- side -->
-    <?php include 'entry_sidebar.php'; ?>
-
-  </div>
+  </main>
 </div>
 
 <?php include_once './footer.php'; ?>

@@ -52,24 +52,6 @@
             font-weight: bold;
             padding: 1em 1.5em;
             position: relative;
-            &:after {
-                content: "";
-                position: absolute;
-                width: 1px;
-                height: 20px;
-                background-color: #ccc;
-                top: 0;
-                bottom: 0;
-                right: -2px;
-                z-index: 1;
-                margin: auto;
-                //transform: rotate(35deg);
-            }
-            &:last-child {
-                &:after {
-                    display: none;
-                }
-            }
             > a {
                 position: relative;
                 width: 100%;
@@ -115,6 +97,26 @@
         }
     }
     @include for-size(phone-only) {
+        display: none;
+    }
+}
+
+.nav_main > ul > li {
+    &:after {
+        content: "";
+        position: absolute;
+        width: 1px;
+        height: 20px;
+        background-color: #ccc;
+        top: 0;
+        bottom: 0;
+        right: -2px;
+        z-index: 1;
+        margin: auto;
+        //transform: rotate(35deg);
+    }
+
+    &:last-child:after {
         display: none;
     }
 }
