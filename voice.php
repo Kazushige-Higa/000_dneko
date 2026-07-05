@@ -34,6 +34,38 @@ voice.php -->
                                 <div class='flexbox gap3'>
                                     <div class="width_3 width_sp10">
                                         <div class="picture">
+                                            <img src='<?php echo $img; ?>/voice-sunroom-nakagusuku.webp' alt='髪を育てる専門店 Sun Room 中城店 様と制作したショップカードの写真' loading='lazy'>
+                                        </div>
+                                    </div>
+                                    <div class='width_7 width_sp10 act inup'>
+                                        <p class="bold b_m10 fs_30 fs_sp22">
+                                            <span class="base_color border_bottom">髪を育てる専門店 Sun Room 中城店 様</span><br>
+                                        </p>
+
+                                        <dl class="dl_list radius b_m10">
+                                            <dt>お名前</dt>
+                                            <dd>オーナー みわさん</dd>
+                                            <dt>地域</dt>
+                                            <dd>沖縄・中城村</dd>
+                                        </dl>
+
+                                        <div class="memo">
+                                            <p>
+                                                沖縄県中城村で「髪を育てる」プライベートサロンを営むみわさんより、うれしいお声をいただきました。
+                                            </p>
+                                            <p>
+                                                「IT系からショップカード、名刺、シール作成まで、いつもデザネコさんにすべてお任せ。ホント頼りにしてます。いつもありがとうございます。」
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="b_m20 radius">
+                            <div class='mbox bg_white'>
+                                <div class='flexbox gap3'>
+                                    <div class="width_3 width_sp10">
+                                        <div class="picture">
                                             <img src='<?php echo $img; ?>/voice01.webp' alt='イメージ画像' loading='lazy'>
                                         </div>
                                     </div>
