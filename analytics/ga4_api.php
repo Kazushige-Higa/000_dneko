@@ -182,6 +182,18 @@ function ga4_build_dashboard($property_id, $token)
         ['startDate' => '30daysAgo', 'endDate' => 'yesterday', 'name' => 'current'],
         ['startDate' => '60daysAgo', 'endDate' => '31daysAgo', 'name' => 'previous'],
     ];
+    // ダッシュボード閲覧によるPVをレポートに混入させない。
+    $exclude_analytics_pages = [
+        'notExpression' => [
+            'filter' => [
+                'fieldName' => 'pagePath',
+                'stringFilter' => [
+                    'value' => '/analytics',
+                    'matchType' => 'BEGINS_WITH',
+                ],
+            ],
+        ],
+    ];
 
     /* ---- バッチ1: KPI合計(当月/前月), PV推移, 流入元, デバイス, 人気ページ ---- */
     $batch1 = ['requests' => [
@@ -195,12 +207,14 @@ function ga4_build_dashboard($property_id, $token)
                 ['name' => 'averageSessionDuration'],
                 ['name' => 'conversions'],
             ],
+            'dimensionFilter' => $exclude_analytics_pages,
         ],
         // 1: PV推移(日別)
         [
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'date']],
             'metrics' => [['name' => 'screenPageViews']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys' => [['dimension' => ['dimensionName' => 'date']]],
         ],
         // 2: 流入元
@@ -223,6 +237,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'pagePath'], ['name' => 'pageTitle']],
             'metrics' => [['name' => 'screenPageViews']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
             'limit' => 10,
         ],
@@ -285,6 +300,7 @@ function ga4_build_dashboard($property_id, $token)
                 ['name' => 'bounceRate'],
                 ['name' => 'userEngagementDuration'],
             ],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
             'limit' => 10,
         ],
@@ -309,6 +325,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => [['startDate' => '83daysAgo', 'endDate' => 'yesterday']],
             'dimensions' => [['name' => 'year'], ['name' => 'week']],
             'metrics'    => [['name' => 'screenPageViews']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys'   => [
                 ['dimension' => ['dimensionName' => 'year']],
                 ['dimension' => ['dimensionName' => 'week']],
@@ -319,6 +336,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => [['startDate' => '364daysAgo', 'endDate' => 'yesterday']],
             'dimensions' => [['name' => 'yearMonth']],
             'metrics'    => [['name' => 'screenPageViews']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys'   => [['dimension' => ['dimensionName' => 'yearMonth']]],
         ],
     ]];

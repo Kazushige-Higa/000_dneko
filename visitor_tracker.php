@@ -139,6 +139,12 @@ if ($vid === '' || $event === '') {
     exit;
 }
 
+// アクセス解析ダッシュボード自身の閲覧はPV・熱量スコアに含めない。
+if (strpos($page, '/analytics') === 0) {
+    echo json_encode(['ignored' => true]);
+    exit;
+}
+
 /* ---- スコア加算量を決定 ---- */
 $add = SCORE_MAP[$event] ?? 0;
 
