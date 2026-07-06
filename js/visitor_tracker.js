@@ -77,6 +77,7 @@
     if (/\/(service_design|service_blog|works)/.test(path)) return 'service_page';
     if (/\/voice/.test(path))   return 'voice_page';
     if (/\/law/.test(path))     return 'law_page';
+    if (/\/contact/.test(path)) return 'contact_page';
     if (/\/profile/.test(path)) return 'profile_page';
     if (/\/entry/.test(path))   return 'works_page';
     return null;

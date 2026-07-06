@@ -310,7 +310,7 @@ tr:hover td { background: #f8fafc; }
     <span style="font-size:11px;color:#94a3b8">認知 → 興味 → 検討 → 意向 → 転換</span>
   </div>
   <div id="funnelWrap" class="funnel-wrap"></div>
-  <p class="note">※ 各ステージは個別ユーザー数（ページ単体の訪問者）です。Stage5のLINEクリックはヘッダー・フッターのgtag計測が有効なセッション以降に反映されます。</p>
+  <p class="note">※ 各ステージは個別ユーザー数（ページ単体の訪問者）です。Stage5はお問い合わせページ到達、またはLINE相談ボタンのgtag計測が有効なセッション以降に反映されます。</p>
 </div>
 
 <!-- ── 個別熱量スコア ── -->

@@ -33,6 +33,7 @@ const SCORE_MAP = [
     'revisit_7d'        => 10,   // 7日以内再訪
     'line_click'        => 30,
     'contact_click'     => 25,
+    'contact_page'      => 25,
     'profile_page'      => 5,
     'works_page'        => 8,
 ];

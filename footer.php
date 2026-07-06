@@ -13,6 +13,12 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
   $cta_btn_url     = isset($cta_banner->button_url) ? trim((string)$cta_banner->button_url) : '';
   $cta_btn_text2   = isset($cta_banner->button_text2) ? trim((string)$cta_banner->button_text2) : '';
   $cta_btn_url2    = isset($cta_banner->button_url2) ? trim((string)$cta_banner->button_url2) : '';
+  if ($cta_btn_url !== '' && (preg_match('/line\.me|lin\.ee/i', $cta_btn_url) || strpos($cta_btn_text, 'LINE') !== false)) {
+    $cta_btn_url = 'contact.php';
+  }
+  if ($cta_btn_url2 !== '' && (preg_match('/line\.me|lin\.ee/i', $cta_btn_url2) || strpos($cta_btn_text2, 'LINE') !== false)) {
+    $cta_btn_url2 = 'contact.php';
+  }
 ?>
 <section class="site-cta-banner">
   <div class="site-cta-banner__inner">
@@ -53,7 +59,7 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
             <div class='space_3 space_sp2'></div>
             <div class="sbox">
                 <button class="btn_normal transparent center radius fs_20 fs_sp20">
-                    <a href="<?php echo $line; ?>" target='_blank' rel='noopener'
+                    <a href="contact.php"
                       onclick="gtag('event','line_click',{'event_category':'contact','event_label':'footer_btn'})">
                         <i class="fab fa-line" style="font-size: 1.3em; vertical-align: middle; margin-right: 0.5em;"></i>
                         公式LINEからお問い合わせ

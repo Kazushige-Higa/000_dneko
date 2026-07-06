@@ -386,12 +386,17 @@ function ga4_build_dashboard($property_id, $token)
                 'filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/law.php', 'matchType' => 'EXACT']],
             ],
         ],
-        // 4: Stage5 - LINEクリックユーザー（転換）
+        // 4: Stage5 - 問い合わせページ到達またはLINE相談ボタンクリックユーザー（転換）
         [
             'dateRanges' => $cur,
             'metrics'    => [['name' => 'totalUsers']],
             'dimensionFilter' => [
-                'filter' => ['fieldName' => 'eventName', 'stringFilter' => ['value' => 'line_click', 'matchType' => 'EXACT']],
+                'orGroup' => [
+                    'expressions' => [
+                        ['filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/contact.php', 'matchType' => 'EXACT']]],
+                        ['filter' => ['fieldName' => 'eventName', 'stringFilter' => ['value' => 'line_click', 'matchType' => 'EXACT']]],
+                    ],
+                ],
             ],
         ],
     ]];
@@ -732,14 +737,14 @@ function ga4_build_dashboard($property_id, $token)
         (int)(($rep4[1]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage2: サービスページ
         (int)(($rep4[2]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage3: お客様の声
         (int)(($rep4[3]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage4: 特商法
-        (int)(($rep4[4]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage5: LINEクリック
+        (int)(($rep4[4]['rows'][0]['metricValues'][0]['value'] ?? 0)),                     // Stage5: 問い合わせページ到達またはLINE相談ボタンクリック
     ];
     $stage_labels = [
         '認知：サイト訪問',
         '興味：サービスページ閲覧',
         '検討：お客様の声閲覧',
         '意向：特商法ページ閲覧',
-        '転換：LINEクリック',
+        '転換：お問い合わせ到達',
     ];
     $funnel_stages = [];
     $s1 = $stage_users[0] ?: 1;
