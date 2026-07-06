@@ -250,7 +250,7 @@
         color: $base_color;
         padding: 1em 0.5em;
         border-left: 3px solid $base_color;
-        background-color: rgba($base_color, 0.1);
+        // background-color: rgba($base_color, 0.1);
         strong {
             font-size: 150%;
         }
@@ -282,9 +282,9 @@
         font-size: 120%;
         margin: 1.5em 0;
         font-weight: bold;
-        color: $base_color;
+        // color: $base_color;
         padding: 0.3em 0.5em 0.3em 0.5em;
-        border-left: 3px solid $base_color;
+        border-bottom: 1px solid $base_color;
     }
     h4 {
         font-size: 120%;
