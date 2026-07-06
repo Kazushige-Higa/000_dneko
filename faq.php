@@ -20,15 +20,15 @@ faq.php -->
                         <img width="80px" src='<?php echo $img; ?>/favicon.png' alt='イメージ画像' loading='lazy'>
                     </div>
                     <h2 class="line_height_14 tcenter">
-                        <span class="eng base_color fs_40 act txt_split type_popup">Question
+                        <span class="eng base_color fs_40">Question
                         </span><br>
-                        <span class="fs_40 fs_sp30 act blur font_kiwi">
+                        <span class="fs_40 fs_sp30 font_kiwi">
                             よくあるご質問
                         </span>
                     </h2>
                     <div class='space_3 space_sp1'></div>
 
-                    <div class="sbox act blur">
+                    <div class="sbox">
 
                         <!-- ▼ 印刷デザインについて ▼ -->
                         <h3 class="fs_28 fs_sp20 base_color font_kiwi tcenter">🖨️ 印刷デザインについて</h3>
