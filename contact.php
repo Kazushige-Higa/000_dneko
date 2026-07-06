@@ -12,24 +12,65 @@ $page_style = "
 .contact-card__icon { display: grid; place-items: center; width: 54px; height: 54px; margin: 0 auto 1em; border-radius: 50%; background: #fff7df; color: #f9b104; font-size: 1.5em; }
 .contact-note { border-left: 4px solid #f9b104; }
 .contact-thanks { border: 2px solid #8ecc6f; }
+.contact-form-wrap .form dl {
+  display: grid;
+  grid-template-columns: minmax(220px, 28%) 1fr;
+  column-gap: 2.5em;
+  row-gap: 0;
+}
+.contact-form-wrap .form dl dt,
+.contact-form-wrap .form dl dd {
+  border-bottom: 1px dotted #cfcfcf;
+  margin: 0;
+  padding: 2.2em 0;
+}
+.contact-form-wrap .form dl dt {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: flex-end;
+  gap: .7em;
+  width: auto;
+  font-size: 1.18em;
+  line-height: 1.5;
+}
+.contact-form-wrap .form dl dd {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-left: 0;
+  padding-top: 2em;
+}
+.contact-form-wrap .form dl dt span {
+  order: -1;
+  flex: 0 0 auto;
+  min-width: 3.8em;
+  margin: .12em 0 0;
+  padding: .28em .7em;
+  border-radius: 999px;
+  background: #1e5fa8;
+  color: #fff;
+  font-size: .68em;
+  line-height: 1.4;
+  text-align: center;
+}
 .contact-form-wrap .form dl dt span.nini { color: #333; background: #f4ed20; }
 .contact-form-wrap label.checkbox_text { margin-bottom: .4em; }
-.contact-form-wrap .form dl dd { margin-bottom: 1.2em; }
 .contact-form-wrap .form .textarea,
 .contact-form-wrap .form textarea,
 .contact-form-wrap .form .dropdown {
   display: block;
   width: 100%;
-  min-height: 64px;
-  padding: 1.1em 1.25em;
-  border: 2px solid #dfd7c8;
-  border-radius: 14px;
-  background: #fffdf8;
-  box-shadow: inset 0 2px 0 rgba(249,177,4,.08), 0 3px 12px rgba(51,51,51,.06);
+  min-height: 70px;
+  padding: 1.15em 1.25em;
+  border: 2px solid #e2e2e2;
+  border-radius: 0;
+  background: #f0f0f0;
+  box-shadow: none;
   color: #333;
   transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
-.contact-form-wrap .form textarea { min-height: 220px; resize: vertical; }
+.contact-form-wrap .form textarea { min-height: 260px; resize: vertical; }
 .contact-form-wrap .form .textarea::placeholder,
 .contact-form-wrap .form textarea::placeholder { color: #8a8176; opacity: 1; }
 .contact-form-wrap .form .textarea:focus,
@@ -37,8 +78,31 @@ $page_style = "
 .contact-form-wrap .form .dropdown:focus {
   outline: none;
   border-color: #f9b104;
-  background: #fff;
-  box-shadow: inset 0 2px 0 rgba(249,177,4,.12), 0 0 0 4px rgba(249,177,4,.18), 0 4px 16px rgba(51,51,51,.08);
+  background: #fff8e6;
+  box-shadow: 0 0 0 4px rgba(249,177,4,.18);
+}
+.contact-form-wrap .form .field-error {
+  border-color: #d94b4b;
+  background: #fff5f5;
+}
+.contact-form-wrap .form .contact-error-message {
+  display: none;
+  margin-top: .7em;
+  color: #d94b4b;
+  font-weight: 600;
+  line-height: 1.6;
+}
+.contact-form-wrap .form .contact-error-message.is-show { display: block; }
+.contact-form-wrap .form .formbutton {
+  color: #fff;
+  border-color: #8ecc6f;
+  background: #8ecc6f;
+}
+.contact-form-wrap .form .formbutton:before { color: #fff; }
+.contact-form-wrap .form .formbutton:hover {
+  color: #fff;
+  background: #78bd5a;
+  border-color: #78bd5a;
 }
 .contact-form-wrap .form label.checkbox_text,
 .contact-form-wrap .form label.radio_text {
@@ -47,12 +111,21 @@ $page_style = "
 }
 @media screen and (max-width: 500px) {
   .contact-card__icon { width: 46px; height: 46px; }
+  .contact-form-wrap .form dl { display: block; }
+  .contact-form-wrap .form dl dt {
+    padding: 1.3em 0 .5em;
+    border-bottom: 0;
+    font-size: 1.05em;
+  }
+  .contact-form-wrap .form dl dd {
+    padding: 0 0 1.4em;
+    border-bottom: 1px dotted #cfcfcf;
+  }
   .contact-form-wrap .form .textarea,
   .contact-form-wrap .form textarea,
   .contact-form-wrap .form .dropdown {
     min-height: 56px;
     padding: .9em 1em;
-    border-radius: 12px;
   }
   .contact-form-wrap .form textarea { min-height: 180px; }
 }
@@ -70,6 +143,58 @@ window.addEventListener('load', function () {
       event_label: 'contact_page'
     });
   }
+
+  var form = document.getElementById('mailform');
+  if (!form) return;
+
+  var consultationChecks = form.querySelectorAll('input[name=\"ご相談内容(必須)[]\"]');
+  var consultationError = form.querySelector('[data-error-for=\"consultation\"]');
+  var requiredFields = form.querySelectorAll('[data-contact-required]');
+
+  function setFieldError(field, hasError) {
+    field.classList.toggle('field-error', hasError);
+  }
+
+  function validateContactForm() {
+    var isValid = true;
+
+    requiredFields.forEach(function (field) {
+      var hasError = !field.value.trim();
+      setFieldError(field, hasError);
+      if (hasError) isValid = false;
+    });
+
+    var hasCheckedConsultation = Array.prototype.some.call(consultationChecks, function (checkbox) {
+      return checkbox.checked;
+    });
+    consultationChecks.forEach(function (checkbox) {
+      checkbox.required = !hasCheckedConsultation;
+    });
+    if (consultationError) {
+      consultationError.classList.toggle('is-show', !hasCheckedConsultation);
+    }
+    if (!hasCheckedConsultation) isValid = false;
+
+    return isValid;
+  }
+
+  requiredFields.forEach(function (field) {
+    field.addEventListener('input', function () {
+      setFieldError(field, !field.value.trim());
+    });
+  });
+
+  consultationChecks.forEach(function (checkbox) {
+    checkbox.addEventListener('change', validateContactForm);
+  });
+
+  form.addEventListener('submit', function (event) {
+    if (!validateContactForm()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      form.reportValidity();
+    }
+  }, true);
 });
 </script>
 ";
@@ -172,7 +297,7 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
                         <dl>
                             <dt>お名前<span>必須</span></dt>
                             <dd>
-                                <input type='text' class='textarea' name='お名前(必須)' size='70' placeholder='例：比嘉 一茂'>
+                                <input type='text' class='textarea' name='お名前(必須)' size='70' placeholder='例：比嘉 一茂' required data-contact-required>
                             </dd>
 
                             <dt>屋号・会社名<span class='nini'>任意</span></dt>
@@ -182,7 +307,7 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
 
                             <dt>メールアドレス<span>必須</span></dt>
                             <dd>
-                                <input type='email' class='textarea' name='email(必須)' size='70' placeholder='例：info@d-neko.com'>
+                                <input type='email' class='textarea' name='email(必須)' size='70' placeholder='例：info@d-neko.com' required data-contact-required>
                             </dd>
 
                             <dt>電話番号<span class='nini'>任意</span></dt>
@@ -198,6 +323,7 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
                                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='ブログ・ホームページ制作'>ブログ・ホームページ制作</label>
                                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='更新・運用サポート'>更新・運用サポート</label>
                                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='まずは相談したい'>まずは相談したい</label>
+                                <p class='contact-error-message' data-error-for='consultation'>ご相談内容を1つ以上選択してください。</p>
                             </dd>
 
                             <dt>ご希望の連絡方法<span class='nini'>任意</span></dt>
@@ -221,7 +347,7 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
 
                             <dt>お問い合わせ内容<span>必須</span></dt>
                             <dd>
-                                <textarea name='お問い合わせ内容(必須)' rows='10' cols='75' placeholder='ご相談内容、制作したいもの、現在困っていること、希望納期などをご自由にご記入ください。'></textarea>
+                                <textarea name='お問い合わせ内容(必須)' rows='10' cols='75' placeholder='ご相談内容、制作したいもの、現在困っていること、希望納期などをご自由にご記入ください。' required data-contact-required></textarea>
                             </dd>
                         </dl>
 
