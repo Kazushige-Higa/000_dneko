@@ -4,6 +4,41 @@ include_once './header.php';
 ?>
 
 <div class="overflow dnk_lp">
+
+  <section>
+    <div class="overflow relative bg_white">
+      <div class="puton center">
+        <h2 class="tcenter line_height_20 white">
+          <span class="act01 blur sponly">
+            <img class="white width_2 width_sp5 b_m10" src='<?php echo $img; ?>/logo.webp' alt='<?php echo $title; ?>' loading='lazy'>
+          </span>
+          <br>
+          <span class="fs_50 fs_sp25 act02 blur">1,000件以上の制作現場を知る<br class="sponly">制作者のネコの手サポート。</span>
+          <br>
+          <span class="fs_50 fs_sp25 act03 blur">あなたのお店に寄り添うWeb担当サービス。</span>
+        </h2>
+        <p class="tcenter white t_m10 act04 blur">
+          チラシやブログ、作ったままになっていませんか？<br>
+          開業1〜3年目の個人事業主専門のデザネコ。<br>
+          「制作して終わり」じゃない、一緒に育てるパートナー。<br>
+          今すぐ、ネコの手を。
+        </p>
+        <div class='space_3 space_sp3'></div>
+        <div class="width_6 width_sp6">
+          <button class="btn_normal transparent center radius fs_20 fs_sp16 act05 blur">
+            <a href='about.php'>
+              デザネコについて
+            </a>
+          </button>
+        </div>
+      </div>
+
+      <div class='iframe_area cover'>
+        <video src='<?php echo $img; ?>/movie_mojacat.mp4' poster='<?php echo $img; ?>/movie_mojacat.webp' playsinline muted autoplay loop onclick='this.play();' width='100%' height='auto'></video>
+      </div>
+    </div>
+  </section>
+
   <section>
     <div id="dnk_lp_top" class="dnk_lp_hero">
       <div class="dnk_lp_leaf dnk_lp_leaf_left" aria-hidden="true"></div>
@@ -196,9 +231,12 @@ include_once './header.php';
             <h3>地域イベント・告知サイト</h3>
             <img src="<?php echo $img; ?>/works/fruitrun_1904.jpg" alt="地域イベントの制作事例" loading="lazy">
             <dl>
-              <dt>課題</dt><dd>開催情報が分散し、申込導線が弱い</dd>
-              <dt>実施</dt><dd>ランディングページと告知導線を整理</dd>
-              <dt>結果</dt><dd>申込までの流れが明確に</dd>
+              <dt>課題</dt>
+              <dd>開催情報が分散し、申込導線が弱い</dd>
+              <dt>実施</dt>
+              <dd>ランディングページと告知導線を整理</dd>
+              <dt>結果</dt>
+              <dd>申込までの流れが明確に</dd>
             </dl>
           </article>
           <article class="dnk_lp_work_card">
@@ -206,9 +244,12 @@ include_once './header.php';
             <h3>サービス紹介・信頼獲得ページ</h3>
             <img src="<?php echo $img; ?>/works/ogawa.jpg" alt="サービス紹介の制作事例" loading="lazy">
             <dl>
-              <dt>課題</dt><dd>強みが伝わりにくく比較されやすい</dd>
-              <dt>実施</dt><dd>写真・コピー・構成をまとめて改善</dd>
-              <dt>結果</dt><dd>相談前の不安を軽減</dd>
+              <dt>課題</dt>
+              <dd>強みが伝わりにくく比較されやすい</dd>
+              <dt>実施</dt>
+              <dd>写真・コピー・構成をまとめて改善</dd>
+              <dt>結果</dt>
+              <dd>相談前の不安を軽減</dd>
             </dl>
           </article>
           <article class="dnk_lp_work_card">
@@ -216,9 +257,12 @@ include_once './header.php';
             <h3>飲食店の販促・メニュー設計</h3>
             <img src="<?php echo $img; ?>/works/uojimaya_food.jpg" alt="飲食店の制作事例" loading="lazy">
             <dl>
-              <dt>課題</dt><dd>お店の魅力が写真と文章で伝わらない</dd>
-              <dt>実施</dt><dd>撮影・文章・導線を一括で制作</dd>
-              <dt>結果</dt><dd>来店前に雰囲気が伝わるページへ</dd>
+              <dt>課題</dt>
+              <dd>お店の魅力が写真と文章で伝わらない</dd>
+              <dt>実施</dt>
+              <dd>撮影・文章・導線を一括で制作</dd>
+              <dt>結果</dt>
+              <dd>来店前に雰囲気が伝わるページへ</dd>
             </dl>
           </article>
         </div>
@@ -257,11 +301,21 @@ include_once './header.php';
       <div class="dnk_lp_inner">
         <h2 class="dnk_lp_section_title">ご相談から公開まで</h2>
         <ol class="dnk_lp_flow_list">
-          <li><span>1</span><b>LINEまたはフォームで相談</b><p>無料・営業電話はしません</p></li>
-          <li><span>2</span><b>ヒアリング＆無料診断</b><p>現状のサイトや集客の課題を数字で確認</p></li>
-          <li><span>3</span><b>ご提案・お見積り</b><p>予算に合わせたプランを提示</p></li>
-          <li><span>4</span><b>取材・撮影・制作</b><p>文章や素材の用意は不要</p></li>
-          <li><span>5</span><b>公開・運用スタート</b><p>公開後も毎月支援</p></li>
+          <li><span>1</span><b>LINEまたはフォームで相談</b>
+            <p>無料・営業電話はしません</p>
+          </li>
+          <li><span>2</span><b>ヒアリング＆無料診断</b>
+            <p>現状のサイトや集客の課題を数字で確認</p>
+          </li>
+          <li><span>3</span><b>ご提案・お見積り</b>
+            <p>予算に合わせたプランを提示</p>
+          </li>
+          <li><span>4</span><b>取材・撮影・制作</b>
+            <p>文章や素材の用意は不要</p>
+          </li>
+          <li><span>5</span><b>公開・運用スタート</b>
+            <p>公開後も毎月支援</p>
+          </li>
         </ol>
       </div>
     </div>
