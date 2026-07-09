@@ -1,0 +1,139 @@
+{
+    "v-mr9q58r8-to46x0a": {
+        "first_seen": "2026-07-06T21:35:42+00:00",
+        "first_seen_ts": 1783373742,
+        "last_seen": "2026-07-09T04:48:35+00:00",
+        "last_seen_ts": 1783572515,
+        "sessions": 2,
+        "last_session": "2026-07-09",
+        "score": 79,
+        "events": [
+            {
+                "e": "stay_120",
+                "p": "\/ai-consulting.php",
+                "ts": 1783373742,
+                "s": 8
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783566527,
+                "s": 11
+            },
+            {
+                "e": "scroll_50",
+                "p": "\/index.php",
+                "ts": 1783566562,
+                "s": 3
+            },
+            {
+                "e": "scroll_90",
+                "p": "\/index.php",
+                "ts": 1783566563,
+                "s": 5
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783566582,
+                "s": 1
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783566636,
+                "s": 1
+            },
+            {
+                "e": "stay_60",
+                "p": "\/index.php",
+                "ts": 1783566696,
+                "s": 5
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783566716,
+                "s": 1
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783566757,
+                "s": 1
+            },
+            {
+                "e": "stay_60",
+                "p": "\/index.php",
+                "ts": 1783566817,
+                "s": 5
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783566867,
+                "s": 1
+            },
+            {
+                "e": "stay_60",
+                "p": "\/index.php",
+                "ts": 1783566927,
+                "s": 5
+            },
+            {
+                "e": "stay_120",
+                "p": "\/index.php",
+                "ts": 1783566987,
+                "s": 8
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783572261,
+                "s": 1
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783572282,
+                "s": 1
+            },
+            {
+                "e": "stay_60",
+                "p": "\/index.php",
+                "ts": 1783572342,
+                "s": 5
+            },
+            {
+                "e": "pageview",
+                "p": "\/index.php",
+                "ts": 1783572395,
+                "s": 1
+            },
+            {
+                "e": "scroll_50",
+                "p": "\/index.php",
+                "ts": 1783572395,
+                "s": 3
+            },
+            {
+                "e": "stay_60",
+                "p": "\/index.php",
+                "ts": 1783572455,
+                "s": 5
+            },
+            {
+                "e": "stay_120",
+                "p": "\/index.php",
+                "ts": 1783572515,
+                "s": 8
+            }
+        ],
+        "top_pages": [
+            {
+                "p": "\/index.php",
+                "n": 9
+            }
+        ]
+    }
+}
