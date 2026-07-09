@@ -1,4 +1,5 @@
 <?php require_once './common.php'; ?>
+<?php $is_dnk_lp_home = !empty($top_lp); ?>
 <!DOCTYPE html>
 <html lang="ja">
 
@@ -152,22 +153,30 @@
   <script src="/js/visitor_tracker.js" defer></script>
 </head>
 
-<body id="top">
+<body id="top" class="<?php echo $is_dnk_lp_home ? 'dnk_lp_body' : ''; ?>">
   <header>
     <div class="fixed bg_white z_index_10 width_10 width_sp10 t0">
       <div class="width_10 bg_white">
         <div class='space_1 space_sp1'></div>
         <div class='flex gap0 a_center j_center'>
-          <div class='width_2 width_sp3'>
+          <div class='<?php echo $is_dnk_lp_home ? "width_2 width_sp4 dnk_lp_header_logo" : "width_2 width_sp3"; ?>'>
             <h1>
               <a href="./">
                 <img src='<?php echo $img; ?>/logo.png' alt='<?php echo $title; ?>' loading='lazy'>
               </a>
             </h1>
           </div>
-          <div class="width_4 b_m0 pconly">
-            <nav class="nav_main set5 tcenter pconly bold center" aria-label="メインナビゲーション">
+          <div class="<?php echo $is_dnk_lp_home ? 'width_6 b_m0 pconly dnk_lp_header_nav_wrap' : 'width_5 b_m0 pconly'; ?>">
+            <nav class="nav_main <?php echo $is_dnk_lp_home ? 'set6 dnk_lp_header_nav' : 'set5'; ?> tcenter pconly bold center" aria-label="メインナビゲーション">
               <ul class="commonnav" ontouchstart="">
+                <?php if ($is_dnk_lp_home): ?>
+                <li><a href="#dnk_lp_price">サービス・料金</a></li>
+                <li><a href="entry_list.php?type=works">制作実績</a></li>
+                <li><a href="voice.php">お客様の声</a></li>
+                <li><a href="#dnk_lp_flow">制作の流れ</a></li>
+                <li><a href="faq.php">よくある質問</a></li>
+                <li><a href="about.php">私たちについて</a></li>
+                <?php else: ?>
                 <li>
                   <a href="./">
                     <span>Home</span>
@@ -207,17 +216,25 @@
                     よくあるご質問
                   </a>
                 </li>
+                <?php endif; ?>
               </ul>
             </nav>
           </div>
-          <div class="width_2 pconly">
-            <button class='btn_normal bg_line radius center font_ja'>
+          <div class="<?php echo $is_dnk_lp_home ? 'width_2 pconly dnk_lp_header_actions' : 'width_2 pconly'; ?>">
+            <?php if ($is_dnk_lp_home): ?>
+            <a class="dnk_lp_header_btn dnk_lp_header_btn_orange" href="contact.php"
+              onclick="gtag('event','diagnosis_click',{'event_category':'contact','event_label':'header_pc'})">
+              無料診断する
+            </a>
+            <?php else: ?>
+            <button class='btn_normal bg_line radius center font_ja fs_15'>
               <a href='contact.php'
                 onclick="gtag('event','line_click',{'event_category':'contact','event_label':'header_pc'})">
-                <i class="fa-brands fa-line fs_20" aria-hidden="true" style="margin-right:6px;"></i>
-                LINEで無料相談
+                <i class="fas fa-envelope" aria-hidden="true" style="margin-right:6px;"></i>
+                まずはお問い合わせ
               </a>
             </button>
+            <?php endif; ?>
           </div>
         </div>
         <div class='space_1 space_sp1'></div>
@@ -249,13 +266,20 @@
           </nav>
           <div class='space_3 space_sp1'></div>
           <div>
-            <button class='btn_normal bg_line radius center font_ja'>
+            <?php if ($is_dnk_lp_home): ?>
+            <a class="dnk_lp_header_btn dnk_lp_header_btn_orange dnk_lp_sp_menu_btn" href="contact.php"
+              onclick="gtag('event','diagnosis_click',{'event_category':'contact','event_label':'header_sp'})">
+              無料診断する
+            </a>
+            <?php else: ?>
+            <button class='btn_normal bg_line radius center font_ja fs_15'>
               <a href='contact.php'
                 onclick="gtag('event','line_click',{'event_category':'contact','event_label':'header_sp'})">
-                <i class="fa-brands fa-line fs_20" aria-hidden="true" style="margin-right:6px;"></i>
-                LINEで無料相談
+                <i class="fas fa-envelope" aria-hidden="true" style="margin-right:6px;"></i>
+                まずはお問い合わせ
               </a>
             </button>
+            <?php endif; ?>
           </div>
         </div>
       </div>

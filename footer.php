@@ -1,4 +1,42 @@
 <?php
+if (!empty($top_lp)):
+?>
+<footer>
+  <div class="dnk_lp_footer">
+    <div class="dnk_lp_inner dnk_lp_footer_inner">
+      <a class="dnk_lp_footer_logo" href="./">
+        <img src="<?php echo $img; ?>/logo.png" alt="<?php echo htmlspecialchars($company, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+      </a>
+      <nav class="dnk_lp_footer_nav" aria-label="フッターナビゲーション">
+        <a href="./">ホーム</a>
+        <a href="#dnk_lp_price">サービス・料金</a>
+        <a href="entry_list.php?type=works">制作実績</a>
+        <a href="voice.php">お客様の声</a>
+        <a href="#dnk_lp_flow">制作の流れ</a>
+        <a href="faq.php">よくある質問</a>
+        <a href="about.php">私たちについて</a>
+      </nav>
+      <small>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($copyright, ENT_QUOTES, 'UTF-8'); ?></small>
+    </div>
+  </div>
+</footer>
+
+<div id="pagetop" class="radius bottom dnk_lp_pagetop">
+  <a href="#top"><i class="fas fa-chevron-up" alt="to top"></i></a>
+</div>
+
+<script src="js/javascript.js" defer></script>
+<script src="js/bg_parallax.js" defer></script>
+
+<?php echo $page_script; ?>
+</body>
+
+</html>
+<?php
+return;
+endif;
+?>
+<?php
 // ==========================================
 //  サイト共通CTAバナー
 //  microCMS「cta_banner」API（オブジェクト形式）から取得
@@ -15,9 +53,11 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
   $cta_btn_url2    = isset($cta_banner->button_url2) ? trim((string)$cta_banner->button_url2) : '';
   if ($cta_btn_url !== '' && (preg_match('/line\.me|lin\.ee/i', $cta_btn_url) || strpos($cta_btn_text, 'LINE') !== false)) {
     $cta_btn_url = 'contact.php';
+    $cta_btn_text = 'まずはお問い合わせ';
   }
   if ($cta_btn_url2 !== '' && (preg_match('/line\.me|lin\.ee/i', $cta_btn_url2) || strpos($cta_btn_text2, 'LINE') !== false)) {
     $cta_btn_url2 = 'contact.php';
+    $cta_btn_text2 = 'まずはお問い合わせ';
   }
 ?>
 <section class="site-cta-banner">
@@ -36,9 +76,15 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
       <?php endif; ?>
       <?php if ($cta_btn_text !== '' && $cta_btn_url !== ''): ?>
       <div class="site-cta-banner__buttons">
-        <a href="<?php echo htmlspecialchars($cta_btn_url, ENT_QUOTES, 'UTF-8'); ?>" class="site-cta-banner__btn site-cta-banner__btn--primary"><?php echo htmlspecialchars($cta_btn_text, ENT_QUOTES, 'UTF-8'); ?></a>
+        <a href="<?php echo htmlspecialchars($cta_btn_url, ENT_QUOTES, 'UTF-8'); ?>" class="site-cta-banner__btn site-cta-banner__btn--primary">
+          <?php if ($cta_btn_text === 'まずはお問い合わせ'): ?><i class="fas fa-envelope" aria-hidden="true"></i> <?php endif; ?>
+          <?php echo htmlspecialchars($cta_btn_text, ENT_QUOTES, 'UTF-8'); ?>
+        </a>
         <?php if ($cta_btn_text2 !== '' && $cta_btn_url2 !== ''): ?>
-        <a href="<?php echo htmlspecialchars($cta_btn_url2, ENT_QUOTES, 'UTF-8'); ?>" class="site-cta-banner__btn site-cta-banner__btn--secondary"><?php echo htmlspecialchars($cta_btn_text2, ENT_QUOTES, 'UTF-8'); ?></a>
+        <a href="<?php echo htmlspecialchars($cta_btn_url2, ENT_QUOTES, 'UTF-8'); ?>" class="site-cta-banner__btn site-cta-banner__btn--secondary">
+          <?php if ($cta_btn_text2 === 'まずはお問い合わせ'): ?><i class="fas fa-envelope" aria-hidden="true"></i> <?php endif; ?>
+          <?php echo htmlspecialchars($cta_btn_text2, ENT_QUOTES, 'UTF-8'); ?>
+        </a>
         <?php endif; ?>
       </div>
       <?php endif; ?>
@@ -53,7 +99,7 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
             <h3 class="tcenter line_height_18">
                 <span class="bold white fs_35 fs_sp30 font_kiwi">
                     無料相談受付中。<br>
-                    LINEで気軽にご相談ください。
+                    まずはお気軽にお問い合わせください。
                 </span>
             </h3>
             <div class='space_3 space_sp2'></div>
@@ -61,8 +107,8 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
                 <button class="btn_normal transparent center radius fs_20 fs_sp20">
                     <a href="contact.php"
                       onclick="gtag('event','line_click',{'event_category':'contact','event_label':'footer_btn'})">
-                        <i class="fab fa-line" style="font-size: 1.3em; vertical-align: middle; margin-right: 0.5em;"></i>
-                        公式LINEからお問い合わせ
+                        <i class="fas fa-envelope" style="font-size: 1.3em; vertical-align: middle; margin-right: 0.5em;"></i>
+                        まずはお問い合わせ
                     </a>
                 </button>
             </div>
