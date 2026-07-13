@@ -1,5 +1,7 @@
 <?php
 $top_lp = true;
+$page_title = "沖縄のホームページ制作 デザネコ｜開業1〜3年目の個人事業主専門";
+$page_description = "沖縄で開業1〜3年目の個人事業主向けホームページ制作。撮影・文章・デザインをまるごとおまかせ、月額9,800円から。公開後もアクセス数や問い合わせ数をダッシュボードで確認しながら伴走する「デザネコ」の制作・運用サービスです。";
 include_once './header.php';
 ?>
 
@@ -10,7 +12,7 @@ include_once './header.php';
       <div class="puton center">
         <h2 class="tcenter line_height_20 white">
           <span class="act01 blur sponly">
-            <img class="white width_2 width_sp5 b_m10" src='<?php echo $img; ?>/logo.webp' alt='<?php echo $title; ?>' loading='lazy'>
+            <img class="width_2 width_sp5 b_m10" src='<?php echo $img; ?>/logo.webp' alt='<?php echo $title; ?>' loading='lazy'>
           </span>
           <br>
           <span class="fs_50 fs_sp25 act02 blur">1,000件以上の制作現場を知る<br class="sponly">制作者のネコの手サポート。</span>
@@ -24,13 +26,6 @@ include_once './header.php';
           今すぐ、ネコの手を。
         </p>
         <div class='space_3 space_sp3'></div>
-        <div class="width_6 width_sp6">
-          <button class="btn_normal transparent center radius fs_20 fs_sp16 act05 blur">
-            <a href='about.php'>
-              デザネコについて
-            </a>
-          </button>
-        </div>
       </div>
 
       <div class='iframe_area cover'>
@@ -84,6 +79,7 @@ include_once './header.php';
               <span>ダッシュボード</span>
               <i></i>
             </div>
+            <p class="dnk_lp_dashboard_note" style="margin:-6px 0 12px;font-size:11px;color:#8a8f86;">※表示イメージです</p>
             <div class="dnk_lp_metric_grid">
               <div><span>アクセス数</span><strong>12,834</strong><em>+28.6%</em></div>
               <div><span>問い合わせ数</span><strong>152</strong><em>+35.1%</em></div>
@@ -172,7 +168,7 @@ include_once './header.php';
           <h2>料金は、先に全部お見せします</h2>
           <p class="dnk_lp_plan_name">ホームページ制作・運用プラン（いちばん人気）</p>
           <div class="dnk_lp_price_box">
-            <span class="dnk_lp_initial_cost">初期費用<br>【要相談】円</span>
+            <span class="dnk_lp_initial_cost">初期費用<br>0円（制作費無料）</span>
             <strong><span class="dnk_lp_price_main"><span class="dnk_lp_price_label">月額</span><span class="dnk_lp_price_amount">9,800</span><span class="dnk_lp_price_yen">円</span></span><small>（税込・長期割）</small></strong>
           </div>
           <div class="dnk_lp_price_body">
@@ -181,11 +177,11 @@ include_once './header.php';
               <li>取材・撮影／文章作成</li>
               <li>サーバー・ドメイン管理</li>
               <li>月次レポート＆ダッシュボード</li>
-              <li>更新対応【要確認：回数など】</li>
+              <li>更新対応（回数無制限）</li>
             </ul>
             <div class="dnk_lp_contract">
               <b>契約縛り</b>
-              <span>【要確認】<br>なるべく短期契約</span>
+              <span>縛りなし<br>いつでも解約OK</span>
             </div>
           </div>
         </div>
@@ -277,7 +273,7 @@ include_once './header.php';
         <div class="dnk_lp_voice_grid">
           <article class="dnk_lp_voice_card">
             <img src="<?php echo $img; ?>/voice01.webp" alt="お客様の声アイコン" loading="lazy">
-            <p>ホームページ公開から直接予約が月0件に近かったのに、OTAの手数料を大幅に削減できました！</p>
+            <p>公開前は直接予約が月0件に近い状態でしたが、公開後は直接予約が増え、OTAの手数料を大幅に削減できました！</p>
             <b>宿泊施設 様</b>
           </article>
           <article class="dnk_lp_voice_card">
@@ -332,7 +328,7 @@ include_once './header.php';
             <dt>写真や文章は用意しないといけない？</dt>
             <dd>不要です。取材・撮影・文章作成までデザネコが行います。</dd>
             <dt>途中で解約できますか？</dt>
-            <dd>契約条件に合わせてご相談可能です。【要確認：契約条件を明記】</dd>
+            <dd>契約期間の縛りはありません。いつでも解約いただけます。</dd>
           </dl>
           <dl>
             <dt>いまあるホームページのリニューアルもできる？</dt>
