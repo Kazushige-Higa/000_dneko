@@ -155,7 +155,7 @@
   <?php
     // Microsoft Clarity（ヒートマップ・セッション録画／無料）
     // https://clarity.microsoft.com でプロジェクトを作成し、発行されたIDを設定すると有効になります
-    $clarity_id = '';
+    $clarity_id = 'xn9icqs3q4';
   ?>
   <?php if ($clarity_id !== ''): ?>
   <script>
