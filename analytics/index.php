@@ -178,6 +178,17 @@ tr:hover td { background: #f8fafc; }
 .hot-score { font-weight: 700; font-size: 14px; }
 .tier-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px;
               border-radius: 999px; white-space: nowrap; margin-left: 4px; }
+.hot-item  { align-items: start; }
+.hot-rank, .hot-sessions, .hot-score { padding-top: 2px; }
+.hot-chips { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 4px; }
+.hot-chip  { display: inline-block; font-size: 10px; font-weight: 600; line-height: 1.4;
+             padding: 1px 7px; border-radius: 999px; background: #e2e8f0; color: #475569; white-space: nowrap; }
+.hot-chip.src  { background: #eef2ff; color: #4f46e5; }
+.hot-chip.geo  { background: #ecfeff; color: #0891b2; }
+.hot-chip.act  { background: #f0fdf4; color: #15803d; }
+.hot-chip.time { background: #fff7ed; color: #c2410c; }
+.hot-pages { font-size: 11px; color: #94a3b8; margin-top: 3px;
+             overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
 /* ── Core Web Vitals ── */
 .cwv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
@@ -655,6 +666,28 @@ function render(d) {
   drawRegions(d.region || []);
   const okinawaTotal = (d.region || []).find(r => r.name === 'Okinawa' || r.name === '沖縄');
   drawOkinawaCities(d.okinawa_cities || [], okinawaTotal ? okinawaTotal.count : 0);
+
+  /* ── データが無い/計測できていないセクションは自動で非表示 ──
+     （データが入れば次回更新時に自動で再表示される） */
+  togglePanel('genderChart',        genderAvailable);
+  togglePanel('ageChart',           ageAvailable);
+  togglePanel('funnelWrap',         (d.funnel_stages || []).length > 0);
+  togglePanel('pageMetricsBody',    (d.page_metrics  || []).length > 0);
+  togglePanel('sourceConvBody',     (d.source_conv   || []).length > 0);
+  togglePanel('eventList',          (d.events        || []).length > 0);
+  togglePanel('scKeywordsBody',     (d.sc_keywords   || []).length > 0);
+  togglePanel('scPagesBody',        (d.sc_pages      || []).length > 0);
+  togglePanel('organicLandingBody', (d.organic_landing || []).length > 0);
+  togglePanel('regionList',         (d.region        || []).length > 0);
+  togglePanel('okinawaCityList',    (d.okinawa_cities|| []).length > 0);
+}
+
+/* 指定要素を含む .panel を表示/非表示（データ無しセクションを隠す） */
+function togglePanel(childId, show) {
+  const child = document.getElementById(childId);
+  if (!child) return;
+  const panel = child.closest('.panel');
+  if (panel) panel.style.display = show ? '' : 'none';
 }
 
 /* ===== グラフ描画 ===== */
@@ -880,10 +913,13 @@ function drawScPages(items) {
   items.forEach((p, i) => {
     const posColor = p.position <= 3 ? '#10b981' : p.position <= 10 ? '#f59e0b' : '#ef4444';
     const ctrColor = p.ctr >= 5 ? '#10b981' : p.ctr >= 2 ? '#f59e0b' : '#94a3b8';
+    const pageCell = p.title
+      ? `<div class="page-title">${escapeHtml(p.title)}</div><div class="path">${escapeHtml(p.path)}</div>`
+      : `<div class="path">${escapeHtml(p.path)}</div>`;
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td class="rank">${i + 1}</td>
-      <td><div class="path">${escapeHtml(p.path)}</div></td>
+      <td>${pageCell}</td>
       <td style="font-size:12px;color:#334155">${escapeHtml(p.top_query || '—')}</td>
       <td class="num">${fmtInt(p.clicks)}</td>
       <td class="num">${fmtInt(p.impressions)}</td>
@@ -906,10 +942,11 @@ function renderCwv(data) {
   if (!grid) return;
   const results = data.results || [];
   if (!results.length) {
-    grid.innerHTML = '<p class="no-data">計測データを取得できませんでした</p>';
-    updated.textContent = '取得失敗';
+    // 計測できていない間はセクションごと非表示（計測開始後に自動表示）
+    togglePanel('cwvGrid', false);
     return;
   }
+  togglePanel('cwvGrid', true);
   if (data.generated_at) {
     const dt = new Date(data.generated_at);
     updated.textContent = 'モバイル計測 / ' + dt.toLocaleString('ja-JP', {month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}) + ' 時点';
@@ -1076,8 +1113,8 @@ fetch('cwv_api.php')
   .then(r => r.json())
   .then(d => renderCwv(d))
   .catch(() => {
-    document.getElementById('cwvUpdated').textContent = '取得失敗';
-    document.getElementById('cwvGrid').innerHTML = '<p class="no-data">Core Web Vitals の取得に失敗しました（時間をおいて再読み込みしてください）</p>';
+    // 取得失敗時はセクションごと非表示（計測できるようになれば自動表示）
+    togglePanel('cwvGrid', false);
   });
 
 /* ===== 個別熱量スコア取得 ===== */
@@ -1106,11 +1143,22 @@ function renderHeatScore(h) {
     const tm = TIER_META[v.tier] || TIER_META.cold;
     const badge = `<span class="tier-badge" style="background:${tm.bg};color:${tm.color}">${tm.label}</span>`;
     const pages = (v.top_pages || []).map(p => p.p).join(' / ') || '—';
+
+    /* ── 行動属性チップ（匿名のまま「どんな見込み客か」を表示）── */
+    const chips = [];
+    if (v.source && v.source !== '不明')      chips.push(`<span class="hot-chip src">${escapeHtml(v.source)}</span>`);
+    if (v.device && v.device !== '不明')      chips.push(`<span class="hot-chip">${escapeHtml(v.device)}</span>`);
+    if (v.region && v.region !== '地域不明')  chips.push(`<span class="hot-chip geo">📍${escapeHtml(v.region)}</span>`);
+    const first = v.first_seen ? relDays(v.first_seen) : '';
+    if (first)                                chips.push(`<span class="hot-chip time">${escapeHtml(first)}</span>`);
+    if (v.label)                              chips.push(`<span class="hot-chip act">${escapeHtml(v.label)}</span>`);
+
     return `<div class="hot-item">
       <div class="hot-rank">${i + 1}</div>
       <div>
         <div class="hot-id">${escapeHtml(v.id)}</div>
-        <div style="font-size:11px;color:#94a3b8;margin-top:2px">${escapeHtml(pages)}</div>
+        <div class="hot-chips">${chips.join('')}</div>
+        <div class="hot-pages" title="${escapeHtml(pages)}">${escapeHtml(pages)}</div>
       </div>
       <div class="hot-sessions" title="訪問回数">${v.sessions}回訪問</div>
       <div>
@@ -1119,6 +1167,17 @@ function renderHeatScore(h) {
       </div>
     </div>`;
   }).join('');
+}
+
+/* 初回訪問日 → 相対表記 */
+function relDays(iso) {
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return '';
+  const days = Math.floor((Date.now() - d.getTime()) / 86400000);
+  if (days <= 0)    return '初回 今日';
+  if (days < 30)    return `初回 ${days}日前`;
+  if (days < 365)   return `初回 ${Math.floor(days / 30)}ヶ月前`;
+  return `初回 ${Math.floor(days / 365)}年前`;
 }
 
 fetch('../visitor_tracker.php?action=stats')

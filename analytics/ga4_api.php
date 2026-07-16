@@ -75,6 +75,15 @@ try {
         $data['sc_pages']    = $data['sc_pages'] ?? [];
         $data['sc_error']    = $e->getMessage();
     }
+
+    // Search Console のURLに、GA4のページタイトルを付与（ぱっと見で識別しやすく）
+    $title_map = $data['_title_map'] ?? [];
+    foreach ($data['sc_pages'] as &$sp) {
+        $sp['title'] = sc_resolve_title($sp['path'] ?? '', $title_map);
+    }
+    unset($sp);
+    unset($data['_title_map']);   // 内部用のため出力しない
+
     $data['generated_at'] = date('c');
     $json = json_encode($data, JSON_UNESCAPED_UNICODE);
 
@@ -449,11 +458,24 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
         ],
     ]];
 
+    /* ---- バッチ6: URL→ページタイトル対応表（Search Consoleのページ名解決用） ---- */
+    // pagePathPlusQueryString で ?eid=... 等のクエリ付きURLもタイトル判別できるようにする。
+    $batch6 = ['requests' => [
+        [
+            'dateRanges' => [['startDate' => '90daysAgo', 'endDate' => 'today']],
+            'dimensions' => [['name' => 'pagePathPlusQueryString'], ['name' => 'pageTitle']],
+            'metrics'    => [['name' => 'screenPageViews']],
+            'orderBys'   => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
+            'limit'      => 1000,
+        ],
+    ]];
+
     $res1 = ga4_http_post($base . ':batchRunReports', json_encode($batch1), $auth);
     $res2 = ga4_http_post($base . ':batchRunReports', json_encode($batch2), $auth);
     $res3 = ga4_http_post($base . ':batchRunReports', json_encode($batch3), $auth);
     $res4 = ga4_http_post($base . ':batchRunReports', json_encode($batch4), $auth);
     $res5 = ga4_http_post($base . ':batchRunReports', json_encode($batch5), $auth);
+    $res6 = ga4_http_post($base . ':batchRunReports', json_encode($batch6), $auth);
 
     $r1 = json_decode($res1, true);
     if (json_last_error() !== JSON_ERROR_NONE || !is_array($r1)) {
@@ -867,7 +889,23 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
         ];
     }
 
+    /* ---- URL→タイトル対応表を構築（バッチ6・失敗しても無視）---- */
+    $title_map = [];
+    $r6 = json_decode($res6, true);
+    if (is_array($r6) && !isset($r6['error'])) {
+        foreach (($r6['reports'][0]['rows'] ?? []) as $row) {
+            $pp    = $row['dimensionValues'][0]['value'] ?? '';
+            $title = trim($row['dimensionValues'][1]['value'] ?? '');
+            if ($pp === '' || $title === '' || $title === '(not set)') continue;
+            if (!isset($title_map[$pp])) $title_map[$pp] = $title;
+            // クエリ除去版もフォールバックとして登録
+            $noq = preg_replace('/\?.*$/', '', $pp);
+            if ($noq !== $pp && !isset($title_map[$noq])) $title_map[$noq] = $title;
+        }
+    }
+
     return [
+        '_title_map'       => $title_map,
         'kpi'              => $kpi,
         'trend'            => $trend,
         'weekly'           => $weekly,
@@ -1007,6 +1045,29 @@ function sc_get_pages($site_url, $token, $days = 28)
         return $b['impressions'] - $a['impressions'];
     });
     return array_slice($result, 0, 10);
+}
+
+/**
+ * Search ConsoleのパスにGA4のページタイトルを解決する。
+ * 完全一致 → クエリ除去一致 → /index.php ⇄ / の揺れ吸収 の順で探す。
+ * 見つからなければ空文字（フロント側はURL表示にフォールバック）。
+ */
+function sc_resolve_title($path, array $map)
+{
+    if ($path === '') return '';
+    if (isset($map[$path])) return $map[$path];
+
+    $noq = preg_replace('/\?.*$/', '', $path);
+    if (isset($map[$noq])) return $map[$noq];
+
+    // トップページの /index.php ⇄ / 表記ゆれ
+    $alts = [];
+    if ($noq === '/' || $noq === '') { $alts[] = '/index.php'; }
+    if (preg_match('#/index\.php$#', $noq)) { $alts[] = '/'; }
+    foreach ($alts as $alt) {
+        if (isset($map[$alt])) return $map[$alt];
+    }
+    return '';
 }
 
 

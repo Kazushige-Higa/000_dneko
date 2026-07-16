@@ -54,6 +54,7 @@
       visitor_id: visitorId,
       event:      event,
       page:       location.pathname,
+      ref:        document.referrer || '',   // 流入元判定用（初回のみサーバーが使用）
     };
     // Beacon API（ページ離脱時も確実に送信）
     if (navigator.sendBeacon) {

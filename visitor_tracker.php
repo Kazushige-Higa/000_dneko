@@ -71,6 +71,97 @@ function vt_cleanup(array &$data): void {
 }
 
 /* ================================================================
+ * 行動属性ヘルパー（匿名のまま「どんな見込み客か」を把握する用途）
+ *   ※ 個人特定はしない。IPは地域推定のみに使い、生IPは保存しない。
+ * ================================================================ */
+
+/* 訪問者IP（プロキシ経由を考慮） */
+function vt_client_ip(): string {
+    foreach (['HTTP_CF_CONNECTING_IP', 'HTTP_X_FORWARDED_FOR', 'REMOTE_ADDR'] as $k) {
+        if (!empty($_SERVER[$k])) {
+            $ip = trim(explode(',', $_SERVER[$k])[0]);
+            if (filter_var($ip, FILTER_VALIDATE_IP)) return $ip;
+        }
+    }
+    return '';
+}
+
+/* IP → 大まかな地域（市区町村レベル）。失敗時は null。生IPは保存しない。 */
+function vt_geo_lookup(string $ip): ?array {
+    if ($ip === '' || !filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_NO_PRIV_RANGE | FILTER_FLAG_NO_RES_RANGE)) {
+        return null;
+    }
+    $url = 'http://ip-api.com/json/' . urlencode($ip) . '?fields=status,country,regionName,city&lang=ja';
+    $ch  = curl_init($url);
+    curl_setopt_array($ch, [
+        CURLOPT_RETURNTRANSFER => true,
+        CURLOPT_TIMEOUT        => 2,
+        CURLOPT_CONNECTTIMEOUT => 2,
+    ]);
+    $res = curl_exec($ch);
+    curl_close($ch);
+    if (!$res) return null;
+    $j = json_decode($res, true);
+    if (!is_array($j) || ($j['status'] ?? '') !== 'success') return null;
+    return [
+        'city'    => $j['city'] ?? '',
+        'region'  => $j['regionName'] ?? '',
+        'country' => $j['country'] ?? '',
+    ];
+}
+
+/* geo配列 → 表示用ラベル */
+function vt_geo_label($geo): string {
+    if (!is_array($geo)) return '地域不明';
+    $parts = array_filter([$geo['region'] ?? '', $geo['city'] ?? '']);
+    if (!$parts) return ($geo['country'] ?? '') ?: '地域不明';
+    return implode(' ', $parts);
+}
+
+/* リファラ → 流入元ラベル（初回のみ有効） */
+function vt_classify_source(string $ref): string {
+    if ($ref === '') return '直接/ブックマーク';
+    $host = strtolower(parse_url($ref, PHP_URL_HOST) ?: '');
+    if ($host === '' ) return '直接/ブックマーク';
+    if (strpos($host, 'd-neko.com') !== false) return '直接/ブックマーク'; // 内部遷移
+    $map = [
+        'google.'    => 'Google検索', 'bing.' => 'Bing検索', 'yahoo.' => 'Yahoo検索',
+        'duckduckgo' => 'DuckDuckGo検索',
+        'instagram.' => 'Instagram', 'cktrack' => 'Instagram',
+        'facebook.'  => 'Facebook', 'fb.'     => 'Facebook',
+        't.co'       => 'X(Twitter)', 'twitter.' => 'X(Twitter)', '//x.com' => 'X(Twitter)',
+        'youtube.'   => 'YouTube', 'youtu.be' => 'YouTube',
+        'line.'      => 'LINE', 'lin.ee'   => 'LINE',
+        'tiktok.'    => 'TikTok',
+        'note.com'   => 'note', 'ameblo'   => 'アメブロ',
+    ];
+    foreach ($map as $needle => $label) {
+        if (strpos($host, ltrim($needle, '/')) !== false) return $label;
+    }
+    return 'その他サイト';
+}
+
+/* User-Agent → デバイス種別 */
+function vt_device(string $ua): string {
+    if ($ua === '') return '不明';
+    if (preg_match('/iPad|Tablet|Nexus 7|Nexus 10/i', $ua)) return 'タブレット';
+    if (preg_match('/Mobile|Android|iPhone|iPod|Windows Phone/i', $ua)) return 'モバイル';
+    return 'PC';
+}
+
+/* 閲覧履歴 → 行動ラベル（購入検討度の傾向を要約） */
+function vt_behavior_label(array $v): string {
+    $joined = implode(' ', array_column($v['top_pages'] ?? [], 'p'));
+    $tags = [];
+    if (preg_match('#/law#', $joined))                       $tags[] = '料金・特商法確認';
+    if (preg_match('#/contact#', $joined))                   $tags[] = 'お問い合わせ接近';
+    if (preg_match('#/voice#', $joined))                     $tags[] = 'お客様の声';
+    if (preg_match('#/(service|works|entry)#', $joined))     $tags[] = '実績重視';
+    if (preg_match('#/profile#', $joined))                   $tags[] = 'プロフィール確認';
+    return $tags ? implode('・', array_slice($tags, 0, 3)) : '閲覧中心';
+}
+
+/* ================================================================
  * GET ?action=stats  — ダッシュボード用集計（内部IP制限なし、認証不要）
  * ================================================================ */
 if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'stats') {
@@ -90,12 +181,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && ($_GET['action'] ?? '') === 'stats')
         $total_count++;
         if ($t === 'hot' || $t === 'warm') {
             $hot_list[] = [
-                'id'       => substr($vid, 0, 8) . '…',   // IDを短縮表示
-                'score'    => $score,
-                'tier'     => $t,
-                'sessions' => (int)($v['sessions'] ?? 1),
-                'last_seen'=> $v['last_seen'] ?? '',
-                'top_pages'=> array_slice($v['top_pages'] ?? [], 0, 3),
+                'id'        => substr($vid, 0, 8) . '…',   // IDを短縮表示
+                'score'     => $score,
+                'tier'      => $t,
+                'sessions'  => (int)($v['sessions'] ?? 1),
+                'last_seen' => $v['last_seen'] ?? '',
+                'top_pages' => array_slice($v['top_pages'] ?? [], 0, 3),
+                // ── 行動属性（匿名のまま「どんな見込み客か」を把握）──
+                'source'     => $v['source'] ?? '不明',
+                'device'     => $v['device'] ?? '不明',
+                'region'     => vt_geo_label($v['geo'] ?? null),
+                'first_seen' => $v['first_seen'] ?? '',
+                'label'      => vt_behavior_label($v),
             ];
         }
     }
@@ -131,6 +228,8 @@ if (!$body) {
 $vid   = preg_replace('/[^a-zA-Z0-9\-_]/', '', $body['visitor_id'] ?? '');
 $event = preg_replace('/[^a-zA-Z0-9_]/', '', $body['event']      ?? '');
 $page  = substr(strip_tags($body['page'] ?? ''), 0, 200);
+$ref   = substr(strip_tags($body['ref'] ?? ''), 0, 300);   // 流入元判定用リファラ
+$ua    = $_SERVER['HTTP_USER_AGENT'] ?? '';
 $now   = time();
 $today = date('Y-m-d', $now);
 
@@ -164,8 +263,20 @@ if (!isset($data[$vid])) {
         'score'         => 0,
         'events'        => [],
         'top_pages'     => [],
+        // ── 行動属性（初回訪問時に確定）──
+        'source'        => vt_classify_source($ref),   // 流入元（初回リファラ）
+        'device'        => vt_device($ua),             // デバイス種別
+        'geo'           => vt_geo_lookup(vt_client_ip()), // 地域（生IPは保存しない）
     ];
 } else {
+    // 既存訪問者の行動属性を補完（旧データ・未取得分のバックフィル）
+    if (empty($data[$vid]['device']))                 $data[$vid]['device'] = vt_device($ua);
+    if (!isset($data[$vid]['source']) || $data[$vid]['source'] === '') {
+        $data[$vid]['source'] = vt_classify_source($ref);
+    }
+    if (!array_key_exists('geo', $data[$vid])) {
+        $data[$vid]['geo'] = vt_geo_lookup(vt_client_ip());
+    }
     // 再訪問判定
     $last_session = $data[$vid]['last_session'] ?? '';
     if ($last_session !== $today) {
