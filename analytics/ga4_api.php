@@ -35,7 +35,9 @@ $SC_SITE_URL     = 'https://d-neko.com/';                         // Search Cons
 // コンバージョン(CV)として数えるイベント名。
 // GA4管理画面のキーイベント設定に依存せず、ここで定義したイベントの
 // 発生数をCV・CVRとして集計する（GA4側でもキーイベント登録を推奨）。
-$KEY_EVENTS = ['contact_page_view', 'line_click', 'form_submit'];
+// CV = 実際の申込み導線（フォーム送信＋LINE相談クリック）。
+// ※ contact_page_view（ページ到達のみ）はCVから除外し、送信率を正しく反映する。
+$KEY_EVENTS = ['form_submit', 'line_click'];
 
 // レポートから除外するページパスの接頭辞（自社ツール・プロトタイプ・テスト階層）
 $EXCLUDE_PATH_PREFIXES = ['/analytics', '/ga4_dashboard_prototype', '/000_dneko'];

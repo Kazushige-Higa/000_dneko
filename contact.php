@@ -147,6 +147,20 @@ window.addEventListener('load', function () {
       event_category: 'contact',
       event_label: 'contact_page'
     });
+
+    // フォーム送信完了の計測（send.php が /contact.php?thanks=1 へリダイレクト）
+    // → コンバージョン(CV)としてカウント
+    var params = new URLSearchParams(location.search);
+    if (params.get('thanks') === '1') {
+      gtag('event', 'form_submit', {
+        event_category: 'contact',
+        event_label: 'contact_form'
+      });
+      // リロードによる二重計測を防ぐため URL から thanks を除去
+      if (window.history && history.replaceState) {
+        history.replaceState(null, '', location.pathname);
+      }
+    }
   }
 
   var form = document.getElementById('mailform');

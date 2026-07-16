@@ -417,7 +417,7 @@ tr:hover td { background: #f8fafc; }
       <tbody id="sourceConvBody"></tbody>
     </table>
     </div>
-    <p class="note">※ コンバージョン = お問い合わせページ閲覧・LINEクリック・フォーム送信イベントの合計件数です。</p>
+    <p class="note">※ コンバージョン = フォーム送信・LINE相談クリックの合計件数（実際の申込み導線）。CVR = CV ÷ セッション数。</p>
   </div>
   <div class="panel">
     <div class="panel-head"><h2>イベント別集計（TOP15）</h2></div>
