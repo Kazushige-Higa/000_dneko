@@ -1,42 +1,4 @@
 <?php
-if (!empty($top_lp)):
-?>
-<footer>
-  <div class="dnk_lp_footer">
-    <div class="dnk_lp_inner dnk_lp_footer_inner">
-      <a class="dnk_lp_footer_logo" href="./">
-        <img src="<?php echo $img; ?>/logo.png" alt="<?php echo htmlspecialchars($company, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-      </a>
-      <nav class="dnk_lp_footer_nav" aria-label="フッターナビゲーション">
-        <a href="./">ホーム</a>
-        <a href="#dnk_lp_price">サービス・料金</a>
-        <a href="entry_list.php?type=works">制作実績</a>
-        <a href="voice.php">お客様の声</a>
-        <a href="#dnk_lp_flow">制作の流れ</a>
-        <a href="faq.php">よくある質問</a>
-        <a href="about.php">私たちについて</a>
-      </nav>
-      <small>&copy; <?php echo date('Y'); ?> <?php echo htmlspecialchars($copyright, ENT_QUOTES, 'UTF-8'); ?></small>
-    </div>
-  </div>
-</footer>
-
-<div id="pagetop" class="radius bottom dnk_lp_pagetop">
-  <a href="#top"><i class="fas fa-chevron-up" alt="to top"></i></a>
-</div>
-
-<script src="js/javascript.js" defer></script>
-<script src="js/bg_parallax.js" defer></script>
-
-<?php echo $page_script; ?>
-</body>
-
-</html>
-<?php
-return;
-endif;
-?>
-<?php
 // ==========================================
 //  サイト共通CTAバナー
 //  microCMS「cta_banner」API（オブジェクト形式）から取得
