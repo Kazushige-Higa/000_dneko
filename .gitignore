@@ -31,6 +31,8 @@ node_modules/
 # Runtime counter data
 data/pv.json
 data/likes.json
+# 個別訪問者トラッキングデータ（本番の実データ。コミットすると本番を上書きする恐れ）
+data/visitors.json
 
 # GA4 ダッシュボード（秘密鍵・トークン・キャッシュは絶対にコミットしない）
 data/ga4/service_account.json

@@ -37,6 +37,7 @@ jobs:
             **/.env.*
             **/data/pv.json
             **/data/likes.json
+            **/data/visitors.json
             **/data/ga4/service_account.json
             **/data/ga4/token.json
             **/data/ga4/cache.json
