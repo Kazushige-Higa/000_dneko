@@ -81,6 +81,12 @@ body {
 }
 .chart-wrap { position: relative; height: 260px; }
 .chart-wrap.sm { height: 200px; }
+.demographic-status {
+  position: absolute; inset: 0; display: none; align-items: center; justify-content: center;
+  padding: 18px; text-align: center; color: #64748b; font-size: 12px; line-height: 1.7;
+  background: #f8fafc; border-radius: 8px;
+}
+.demographic-status strong { display: block; color: #334155; font-size: 13px; margin-bottom: 4px; }
 
 /* ── Period tabs ── */
 .tab-group { display: flex; gap: 4px; }
@@ -172,6 +178,22 @@ tr:hover td { background: #f8fafc; }
 .hot-score { font-weight: 700; font-size: 14px; }
 .tier-badge { display: inline-block; font-size: 10px; font-weight: 700; padding: 2px 7px;
               border-radius: 999px; white-space: nowrap; margin-left: 4px; }
+
+/* ── Core Web Vitals ── */
+.cwv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
+.cwv-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
+.cwv-page-label { font-size: 13px; font-weight: 700; color: #0f172a; margin-bottom: 2px; }
+.cwv-page-path { font-size: 11px; color: #94a3b8; font-family: "SF Mono", Menlo, monospace;
+                 overflow: hidden; text-overflow: ellipsis; white-space: nowrap; margin-bottom: 12px; }
+.cwv-score-row { display: flex; align-items: center; gap: 14px; margin-bottom: 12px; }
+.cwv-score-circle { width: 58px; height: 58px; border-radius: 50%; display: flex; align-items: center;
+                    justify-content: center; font-size: 19px; font-weight: 800; flex-shrink: 0; border: 4px solid; }
+.cwv-score-label { font-size: 12px; color: #64748b; line-height: 1.5; }
+.cwv-metrics { display: flex; flex-direction: column; gap: 6px; }
+.cwv-metric { display: flex; justify-content: space-between; align-items: center; font-size: 12px; }
+.cwv-metric-name { color: #64748b; }
+.cwv-metric-val { font-weight: 700; font-variant-numeric: tabular-nums; }
+@media (max-width: 960px) { .cwv-grid { grid-template-columns: 1fr; } }
 
 /* ── Notes ── */
 .note { font-size: 11px; color: #94a3b8; margin-top: 10px; line-height: 1.6; }
@@ -287,11 +309,19 @@ tr:hover td { background: #f8fafc; }
 <div class="grid-4">
   <div class="panel">
     <div class="panel-head"><h2>男女比</h2></div>
-    <div class="chart-wrap sm"><canvas id="genderChart"></canvas></div>
+    <div class="chart-wrap sm">
+      <canvas id="genderChart"></canvas>
+      <div class="demographic-status" id="genderStatus"></div>
+    </div>
+    <p class="note" id="genderPeriod">集計期間: 過去365日間</p>
   </div>
   <div class="panel">
     <div class="panel-head"><h2>年齢層</h2></div>
-    <div class="chart-wrap sm"><canvas id="ageChart"></canvas></div>
+    <div class="chart-wrap sm">
+      <canvas id="ageChart"></canvas>
+      <div class="demographic-status" id="ageStatus"></div>
+    </div>
+    <p class="note" id="agePeriod">集計期間: 過去365日間</p>
   </div>
   <div class="panel">
     <div class="panel-head"><h2>デバイス比率</h2></div>
@@ -376,7 +406,7 @@ tr:hover td { background: #f8fafc; }
       <tbody id="sourceConvBody"></tbody>
     </table>
     </div>
-    <p class="note">※ コンバージョンはGA4プロパティで設定したキーイベントの合計件数です。</p>
+    <p class="note">※ コンバージョン = お問い合わせページ閲覧・LINEクリック・フォーム送信イベントの合計件数です。</p>
   </div>
   <div class="panel">
     <div class="panel-head"><h2>イベント別集計（TOP15）</h2></div>
@@ -406,6 +436,42 @@ tr:hover td { background: #f8fafc; }
   </table>
   </div>
   <p class="note" id="scErrorNote" style="display:none;color:#ef4444"></p>
+</div>
+
+<!-- ── Search Console ページ別検索パフォーマンス ── -->
+<div class="panel mb16">
+  <div class="panel-head">
+    <h2>ページ別 検索パフォーマンス（過去28日 TOP10）</h2>
+  </div>
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:28px"></th>
+        <th>ページ</th>
+        <th>主要クエリ</th>
+        <th style="text-align:right;width:70px">クリック</th>
+        <th style="text-align:right;width:80px">表示回数</th>
+        <th style="width:70px">CTR</th>
+        <th style="text-align:right;width:80px">平均順位</th>
+      </tr>
+    </thead>
+    <tbody id="scPagesBody"></tbody>
+  </table>
+  </div>
+  <p class="note">※ 主要クエリ = そのページがGoogle検索で最も表示されたキーワード。順位が11位以下のページはタイトル・コンテンツ改善で1ページ目入りを狙えます。</p>
+</div>
+
+<!-- ── Core Web Vitals ── -->
+<div class="panel mb16">
+  <div class="panel-head">
+    <h2>サイト表示速度（Core Web Vitals）</h2>
+    <span id="cwvUpdated" style="font-size:11px;color:#94a3b8">計測中…（初回は1〜2分かかります）</span>
+  </div>
+  <div class="cwv-grid" id="cwvGrid">
+    <p class="no-data">PageSpeed Insights で計測中です…</p>
+  </div>
+  <p class="note">※ Google PageSpeed Insights（Lighthouse）によるラボ計測値です。スコア: 90以上=良好 / 50〜89=要改善 / 49以下=不良。結果は24時間キャッシュされます。</p>
 </div>
 
 <!-- ── オーガニックランディング ── -->
@@ -508,7 +574,8 @@ function render(d) {
   setChange(document.getElementById('kpiPvChange'), d.kpi.pv.change);
   document.getElementById('kpiUsers').textContent = fmtInt(d.kpi.users.value);
   setChange(document.getElementById('kpiUsersChange'), d.kpi.users.change);
-  document.getElementById('kpiCvr').textContent   = (d.kpi.cvr.value ?? 0) + '%';
+  const cvCount = d.kpi.cv ? ` <span style="font-size:14px;font-weight:600;color:#64748b">(${fmtInt(d.kpi.cv.value)}件)</span>` : '';
+  document.getElementById('kpiCvr').innerHTML     = (d.kpi.cvr.value ?? 0) + '%' + cvCount;
   setChange(document.getElementById('kpiCvrChange'), d.kpi.cvr.change, null, true);
   document.getElementById('kpiEng').textContent   = fmtDuration(d.kpi.engagement.seconds);
   setChange(document.getElementById('kpiEngChange'), d.kpi.engagement.change);
@@ -536,12 +603,25 @@ function render(d) {
   drawDonut('sourceChart', srcLabels, d.source.data, PALETTE, '55%');
   drawSourceList({ labels: srcLabels, data: d.source.data });
 
-  /* 男女比 */
-  const gColors = d.gender.labels.map(l => l === '女性' ? '#ec4899' : '#3b82f6');
-  drawDonut('genderChart', d.gender.labels, d.gender.data, gColors, '65%');
+  /* 男女比・年齢層（Googleシグナル／プライバシーしきい値対象） */
+  const demographicPeriod = d.demographics?.period || '過去365日間';
+  document.getElementById('genderPeriod').textContent = '集計期間: ' + demographicPeriod;
+  document.getElementById('agePeriod').textContent = '集計期間: ' + demographicPeriod;
 
-  /* 年齢層 */
-  drawBar('ageChart', d.age.labels, d.age.data, '#7c3aed');
+  const genderLabels = d.gender?.labels || [];
+  const genderData = d.gender?.data || [];
+  const genderAvailable = genderData.some(v => Number(v) > 0);
+  setDemographicStatus('genderChart', 'genderStatus', genderAvailable, d.demographics?.gender);
+  if (genderAvailable) {
+    const gColors = genderLabels.map(l => l === '女性' ? '#ec4899' : '#3b82f6');
+    drawDonut('genderChart', genderLabels, genderData, gColors, '65%');
+  }
+
+  const ageLabels = d.age?.labels || [];
+  const ageData = d.age?.data || [];
+  const ageAvailable = ageData.some(v => Number(v) > 0);
+  setDemographicStatus('ageChart', 'ageStatus', ageAvailable, d.demographics?.age);
+  if (ageAvailable) drawBar('ageChart', ageLabels, ageData, '#7c3aed');
 
   /* デバイス */
   drawDonut('deviceChart', d.device.labels, d.device.data, PALETTE, '65%');
@@ -565,6 +645,9 @@ function render(d) {
   /* Search Console キーワード */
   drawScKeywords(d.sc_keywords || [], d.sc_error || '');
 
+  /* Search Console ページ別 */
+  drawScPages(d.sc_pages || []);
+
   /* オーガニックランディング */
   drawOrganicLanding(d.organic_landing || []);
 
@@ -575,6 +658,28 @@ function render(d) {
 }
 
 /* ===== グラフ描画 ===== */
+function setDemographicStatus(chartId, statusId, available, meta) {
+  const canvas = document.getElementById(chartId);
+  const status = document.getElementById(statusId);
+  if (available) {
+    canvas.style.display = 'block';
+    status.style.display = 'none';
+    return;
+  }
+  if (charts[chartId]) {
+    charts[chartId].destroy();
+    delete charts[chartId];
+  }
+  canvas.style.display = 'none';
+  status.style.display = 'flex';
+  const thresholdNote = meta?.thresholded
+    ? 'Googleのプライバシーしきい値の対象です。'
+    : '';
+  status.innerHTML = '<div><strong>取得可能なデータがありません</strong>' +
+    thresholdNote + 'GA4のGoogle シグナル設定と同意設定を確認してください。' +
+    '<br>対象ユーザーが少ない場合は、設定済みでも表示されません。</div>';
+}
+
 function drawLine(id, labels, data) {
   if (charts[id]) charts[id].destroy();
   charts[id] = new Chart(document.getElementById(id), {
@@ -764,6 +869,81 @@ function drawScKeywords(keywords, errorMsg) {
   });
 }
 
+function drawScPages(items) {
+  const tbody = document.getElementById('scPagesBody');
+  if (!tbody) return;
+  tbody.innerHTML = '';
+  if (!items || !items.length) {
+    tbody.innerHTML = '<tr><td colspan="7" class="no-data">ページ別の検索データがありません</td></tr>';
+    return;
+  }
+  items.forEach((p, i) => {
+    const posColor = p.position <= 3 ? '#10b981' : p.position <= 10 ? '#f59e0b' : '#ef4444';
+    const ctrColor = p.ctr >= 5 ? '#10b981' : p.ctr >= 2 ? '#f59e0b' : '#94a3b8';
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="rank">${i + 1}</td>
+      <td><div class="path">${escapeHtml(p.path)}</div></td>
+      <td style="font-size:12px;color:#334155">${escapeHtml(p.top_query || '—')}</td>
+      <td class="num">${fmtInt(p.clicks)}</td>
+      <td class="num">${fmtInt(p.impressions)}</td>
+      <td><span style="font-weight:600;color:${ctrColor}">${p.ctr}%</span></td>
+      <td class="num" style="font-weight:600;color:${posColor}">${p.position}位</td>`;
+    tbody.appendChild(tr);
+  });
+}
+
+/* ===== Core Web Vitals ===== */
+function cwvScoreColor(score) {
+  return score >= 90 ? '#10b981' : score >= 50 ? '#f59e0b' : '#ef4444';
+}
+function cwvMetricColor(val, good, poor) {
+  return val <= good ? '#10b981' : val <= poor ? '#f59e0b' : '#ef4444';
+}
+function renderCwv(data) {
+  const grid = document.getElementById('cwvGrid');
+  const updated = document.getElementById('cwvUpdated');
+  if (!grid) return;
+  const results = data.results || [];
+  if (!results.length) {
+    grid.innerHTML = '<p class="no-data">計測データを取得できませんでした</p>';
+    updated.textContent = '取得失敗';
+    return;
+  }
+  if (data.generated_at) {
+    const dt = new Date(data.generated_at);
+    updated.textContent = 'モバイル計測 / ' + dt.toLocaleString('ja-JP', {month:'long',day:'numeric',hour:'2-digit',minute:'2-digit'}) + ' 時点';
+  }
+  grid.innerHTML = results.map(r => {
+    if (r.error) {
+      return `<div class="cwv-card">
+        <div class="cwv-page-label">${escapeHtml(r.label)}</div>
+        <div class="cwv-page-path">${escapeHtml(r.url)}</div>
+        <p class="no-data">計測失敗: ${escapeHtml(r.error)}</p>
+      </div>`;
+    }
+    const sc = cwvScoreColor(r.score);
+    const scoreText = r.score >= 90 ? '良好' : r.score >= 50 ? '要改善' : '不良';
+    const lcpSec = (r.lcp / 1000).toFixed(1);
+    const lcpColor = cwvMetricColor(r.lcp, 2500, 4000);
+    const clsColor = cwvMetricColor(r.cls, 0.1, 0.25);
+    const tbtColor = cwvMetricColor(r.tbt, 200, 600);
+    return `<div class="cwv-card">
+      <div class="cwv-page-label">${escapeHtml(r.label)}</div>
+      <div class="cwv-page-path">${escapeHtml(r.url)}</div>
+      <div class="cwv-score-row">
+        <div class="cwv-score-circle" style="color:${sc};border-color:${sc}">${r.score}</div>
+        <div class="cwv-score-label">パフォーマンス<br><strong style="color:${sc}">${scoreText}</strong></div>
+      </div>
+      <div class="cwv-metrics">
+        <div class="cwv-metric"><span class="cwv-metric-name">LCP（最大コンテンツ描画）</span><span class="cwv-metric-val" style="color:${lcpColor}">${lcpSec}秒</span></div>
+        <div class="cwv-metric"><span class="cwv-metric-name">CLS（レイアウトのずれ）</span><span class="cwv-metric-val" style="color:${clsColor}">${r.cls}</span></div>
+        <div class="cwv-metric"><span class="cwv-metric-name">TBT（操作ブロック時間）</span><span class="cwv-metric-val" style="color:${tbtColor}">${Math.round(r.tbt)}ms</span></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
 function drawOrganicLanding(items) {
   const tbody = document.getElementById('organicLandingBody');
   if (!tbody) return;
@@ -829,12 +1009,17 @@ function drawFunnel(stages) {
       </div>`;
     if (i < stages.length - 1) {
       const next = stages[i + 1];
+      // 各ステージは独立したページ訪問者数のため、後段が前段を上回ることがある。
+      // その場合は離脱0%・通過100%として表示する（マイナス％を出さない）。
+      // ※ drop は「前段→当該段」の離脱数のため、この行では next.drop を使う
+      const dropPct = Math.max(0, 100 - next.rate_prev).toFixed(1);
+      const passPct = Math.min(next.rate_prev, 100);
       html += `
       <div class="funnel-drop-row">
         <div class="funnel-drop-vline"></div>
         <div class="funnel-drop-info">
-          <span class="funnel-drop-text">▼ 離脱 ${fmtInt(s.drop)}人 (${(100 - next.rate_prev).toFixed(1)}%)</span>
-          <span class="funnel-next-text">次へ ${fmtInt(next.users)}人 (${next.rate_prev}%)</span>
+          <span class="funnel-drop-text">▼ 離脱 ${fmtInt(next.drop)}人 (${dropPct}%)</span>
+          <span class="funnel-next-text">次へ ${fmtInt(next.users)}人 (${passPct}%)</span>
         </div>
       </div>`;
     }
@@ -885,6 +1070,15 @@ fetch('ga4_api.php')
   .then(r => r.json())
   .then(d => { if (d.error && !d.kpi) { showError(d.error); return; } render(d); })
   .catch(e => showError(e.message));
+
+/* ===== Core Web Vitals 取得（PageSpeed Insights・24時間キャッシュ） ===== */
+fetch('cwv_api.php')
+  .then(r => r.json())
+  .then(d => renderCwv(d))
+  .catch(() => {
+    document.getElementById('cwvUpdated').textContent = '取得失敗';
+    document.getElementById('cwvGrid').innerHTML = '<p class="no-data">Core Web Vitals の取得に失敗しました（時間をおいて再読み込みしてください）</p>';
+  });
 
 /* ===== 個別熱量スコア取得 ===== */
 const TIER_META = {

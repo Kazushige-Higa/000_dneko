@@ -31,6 +31,14 @@ $GA4_KEY_FILE    = __DIR__ . '/data/ga4/service_account.json';    // サービ�
 $GA4_CACHE_DIR   = __DIR__ . '/data/ga4';                         // キャッシュ保存先
 $CACHE_TTL       = 3600;                                          // キャッシュ有効秒数(1時間)
 $SC_SITE_URL     = 'https://d-neko.com/';                         // Search Console サイトURL
+
+// コンバージョン(CV)として数えるイベント名。
+// GA4管理画面のキーイベント設定に依存せず、ここで定義したイベントの
+// 発生数をCV・CVRとして集計する（GA4側でもキーイベント登録を推奨）。
+$KEY_EVENTS = ['contact_page_view', 'line_click', 'form_submit'];
+
+// レポートから除外するページパスの接頭辞（自社ツール・プロトタイプ・テスト階層）
+$EXCLUDE_PATH_PREFIXES = ['/analytics', '/ga4_dashboard_prototype', '/000_dneko'];
 /* ================================================ */
 
 $cache_file = $GA4_CACHE_DIR . '/cache.json';
@@ -56,13 +64,15 @@ try {
         $GA4_CACHE_DIR . '/sc_token.json',
         'https://www.googleapis.com/auth/webmasters.readonly'
     );
-    $data = ga4_build_dashboard($GA4_PROPERTY_ID, $token);
+    $data = ga4_build_dashboard($GA4_PROPERTY_ID, $token, $KEY_EVENTS, $EXCLUDE_PATH_PREFIXES);
 
-    // Search Console キーワード取得（失敗してもダッシュボードは返す）
+    // Search Console キーワード・ページ別取得（失敗してもダッシュボードは返す）
     try {
         $data['sc_keywords'] = sc_get_keywords($SC_SITE_URL, $sc_token);
+        $data['sc_pages']    = sc_get_pages($SC_SITE_URL, $sc_token);
     } catch (Exception $e) {
-        $data['sc_keywords'] = [];
+        $data['sc_keywords'] = $data['sc_keywords'] ?? [];
+        $data['sc_pages']    = $data['sc_pages'] ?? [];
         $data['sc_error']    = $e->getMessage();
     }
     $data['generated_at'] = date('c');
@@ -172,28 +182,27 @@ function ga4_get_access_token($key_file, $token_file, $scope = 'https://www.goog
 /* ==================================================================
  * GA4 Data API を呼び出してダッシュボード用データを組み立てる
  * ================================================================== */
-function ga4_build_dashboard($property_id, $token)
+function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_prefixes = ['/analytics'])
 {
     $base = 'https://analyticsdata.googleapis.com/v1beta/properties/' . $property_id;
     $auth = ['Authorization: Bearer ' . $token, 'Content-Type: application/json'];
 
     $cur  = [['startDate' => '30daysAgo', 'endDate' => 'yesterday']];
+    // 年齢・性別は Google シグナル由来の同意済みユーザーのみが対象になり、
+    // 少数データにはプライバシーしきい値が適用されるため、集計期間を広げる。
+    $demographics_range = [['startDate' => '364daysAgo', 'endDate' => 'yesterday']];
     $comp = [
         ['startDate' => '30daysAgo', 'endDate' => 'yesterday', 'name' => 'current'],
         ['startDate' => '60daysAgo', 'endDate' => '31daysAgo', 'name' => 'previous'],
     ];
-    // ダッシュボード閲覧によるPVをレポートに混入させない。
-    $exclude_analytics_pages = [
-        'notExpression' => [
-            'filter' => [
-                'fieldName' => 'pagePath',
-                'stringFilter' => [
-                    'value' => '/analytics',
-                    'matchType' => 'BEGINS_WITH',
-                ],
-            ],
-        ],
-    ];
+    // ダッシュボード・プロトタイプ・テスト階層のPVをレポートに混入させない。
+    $exclude_analytics_pages = ga4_not_prefix_filters('pagePath', $exclude_prefixes);
+    $exclude_landing_pages   = ga4_not_prefix_filters('landingPage', $exclude_prefixes);
+    // コンバージョン対象イベントの絞り込み（除外パス上のイベントは数えない）
+    $key_event_filter = ['andGroup' => ['expressions' => [
+        ['filter' => ['fieldName' => 'eventName', 'inListFilter' => ['values' => $key_events]]],
+        $exclude_analytics_pages,
+    ]]];
 
     /* ---- バッチ1: KPI合計(当月/前月), PV推移, 流入元, デバイス, 人気ページ ---- */
     $batch1 = ['requests' => [
@@ -222,6 +231,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'sessionDefaultChannelGroup']],
             'metrics' => [['name' => 'sessions']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys' => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
             'limit' => 6,
         ],
@@ -230,6 +240,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'deviceCategory']],
             'metrics' => [['name' => 'totalUsers']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys' => [['metric' => ['metricName' => 'totalUsers'], 'desc' => true]],
         ],
         // 4: 人気ページ
@@ -247,15 +258,15 @@ function ga4_build_dashboard($property_id, $token)
     $batch2 = ['requests' => [
         // 0: 男女比
         [
-            'dateRanges' => $cur,
+            'dateRanges' => $demographics_range,
             'dimensions' => [['name' => 'userGender']],
-            'metrics' => [['name' => 'totalUsers']],
+            'metrics' => [['name' => 'activeUsers']],
         ],
         // 1: 年齢層
         [
-            'dateRanges' => $cur,
+            'dateRanges' => $demographics_range,
             'dimensions' => [['name' => 'userAgeBracket']],
-            'metrics' => [['name' => 'totalUsers']],
+            'metrics' => [['name' => 'activeUsers']],
             'orderBys' => [['dimension' => ['dimensionName' => 'userAgeBracket']]],
         ],
         // 2: 地域(日本の都道府県 TOP10)
@@ -263,12 +274,13 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'region']],
             'metrics' => [['name' => 'totalUsers']],
-            'dimensionFilter' => [
-                'filter' => [
+            'dimensionFilter' => ['andGroup' => ['expressions' => [
+                ['filter' => [
                     'fieldName' => 'country',
                     'stringFilter' => ['value' => 'Japan'],
-                ],
-            ],
+                ]],
+                $exclude_analytics_pages,
+            ]]],
             'orderBys' => [['metric' => ['metricName' => 'totalUsers'], 'desc' => true]],
             'limit' => 10,
         ],
@@ -285,6 +297,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'newVsReturning']],
             'metrics'    => [['name' => 'totalUsers']],
+            'dimensionFilter' => $exclude_analytics_pages,
         ],
     ]];
 
@@ -304,11 +317,12 @@ function ga4_build_dashboard($property_id, $token)
             'orderBys' => [['metric' => ['metricName' => 'screenPageViews'], 'desc' => true]],
             'limit' => 10,
         ],
-        // 1: 流入元×コンバージョン
+        // 1: 流入元×コンバージョン（CV数はバッチ5のキーイベント集計で上書きする）
         [
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'sessionDefaultChannelGroup']],
             'metrics'    => [['name' => 'sessions'], ['name' => 'conversions']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys'   => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
             'limit' => 8,
         ],
@@ -317,6 +331,7 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'eventName']],
             'metrics'    => [['name' => 'eventCount']],
+            'dimensionFilter' => $exclude_analytics_pages,
             'orderBys'   => [['metric' => ['metricName' => 'eventCount'], 'desc' => true]],
             'limit' => 15,
         ],
@@ -348,12 +363,13 @@ function ga4_build_dashboard($property_id, $token)
             'dateRanges' => $cur,
             'dimensions' => [['name' => 'landingPage']],
             'metrics'    => [['name' => 'sessions']],
-            'dimensionFilter' => [
-                'filter' => [
+            'dimensionFilter' => ['andGroup' => ['expressions' => [
+                ['filter' => [
                     'fieldName'    => 'sessionDefaultChannelGroup',
                     'stringFilter' => ['value' => 'Organic Search', 'matchType' => 'EXACT'],
-                ],
-            ],
+                ]],
+                $exclude_landing_pages,
+            ]]],
             'orderBys' => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
             'limit' => 10,
         ],
@@ -401,20 +417,35 @@ function ga4_build_dashboard($property_id, $token)
         ],
     ]];
 
-    /* ---- バッチ5: 沖縄県内 市区町村別（180日間／プライバシーしきい値対策） ---- */
+    /* ---- バッチ5: 沖縄市区町村別 + キーイベント(CV)集計 ---- */
     $batch5 = ['requests' => [
+        // 0: 沖縄県内 市区町村別（180日間／プライバシーしきい値対策）
         [
             'dateRanges' => [['startDate' => '179daysAgo', 'endDate' => 'yesterday']],
             'dimensions' => [['name' => 'city']],
             'metrics'    => [['name' => 'totalUsers']],
-            'dimensionFilter' => [
-                'filter' => [
+            'dimensionFilter' => ['andGroup' => ['expressions' => [
+                ['filter' => [
                     'fieldName'    => 'region',
                     'stringFilter' => ['value' => 'Okinawa', 'matchType' => 'EXACT'],
-                ],
-            ],
+                ]],
+                $exclude_analytics_pages,
+            ]]],
             'orderBys' => [['metric' => ['metricName' => 'totalUsers'], 'desc' => true]],
             'limit' => 15,
+        ],
+        // 1: キーイベント合計(当月/前月) — GA4のキーイベント設定に依存しないCV集計
+        [
+            'dateRanges' => $comp,
+            'metrics'    => [['name' => 'eventCount']],
+            'dimensionFilter' => $key_event_filter,
+        ],
+        // 2: 流入元×キーイベント
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'sessionDefaultChannelGroup']],
+            'metrics'    => [['name' => 'eventCount']],
+            'dimensionFilter' => $key_event_filter,
         ],
     ]];
 
@@ -497,6 +528,19 @@ function ga4_build_dashboard($property_id, $token)
         }
     }
 
+    // CVはGA4のキーイベント設定に依存せず、$KEY_EVENTS の発生数で集計する(rep5[1])
+    $cur_m['key'] = 0;
+    $prev_m['key'] = 0;
+    foreach (($rep5[1]['rows'] ?? []) as $row) {
+        $rangeName = $row['dimensionValues'][0]['value'] ?? 'date_range_0';
+        $v = (float)($row['metricValues'][0]['value'] ?? 0);
+        if ($rangeName === 'previous' || $rangeName === 'date_range_1') {
+            $prev_m['key'] = $v;
+        } else {
+            $cur_m['key'] = $v;
+        }
+    }
+
     $cvr_cur  = $cur_m['sessions']  > 0 ? $cur_m['key']  / $cur_m['sessions']  * 100 : 0;
     $cvr_prev = $prev_m['sessions'] > 0 ? $prev_m['key'] / $prev_m['sessions'] * 100 : 0;
 
@@ -512,6 +556,10 @@ function ga4_build_dashboard($property_id, $token)
         'cvr' => [
             'value'  => round($cvr_cur, 2),
             'change' => round($cvr_cur - $cvr_prev, 2), // ポイント差
+        ],
+        'cv' => [
+            'value'  => (int)$cur_m['key'],
+            'prev'   => (int)$prev_m['key'],
         ],
         'engagement' => [
             'seconds' => $cur_m['users'] > 0 ? $cur_m['dur'] : 0, // 平均セッション時間(秒)
@@ -559,15 +607,20 @@ function ga4_build_dashboard($property_id, $token)
         $device['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
-    /* ---- 人気ページ ---- */
-    $pages = [];
+    /* ---- 人気ページ (/index.php と / を統合) ---- */
+    $pages_map = [];
     foreach (($rep1[4]['rows'] ?? []) as $row) {
-        $pages[] = [
-            'path'  => $row['dimensionValues'][0]['value'],
-            'title' => $row['dimensionValues'][1]['value'] ?: $row['dimensionValues'][0]['value'],
-            'pv'    => (int)($row['metricValues'][0]['value'] ?? 0),
-        ];
+        $path  = ga4_normalize_path($row['dimensionValues'][0]['value']);
+        $title = $row['dimensionValues'][1]['value'] ?: $path;
+        $pv    = (int)($row['metricValues'][0]['value'] ?? 0);
+        if (isset($pages_map[$path])) {
+            $pages_map[$path]['pv'] += $pv;
+        } else {
+            $pages_map[$path] = ['path' => $path, 'title' => $title, 'pv' => $pv];
+        }
     }
+    $pages = array_values($pages_map);
+    usort($pages, function ($a, $b) { return $b['pv'] - $a['pv']; });
 
     /* ---- オーガニック検索ランディングページ (rep4[0]) ---- */
     $organic_landing = [];
@@ -581,22 +634,48 @@ function ga4_build_dashboard($property_id, $token)
     /* ---- 男女比 ---- */
     $gender_map = ['female' => '女性', 'male' => '男性', 'unknown' => '不明'];
     $gender = ['labels' => [], 'data' => []];
+    $gender_unknown = 0;
     foreach (($rep2[0]['rows'] ?? []) as $row) {
         $g = $row['dimensionValues'][0]['value'];
         $label = $gender_map[$g] ?? $g;
-        if ($g === 'unknown') continue; // 不明は除外(男女比を見やすく)
+        if ($g === 'unknown') {
+            $gender_unknown += (int)($row['metricValues'][0]['value'] ?? 0);
+            continue; // 不明はグラフから除外し、ステータスには件数を残す
+        }
         $gender['labels'][] = $label;
         $gender['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
     /* ---- 年齢層 ---- */
     $age = ['labels' => [], 'data' => []];
+    $age_unknown = 0;
     foreach (($rep2[1]['rows'] ?? []) as $row) {
         $a = $row['dimensionValues'][0]['value'];
-        if ($a === 'unknown') continue;
+        if ($a === 'unknown') {
+            $age_unknown += (int)($row['metricValues'][0]['value'] ?? 0);
+            continue;
+        }
         $age['labels'][] = $a;
         $age['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
+
+    // subjectToThresholding=true は、レポートがプライバシーしきい値の対象で、
+    // 基準未満の行が返されない可能性があることを示す。
+    $demographics = [
+        'period' => '過去365日間',
+        'gender' => [
+            'available'   => count($gender['data']) > 0,
+            'thresholded' => !empty($rep2[0]['metadata']['subjectToThresholding']),
+            'known_users' => array_sum($gender['data']),
+            'unknown_users' => $gender_unknown,
+        ],
+        'age' => [
+            'available'   => count($age['data']) > 0,
+            'thresholded' => !empty($rep2[1]['metadata']['subjectToThresholding']),
+            'known_users' => array_sum($age['data']),
+            'unknown_users' => $age_unknown,
+        ],
+    ];
 
     /* ---- 地域 ---- */
     $region = [];
@@ -627,29 +706,56 @@ function ga4_build_dashboard($property_id, $token)
         $new_vs_returning['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
     }
 
-    /* ---- ページ別エンゲージメント指標 ---- */
-    $page_metrics = [];
+    /* ---- ページ別エンゲージメント指標 (/index.php と / をPV加重で統合) ---- */
+    $pm_map = [];
     foreach (($rep3[0]['rows'] ?? []) as $row) {
-        $path    = $row['dimensionValues'][0]['value'];
+        $path    = ga4_normalize_path($row['dimensionValues'][0]['value']);
         $title   = $row['dimensionValues'][1]['value'] ?: $path;
         $pv      = (int)($row['metricValues'][0]['value'] ?? 0);
+        $eng     = (float)($row['metricValues'][1]['value'] ?? 0) * 100;
+        $bounce  = (float)($row['metricValues'][2]['value'] ?? 0) * 100;
         $eng_dur = (float)($row['metricValues'][3]['value'] ?? 0);
+        if (isset($pm_map[$path])) {
+            $m = &$pm_map[$path];
+            $total_pv = $m['pv'] + $pv;
+            if ($total_pv > 0) {
+                $m['engagement'] = ($m['engagement'] * $m['pv'] + $eng * $pv) / $total_pv;
+                $m['bounce']     = ($m['bounce'] * $m['pv'] + $bounce * $pv) / $total_pv;
+            }
+            $m['pv']      = $total_pv;
+            $m['eng_dur'] += $eng_dur;
+            unset($m);
+        } else {
+            $pm_map[$path] = [
+                'path' => $path, 'title' => $title, 'pv' => $pv,
+                'engagement' => $eng, 'bounce' => $bounce, 'eng_dur' => $eng_dur,
+            ];
+        }
+    }
+    $page_metrics = [];
+    foreach ($pm_map as $m) {
         $page_metrics[] = [
-            'path'        => $path,
-            'title'       => $title,
-            'pv'          => $pv,
-            'engagement'  => round((float)($row['metricValues'][1]['value'] ?? 0) * 100, 1),
-            'bounce'      => round((float)($row['metricValues'][2]['value'] ?? 0) * 100, 1),
-            'avg_time'    => $pv > 0 ? round($eng_dur / $pv) : 0,
+            'path'        => $m['path'],
+            'title'       => $m['title'],
+            'pv'          => $m['pv'],
+            'engagement'  => round($m['engagement'], 1),
+            'bounce'      => round($m['bounce'], 1),
+            'avg_time'    => $m['pv'] > 0 ? round($m['eng_dur'] / $m['pv']) : 0,
         ];
     }
+    usort($page_metrics, function ($a, $b) { return $b['pv'] - $a['pv']; });
 
-    /* ---- 流入元×コンバージョン ---- */
+    /* ---- 流入元×コンバージョン（CV数はキーイベント集計 rep5[2] を使用） ---- */
+    $cv_by_channel = [];
+    foreach (($rep5[2]['rows'] ?? []) as $row) {
+        $ch = $row['dimensionValues'][0]['value'];
+        $cv_by_channel[$ch] = (int)($row['metricValues'][0]['value'] ?? 0);
+    }
     $source_conv = [];
     foreach (($rep3[1]['rows'] ?? []) as $row) {
         $raw      = $row['dimensionValues'][0]['value'];
         $sessions = (int)($row['metricValues'][0]['value'] ?? 0);
-        $conv     = (int)($row['metricValues'][1]['value'] ?? 0);
+        $conv     = $cv_by_channel[$raw] ?? 0;
         $source_conv[] = [
             'channel'     => $channel_map[$raw] ?? $raw,
             'sessions'    => $sessions,
@@ -770,6 +876,7 @@ function ga4_build_dashboard($property_id, $token)
         'device'           => $device,
         'gender'           => $gender,
         'age'              => $age,
+        'demographics'     => $demographics,
         'region'           => $region,
         'pages'            => $pages,
         'page_metrics'     => $page_metrics,
@@ -830,8 +937,107 @@ function sc_get_keywords($site_url, $token, $days = 28)
 
 
 /* ==================================================================
+ * Search Console: ページ別 検索パフォーマンス取得
+ * ページごとにクリック・表示回数・CTR・平均順位と主要クエリを集計
+ * ================================================================== */
+function sc_get_pages($site_url, $token, $days = 28)
+{
+    $end_date   = date('Y-m-d', strtotime('-1 day'));
+    $start_date = date('Y-m-d', strtotime("-{$days} days"));
+    $encoded    = urlencode($site_url);
+    $url        = 'https://searchconsole.googleapis.com/webmasters/v3/sites/' . $encoded . '/searchAnalytics/query';
+    $auth       = ['Authorization: Bearer ' . $token, 'Content-Type: application/json'];
+
+    $body = json_encode([
+        'startDate'  => $start_date,
+        'endDate'    => $end_date,
+        'dimensions' => ['page', 'query'],
+        'rowLimit'   => 250,
+        'type'       => 'web',
+    ]);
+
+    $res  = ga4_http_post($url, $body, $auth);
+    $data = json_decode($res, true);
+
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($data)) {
+        throw new Exception('Search Console(ページ別) JSON解析失敗: ' . substr($res, 0, 500));
+    }
+    if (isset($data['error'])) {
+        $msg = $data['error']['message'] ?? json_encode($data['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('Search Console(ページ別) APIエラー: ' . $msg);
+    }
+
+    // ページ単位に集約（順位は表示回数による加重平均）
+    $pages = [];
+    foreach ($data['rows'] ?? [] as $row) {
+        $page  = $row['keys'][0];
+        $query = $row['keys'][1];
+        $path  = preg_replace('#^https?://[^/]+#', '', $page) ?: '/';
+        if (!isset($pages[$path])) {
+            $pages[$path] = [
+                'path' => $path, 'clicks' => 0, 'impressions' => 0,
+                'pos_weighted' => 0.0, 'top_query' => '', 'top_query_imp' => 0,
+            ];
+        }
+        $p = &$pages[$path];
+        $p['clicks']       += (int)$row['clicks'];
+        $p['impressions']  += (int)$row['impressions'];
+        $p['pos_weighted'] += $row['position'] * $row['impressions'];
+        // 主要クエリ = そのページで最も表示されたクエリ
+        if ((int)$row['impressions'] > $p['top_query_imp']) {
+            $p['top_query']     = $query;
+            $p['top_query_imp'] = (int)$row['impressions'];
+        }
+        unset($p);
+    }
+
+    $result = [];
+    foreach ($pages as $p) {
+        $result[] = [
+            'path'        => $p['path'],
+            'top_query'   => $p['top_query'],
+            'clicks'      => $p['clicks'],
+            'impressions' => $p['impressions'],
+            'ctr'         => $p['impressions'] > 0 ? round($p['clicks'] / $p['impressions'] * 100, 1) : 0,
+            'position'    => $p['impressions'] > 0 ? round($p['pos_weighted'] / $p['impressions'], 1) : 0,
+        ];
+    }
+    usort($result, function ($a, $b) {
+        if ($b['clicks'] !== $a['clicks']) return $b['clicks'] - $a['clicks'];
+        return $b['impressions'] - $a['impressions'];
+    });
+    return array_slice($result, 0, 10);
+}
+
+
+/* ==================================================================
  * ヘルパー
  * ================================================================== */
+
+/**
+ * 指定した接頭辞のいずれにも一致しないことを表す dimensionFilter を生成
+ */
+function ga4_not_prefix_filters($field, $prefixes)
+{
+    $exprs = [];
+    foreach ($prefixes as $prefix) {
+        $exprs[] = ['notExpression' => ['filter' => [
+            'fieldName'    => $field,
+            'stringFilter' => ['value' => $prefix, 'matchType' => 'BEGINS_WITH'],
+        ]]];
+    }
+    return count($exprs) === 1 ? $exprs[0] : ['andGroup' => ['expressions' => $exprs]];
+}
+
+/**
+ * /index.php と / を同一ページとして扱うための正規化
+ */
+function ga4_normalize_path($path)
+{
+    $n = preg_replace('#/index\.php$#', '/', $path);
+    return $n === '' ? '/' : $n;
+}
+
 function ga4_b64url($data)
 {
     return rtrim(strtr(base64_encode($data), '+/', '-_'), '=');

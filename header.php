@@ -151,6 +151,21 @@
   </script>
   <script src="//kitchen.juicer.cc/?color=ND+ngZfbDgU=" async></script>
   <script src="/js/visitor_tracker.js" defer></script>
+
+  <?php
+    // Microsoft Clarity（ヒートマップ・セッション録画／無料）
+    // https://clarity.microsoft.com でプロジェクトを作成し、発行されたIDを設定すると有効になります
+    $clarity_id = '';
+  ?>
+  <?php if ($clarity_id !== ''): ?>
+  <script>
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "<?php echo htmlspecialchars($clarity_id, ENT_QUOTES, 'UTF-8'); ?>");
+  </script>
+  <?php endif; ?>
 </head>
 
 <body id="top" class="<?php echo $is_dnk_lp_home ? 'dnk_lp_body' : ''; ?>">

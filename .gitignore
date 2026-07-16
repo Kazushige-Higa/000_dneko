@@ -47,3 +47,5 @@ analytics/data/ga4/service_account.json
 analytics/data/ga4/token.json
 analytics/data/ga4/sc_token.json
 analytics/data/ga4/cache.json
+data/ga4/cwv_cache.json
+analytics/data/ga4/cwv_cache.json
