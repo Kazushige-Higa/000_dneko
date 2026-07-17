@@ -31,7 +31,7 @@ header("Content-Type: text/xml");
 			echo '</url>'."\n";
 		
 		//よくある読み込み系のファイルは名前から推測し、除外。thanksページ、その他不要ファイルも除外、気が付いたのがあれば適当にカスタムしてください。
-		}elseif($mathes[9] != 'header.php' && $mathes[9] != 'footer.php' && $mathes[9] != 'sitemap.xml.php' && $mathes[9] != 'thanks.php' && $mathes[9] != 'nav.php' && $mathes[9] != 'navi.php' && $mathes[9] != 'entry_list2.php' && $mathes[9] != 'entry02.php' && $mathes[9] != 'entry.php'  && $mathes[9] != 'entry_list.php'){
+		}elseif($mathes[9] != 'header.php' && $mathes[9] != 'footer.php' && $mathes[9] != 'sitemap.xml.php' && $mathes[9] != 'thanks.php' && $mathes[9] != 'nav.php' && $mathes[9] != 'navi.php' && $mathes[9] != 'entry_list2.php' && $mathes[9] != 'entry02.php' && $mathes[9] != 'entry.php'  && $mathes[9] != 'entry_list.php' && $mathes[9] != 'works_archive.php'){
 			echo '<url>'."\n";
 			echo '<loc>http'.(($ssl=="1")?'s':'').'://'.htmlspecialchars($domain).'/'.$mathes[9].'</loc>'."\n";
 			//ファイルの最終更新日を、サイトの更新日として通知

@@ -33,7 +33,8 @@
   ?>
   <link rel="canonical" href="<?php echo htmlspecialchars(nowUrl(), ENT_QUOTES, 'UTF-8'); ?>">
   <title><?php echo htmlspecialchars($head_prefix . $head_title_suffix, ENT_QUOTES, 'UTF-8'); ?></title>
-  <meta name="Description" content="<?php echo htmlspecialchars($head_meta_description, ENT_QUOTES, 'UTF-8'); ?>">
+  <?php if (!empty($page_noindex)): ?><meta name="robots" content="noindex, nofollow">
+  <?php endif; ?><meta name="Description" content="<?php echo htmlspecialchars($head_meta_description, ENT_QUOTES, 'UTF-8'); ?>">
   <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1">
   <meta name="format-detection" content="telephone=no">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
