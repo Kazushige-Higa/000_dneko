@@ -183,7 +183,7 @@
             </h1>
           </div>
           <div class="<?php echo $is_dnk_lp_home ? 'width_6 b_m0 pconly dnk_lp_header_nav_wrap' : 'width_5 b_m0 pconly'; ?>">
-            <nav class="nav_main <?php echo $is_dnk_lp_home ? 'set6 dnk_lp_header_nav' : 'set5'; ?> tcenter pconly bold center" aria-label="メインナビゲーション">
+            <nav class="nav_main <?php echo $is_dnk_lp_home ? 'set7 dnk_lp_header_nav' : 'set5'; ?> tcenter pconly bold center" aria-label="メインナビゲーション">
               <ul class="commonnav" ontouchstart="">
                 <?php if ($is_dnk_lp_home): ?>
                 <li><a href="#dnk_lp_price">サービス・料金</a></li>
@@ -192,6 +192,7 @@
                 <li><a href="#dnk_lp_flow">制作の流れ</a></li>
                 <li><a href="faq.php">よくある質問</a></li>
                 <li><a href="about.php">私たちについて</a></li>
+                <li><a href="ai-consulting.php">AI活用相談</a></li>
                 <?php else: ?>
                 <li>
                   <a href="./">
@@ -213,6 +214,7 @@
                     <li><a href="service_blog.php">ブログ制作サービス・料金</a></li>
                     <li><a href="service_design.php">印刷デザインサービス・料金</a></li>
                     <li><a href="flyer-design.php">チラシデザインについて</a></li>
+                    <li><a href="ai-consulting.php">AI活用コンサルティング</a></li>
                   </ul>
                 </li>
                 <li>
