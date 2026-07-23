@@ -212,6 +212,7 @@
                   <ul>
                     <li><a href="service_blog.php">ブログ制作サービス・料金</a></li>
                     <li><a href="service_design.php">印刷デザインサービス・料金</a></li>
+                    <li><a href="flyer-design.php">チラシデザインについて</a></li>
                   </ul>
                 </li>
                 <li>
@@ -247,7 +248,7 @@
               <a href='contact.php'
                 onclick="gtag('event','line_click',{'event_category':'contact','event_label':'header_pc'})">
                 <i class="fas fa-envelope" aria-hidden="true" style="margin-right:6px;"></i>
-                まずはお問い合わせ
+                まずは無料診断
               </a>
             </button>
             <?php endif; ?>
@@ -292,7 +293,7 @@
               <a href='contact.php'
                 onclick="gtag('event','line_click',{'event_category':'contact','event_label':'header_sp'})">
                 <i class="fas fa-envelope" aria-hidden="true" style="margin-right:6px;"></i>
-                まずはお問い合わせ
+                まずは無料診断
               </a>
             </button>
             <?php endif; ?>

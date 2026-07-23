@@ -8,12 +8,18 @@ $page_style = "
 .contact-lead { max-width: 900px; margin-inline: auto; }
 .contact-choice-list { align-items: stretch; }
 .contact-choice-list > li { height: 100%; }
-.contact-card { height: 100%; border: 1px solid rgba(249,177,4,.28); }
+.contact-card { height: 100%; border: 1px solid rgba(249,177,4,.28); padding: 2em; }
+@media screen and (max-width: 500px) {
+  .contact-card { padding: 1.5em; }
+}
 .contact-card__icon { display: grid; place-items: center; width: 54px; height: 54px; margin: 0 auto 1em; border-radius: 50%; background: #fff7df; color: #f9b104; font-size: 1.5em; }
 .contact-note { border-left: 4px solid #f9b104; }
 .contact-thanks { border: 2px solid #8ecc6f; }
 .contact-form-wrap .form dl {
-  display: block;
+  display: grid;
+  grid-template-columns: minmax(220px, 300px) 1fr;
+  column-gap: 2em;
+  row-gap: 0;
   max-width: 980px;
   margin-inline: auto;
 }
@@ -25,21 +31,21 @@ $page_style = "
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   gap: .7em;
   width: auto;
   font-size: 1.18em;
   line-height: 1.5;
-  padding: 2.2em 0 .9em;
-  text-align: center;
+  padding: 1.6em 0 1.6em;
+  text-align: left;
+  border-bottom: 1px dotted #cfcfcf;
 }
 .contact-form-wrap .form dl dd {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
-  padding-left: 0;
-  padding: 0 0 2.2em;
+  align-items: stretch;
+  padding: 1.6em 0;
   border-bottom: 1px dotted #cfcfcf;
 }
 .contact-form-wrap .form dl dt span {
@@ -49,7 +55,7 @@ $page_style = "
   margin: .12em 0 0;
   padding: .28em .7em;
   border-radius: 999px;
-  background: #1e5fa8;
+  background: #f9b104;
   color: #fff;
   font-size: .68em;
   line-height: 1.4;
@@ -62,14 +68,14 @@ $page_style = "
 .contact-form-wrap .form .dropdown {
   display: block;
   width: 100%;
-  min-height: 100px;
-  padding: 1.15em 1.25em;
+  min-height: 56px;
+  padding: 1em 1.25em;
   border: 2px solid #e2e2e2;
-  border-radius: 0;
-  background: #f0f0f0;
+  border-radius: 6px;
+  background: #f7f7f7;
   box-shadow: none;
   color: #333;
-  text-align: center;
+  text-align: left;
   transition: border-color .2s ease, box-shadow .2s ease, background-color .2s ease;
 }
 .contact-form-wrap .form textarea {
@@ -103,6 +109,10 @@ $page_style = "
   color: #fff;
   border-color: #8ecc6f;
   background: #8ecc6f;
+  font-size: 145%;
+  padding: .75em 2em;
+  font-weight: 700;
+  letter-spacing: .06em;
 }
 .contact-form-wrap .form .formbutton:before { color: #fff; }
 .contact-form-wrap .form .formbutton:hover {
@@ -110,13 +120,29 @@ $page_style = "
   background: #78bd5a;
   border-color: #78bd5a;
 }
+.contact-form-wrap .form .formbutton:disabled,
+.contact-form-wrap .form .formbutton[disabled] {
+  background: #c9c9c9;
+  border-color: #c9c9c9;
+  color: #fff;
+  cursor: not-allowed;
+  opacity: .85;
+}
+.contact-form-wrap .form .formbutton:disabled:hover,
+.contact-form-wrap .form .formbutton[disabled]:hover {
+  background: #c9c9c9;
+  border-color: #c9c9c9;
+}
 .contact-form-wrap .form label.checkbox_text,
 .contact-form-wrap .form label.radio_text {
   padding-top: .25em;
   padding-bottom: .25em;
 }
-@media screen and (max-width: 500px) {
-  .contact-card__icon { width: 46px; height: 46px; }
+@media screen and (max-width: 896px) {
+  .contact-form-wrap .form dl {
+    grid-template-columns: 1fr;
+    column-gap: 0;
+  }
   .contact-form-wrap .form dl dt {
     padding: 1.3em 0 .5em;
     border-bottom: 0;
@@ -126,14 +152,18 @@ $page_style = "
     padding: 0 0 1.4em;
     border-bottom: 1px dotted #cfcfcf;
   }
+}
+@media screen and (max-width: 500px) {
+  .contact-card__icon { width: 46px; height: 46px; }
   .contact-form-wrap .form .textarea,
   .contact-form-wrap .form textarea,
   .contact-form-wrap .form .dropdown {
-    min-height: 80px;
-    padding: .9em 1em;
+    min-height: 48px;
+    padding: .8em 1em;
   }
-  .contact-form-wrap .form textarea { min-height: 180px; }
+  .contact-form-wrap .form textarea { min-height: 160px; }
 }
+.contact-form-wrap .form textarea { min-height: 200px; text-align: left; }
 </style>
 ";
 $page_script = "
@@ -169,9 +199,27 @@ window.addEventListener('load', function () {
   var consultationChecks = form.querySelectorAll('input[name=\"ご相談内容(必須)[]\"]');
   var consultationError = form.querySelector('[data-error-for=\"consultation\"]');
   var requiredFields = form.querySelectorAll('[data-contact-required]');
+  var submitBtn = form.querySelector('.contact-submit-btn');
 
   function setFieldError(field, hasError) {
     field.classList.toggle('field-error', hasError);
+  }
+
+  // 送信ボタン有効/無効の判定（エラー表示は出さず、素直に入力状況のみで判定）
+  function isFormReady() {
+    for (var i = 0; i < requiredFields.length; i++) {
+      if (!requiredFields[i].value.trim()) return false;
+    }
+    var hasCheckedConsultation = Array.prototype.some.call(consultationChecks, function (cb) {
+      return cb.checked;
+    });
+    if (!hasCheckedConsultation) return false;
+    return true;
+  }
+
+  function updateSubmitState() {
+    if (!submitBtn) return;
+    submitBtn.disabled = !isFormReady();
   }
 
   function validateContactForm() {
@@ -200,12 +248,19 @@ window.addEventListener('load', function () {
   requiredFields.forEach(function (field) {
     field.addEventListener('input', function () {
       setFieldError(field, !field.value.trim());
+      updateSubmitState();
     });
   });
 
   consultationChecks.forEach(function (checkbox) {
-    checkbox.addEventListener('change', validateContactForm);
+    checkbox.addEventListener('change', function () {
+      validateContactForm();
+      updateSubmitState();
+    });
   });
+
+  // 初期状態を反映
+  updateSubmitState();
 
   form.addEventListener('submit', function (event) {
     if (!validateContactForm()) {
@@ -391,6 +446,11 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
                 <input type='text' class='textarea' name='屋号・会社名' size='70' placeholder='例：〇〇店'>
               </dd>
 
+              <dt>今お持ちのホームページURL<span class='nini'>任意</span></dt>
+              <dd>
+                <input type='url' class='textarea' name='今お持ちのホームページURL' size='70' placeholder='例：https://example.com'>
+              </dd>
+
               <dt>メールアドレス<span>必須</span></dt>
               <dd>
                 <input type='email' class='textarea' name='email(必須)' size='70' placeholder='例：info@〇〇.com' required data-contact-required>
@@ -426,7 +486,7 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
               </dd>
             </dl>
 
-            <button class='formbutton' type='submit' value='送信する'>送信する</button>
+            <button class='formbutton contact-submit-btn' type='submit' value='無料相談する' disabled>無料相談する</button>
           </form>
         </div>
       </div>

@@ -63,6 +63,7 @@ if (is_readable($wd_http_only_file)) {
 }
 
 // CSVから実績データを読み込み（業種, 顧客名, URL）
+// URLはスキームなしで格納。サブページ（例: example.com/sub.php）も可。
 $wd_items = [];
 $wd_categories = [];
 $wd_csv = __DIR__ . '/data/web_design_works.csv';
@@ -74,12 +75,16 @@ if (is_readable($wd_csv) && ($wd_fp = fopen($wd_csv, 'r')) !== false) {
     $wd_url  = trim((string)($wd_row[2] ?? ''));
     if ($wd_url === '') continue;
     if ($wd_cat === '') $wd_cat = 'その他';
-    $wd_thumb = 'images/web_design/' . $wd_url . '.webp';
+    // ドメイン部（サブページ付きURLでもhttp_only判定できるよう先頭要素を取り出す）
+    $wd_domain = explode('/', $wd_url)[0];
+    // サムネイルファイル名（"/"や":"を含むURLでも安全なファイル名に変換）
+    $wd_thumb_name = preg_replace('/[^A-Za-z0-9._-]/', '_', $wd_url) . '.webp';
+    $wd_thumb = 'images/web_design/' . $wd_thumb_name;
     $wd_items[] = [
       'cat'    => $wd_cat,
       'name'   => $wd_name !== '' ? $wd_name : $wd_url,
       'url'    => $wd_url,
-      'scheme' => isset($wd_http_only[$wd_url]) ? 'http' : 'https',
+      'scheme' => isset($wd_http_only[$wd_domain]) ? 'http' : 'https',
       'thumb'  => file_exists(__DIR__ . '/' . $wd_thumb) ? $wd_thumb : '',
     ];
     $wd_categories[$wd_cat] = ($wd_categories[$wd_cat] ?? 0) + 1;
@@ -87,6 +92,12 @@ if (is_readable($wd_csv) && ($wd_fp = fopen($wd_csv, 'r')) !== false) {
   fclose($wd_fp);
 }
 arsort($wd_categories); // 件数の多い順にタブを並べる
+// 「その他」は件数に関わらず常に最後尾へ
+if (isset($wd_categories['その他'])) {
+  $wd_other_count = $wd_categories['その他'];
+  unset($wd_categories['その他']);
+  $wd_categories['その他'] = $wd_other_count;
+}
 ?>
 
 <div class="overflow">
@@ -100,8 +111,8 @@ arsort($wd_categories); // 件数の多い順にタブを並べる
         </h2>
         <div class='space_2 space_sp2'></div>
         <p class="tcenter">
-          これまでに制作へ携わったホームページの一覧です。業種タブで絞り込みできます。<br class="pconly">
-          画像をクリックすると、各サイトが別ウィンドウで開きます。
+          これまでに制作で携わったホームページ制作は1,000件以上。<br class="pconly">
+          その中で実際に閲覧できるホームページを一覧でご紹介いたします。
         </p>
         <div class='space_2 space_sp2'></div>
 
