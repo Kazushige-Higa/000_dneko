@@ -1,0 +1,25 @@
+
+RewriteEngine On
+
+# 公開URLは /sitemap.xml のまま、PHPで最新の内容を生成する
+RewriteRule ^sitemap\.xml$ sitemap.php [L]
+
+# localhost以外のホスト名を正規ドメインへ1回で統一する
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(?::[0-9]+)?$ [NC]
+RewriteCond %{HTTP_HOST} !^d-neko\.com$ [NC]
+RewriteRule ^ https://d-neko.com%{REQUEST_URI} [R=301,L,NE]
+
+# localhostではHTTPのまま表示し、公開環境だけHTTPSへ統一する
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(?::[0-9]+)?$ [NC]
+RewriteCond %{HTTPS} !=on
+RewriteCond %{HTTP:X-Forwarded-Proto} !https [NC]
+RewriteRule ^ https://d-neko.com%{REQUEST_URI} [R=301,L,NE]
+
+# 公開環境だけ /index.php を / に正規化する
+RewriteCond %{HTTP_HOST} !^(localhost|127\.0\.0\.1|\[::1\])(?::[0-9]+)?$ [NC]
+RewriteRule ^index\.(?:html|php)$ / [R=301,L]
+
+# 存在しないURLはトップへ転送せず、404ページを正しいステータスで返す
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^ 404.php [L]
