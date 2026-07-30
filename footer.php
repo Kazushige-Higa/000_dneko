@@ -1,83 +1,12 @@
+<?php include __DIR__ . '/footer-contact.php'; ?>
+<?php require_once __DIR__ . '/site-navigation.php'; ?>
 <?php
-// ==========================================
-//  サイト共通CTAバナー
-//  microCMS「cta_banner」API（オブジェクト形式）から取得
-//  enabled=trueの場合のみ表示
-// ==========================================
-$cta_banner = microcms_get("/cta_banner");
-if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true):
-  $cta_heading     = isset($cta_banner->heading) ? trim((string)$cta_banner->heading) : '';
-  $cta_description = isset($cta_banner->description) ? trim((string)$cta_banner->description) : '';
-  $cta_image_url   = (isset($cta_banner->image->url) && $cta_banner->image->url !== '') ? $cta_banner->image->url : '';
-  $cta_btn_text    = isset($cta_banner->button_text) ? trim((string)$cta_banner->button_text) : '';
-  $cta_btn_url     = isset($cta_banner->button_url) ? trim((string)$cta_banner->button_url) : '';
-  $cta_btn_text2   = isset($cta_banner->button_text2) ? trim((string)$cta_banner->button_text2) : '';
-  $cta_btn_url2    = isset($cta_banner->button_url2) ? trim((string)$cta_banner->button_url2) : '';
-  if ($cta_btn_url !== '' && (preg_match('/line\.me|lin\.ee/i', $cta_btn_url) || strpos($cta_btn_text, 'LINE') !== false)) {
-    $cta_btn_url = 'contact.php';
-    $cta_btn_text = 'まずはお問い合わせ';
-  }
-  if ($cta_btn_url2 !== '' && (preg_match('/line\.me|lin\.ee/i', $cta_btn_url2) || strpos($cta_btn_text2, 'LINE') !== false)) {
-    $cta_btn_url2 = 'contact.php';
-    $cta_btn_text2 = 'まずはお問い合わせ';
-  }
+$dr_line_url = isset($line) ? $line : 'contact.php';
+if (!isset($dr_navigation_items)) {
+    $dr_navigation_items = dneko_navigation_items($dr_line_url);
+}
 ?>
-<section class="site-cta-banner">
-  <div class="site-cta-banner__inner">
-    <?php if ($cta_image_url !== ''): ?>
-    <div class="site-cta-banner__image">
-      <img src="<?php echo htmlspecialchars($cta_image_url, ENT_QUOTES, 'UTF-8'); ?>?w=600" alt="<?php echo htmlspecialchars($cta_heading, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-    </div>
-    <?php endif; ?>
-    <div class="site-cta-banner__body">
-      <?php if ($cta_heading !== ''): ?>
-      <h3 class="site-cta-banner__heading"><?php echo htmlspecialchars($cta_heading, ENT_QUOTES, 'UTF-8'); ?></h3>
-      <?php endif; ?>
-      <?php if ($cta_description !== ''): ?>
-      <p class="site-cta-banner__desc"><?php echo nl2br(htmlspecialchars($cta_description, ENT_QUOTES, 'UTF-8')); ?></p>
-      <?php endif; ?>
-      <?php if ($cta_btn_text !== '' && $cta_btn_url !== ''): ?>
-      <div class="site-cta-banner__buttons">
-        <a href="<?php echo htmlspecialchars($cta_btn_url, ENT_QUOTES, 'UTF-8'); ?>" class="site-cta-banner__btn site-cta-banner__btn--primary">
-          <?php if ($cta_btn_text === 'まずはお問い合わせ'): ?><i class="fas fa-envelope" aria-hidden="true"></i> <?php endif; ?>
-          <?php echo htmlspecialchars($cta_btn_text, ENT_QUOTES, 'UTF-8'); ?>
-        </a>
-        <?php if ($cta_btn_text2 !== '' && $cta_btn_url2 !== ''): ?>
-        <a href="<?php echo htmlspecialchars($cta_btn_url2, ENT_QUOTES, 'UTF-8'); ?>" class="site-cta-banner__btn site-cta-banner__btn--secondary">
-          <?php if ($cta_btn_text2 === 'まずはお問い合わせ'): ?><i class="fas fa-envelope" aria-hidden="true"></i> <?php endif; ?>
-          <?php echo htmlspecialchars($cta_btn_text2, ENT_QUOTES, 'UTF-8'); ?>
-        </a>
-        <?php endif; ?>
-      </div>
-      <?php endif; ?>
-    </div>
-  </div>
-</section>
-<?php endif; ?>
-
 <footer>
-    <div class='bg_grd_anime overflow'>
-        <div class='single'>
-            <h3 class="tcenter line_height_18">
-                <span class="bold white fs_35 fs_sp30 font_kiwi">
-                    無料相談受付中。<br>
-                    まずはお気軽にお問い合わせください。
-                </span>
-            </h3>
-            <div class='space_3 space_sp2'></div>
-            <div class="sbox">
-                <button class="btn_normal transparent center radius fs_20 fs_sp20">
-                    <a href="contact.php"
-                      onclick="gtag('event','line_click',{'event_category':'contact','event_label':'footer_btn'})">
-                        <i class="fas fa-envelope" style="font-size: 1.3em; vertical-align: middle; margin-right: 0.5em;"></i>
-                        まずはお問い合わせ
-                    </a>
-                </button>
-            </div>
-        </div>
-    </div>
-
-
     <div class="bg_white">
         <div class="single03">
 
@@ -91,7 +20,7 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
 
                         <!-- // youtube -->
                         <li class="youtube">
-                            <a href="<?php echo $youtube; ?>" target="_blank" rel="nofollow">
+                            <a href="<?php echo htmlspecialchars($youtube, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="nofollow noopener noreferrer">
                                 <svg id="a" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 19.1 13.37">
                                     <path class="b" d="M18.7,2.09c-.22-.82-.87-1.47-1.69-1.69-1.49-.4-7.46-.4-7.46-.4,0,0-5.97,0-7.46,.4-.82,.22-1.47,.87-1.69,1.69-.4,1.49-.4,4.6-.4,4.6,0,0,0,3.11,.4,4.6,.22,.82,.87,1.47,1.69,1.69,1.49,.4,7.46,.4,7.46,.4,0,0,5.97,0,7.46-.4,.82-.22,1.47-.87,1.69-1.69,.4-1.49,.4-4.6,.4-4.6,0,0,0-3.11-.4-4.6ZM7.64,9.55V3.82l4.96,2.86-4.96,2.86Z" />
                                 </svg>
@@ -99,7 +28,7 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
                         </li>
                         <!-- // instagram -->
                         <li class="instagram">
-                            <a href="<?php echo $instagram; ?>" target="_blank" rel="nofollow"
+                            <a href="<?php echo htmlspecialchars($instagram, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="nofollow noopener noreferrer"
                               onclick="gtag('event','instagram_click',{'event_category':'sns','event_label':'footer_icon'})">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18 17.9">
                                     <g>
@@ -110,7 +39,7 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
                         </li>
                         <!-- // line -->
                         <li class="line">
-                            <a href="<?php echo $line; ?>" target='_blank' rel='noopener'
+                            <a href="<?php echo htmlspecialchars($dr_line_url, ENT_QUOTES, 'UTF-8'); ?>" target='_blank' rel='noopener'
                               onclick="gtag('event','line_click',{'event_category':'contact','event_label':'footer_icon'})">
                                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 18.9 18.12">
                                     <path d="M18.9,7.7C18.9,3.4,14.6,0,9.4,0S0,3.4,0,7.7c0,3.8,3.4,7,7.9,7.6,.3,.1,.7,.2,.8,.5,.1,.2,.1,.6,0,.9,0,0-.1,.7-.1,.8,0,.2-.2,.9,.8,.5s5.4-3.2,7.4-5.5h0c1.4-1.6,2.1-3.1,2.1-4.8Zm-13.2,2.5h-1.9c-.3,0-.5-.2-.5-.5v-3.8c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.3h1.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5Zm2-.5c0,.3-.2,.5-.5,.5s-.5-.2-.5-.5v-3.8c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.8Zm4.5,0c0,.2-.1,.4-.3,.5h-.2c-.2,0-.3-.1-.4-.2l-1.9-2.6v2.3c0,.3-.2,.5-.5,.5s-.5-.2-.5-.5v-3.8c0-.2,.1-.4,.3-.5h.2c.2,0,.3,.1,.4,.2l1.9,2.6v-2.3c0-.3,.2-.5,.5-.5s.5,.2,.5,.5v3.8Zm3-2.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.4v.9h1.4c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.9c-.3,0-.5-.2-.5-.5v-1.9h0v-1.9h0c0-.3,.2-.5,.5-.5h1.9c.3,0,.5,.2,.5,.5s-.2,.5-.5,.5h-1.4v.9h1.4Z" />
@@ -123,8 +52,9 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
 
 
                 </div>
-                <div class='width_6 width_sp10 pconly'>
-                    <nav class="nav_icon clone_nav tcenter set4 bold" aria-label="フッターナビゲーション">
+                <div class='width_6 width_sp10'>
+                    <nav class="nav_icon dr_footer_navigation tcenter set4 bold" aria-label="フッターナビゲーション">
+                        <?php dneko_render_navigation($dr_navigation_items, 'dr_global_nav_list dr_footer_nav_list'); ?>
                     </nav>
                 </div>
             </div>
@@ -143,14 +73,15 @@ if ($cta_banner && isset($cta_banner->enabled) && $cta_banner->enabled === true)
     </div>
 </footer>
 
-<div id="pagetop" class="radius bottom">
-    <a href="#top"><i class="fas fa-chevron-up" alt="to top"></i></a>
+<div id="pagetop" class="radius bottom dr_common_pagetop">
+    <a href="#top" aria-label="ページトップへ"><i class="fas fa-chevron-up" aria-hidden="true"></i><span>TOP</span></a>
 </div>
 
+<script src="js/site-common.js?v=<?= filemtime(__DIR__ . '/js/site-common.js') ?>" defer></script>
 <script src="js/javascript.js" defer></script>
 <script src="js/bg_parallax.js" defer></script>
 
-<?php echo $page_script; ?>
+<?php echo $page_script ?? ''; ?>
 </body>
 
 </html>

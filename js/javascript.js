@@ -7,6 +7,10 @@ document.addEventListener("DOMContentLoaded", function () {
   const overlay = document.querySelector(".nav_overlay");
   const body = document.body;
 
+  if (!toggleBtn || !navMenu || !closeBtn || !overlay) {
+    return;
+  }
+
   // メニューを開く
   function openMenu() {
     navMenu.classList.add("active");

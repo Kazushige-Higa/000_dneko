@@ -1,701 +1,460 @@
 <?php
-$page_title = "沖縄のホームページ制作 デザネコ｜開業1〜3年目の個人事業主専門";
-$page_description = "沖縄で開業1〜3年目の個人事業主向けホームページ制作。撮影・文章・デザインをまるごとおまかせ、月額9,800円から。公開後もアクセス数や問い合わせ数をダッシュボードで確認しながら伴走する「デザネコ」の制作・運用サービスです。";
+$home_renewal = true;
+$page_title = "デザネコ｜沖縄のデザイン・Web制作・AI活用相談";
+$page_description = "沖縄のチラシ・ホームページ制作・AI活用相談ならデザネコへ。看板猫もじゃ・くるると一緒に、撮影からデザイン、公開後の改善まで伴走します。";
+$page_og_image = "https://d-neko.com/images/home-renewal/ogp-home.jpg";
+$page_style = '<link href="css/index-renewal.css?v=' . filemtime(__DIR__ . '/css/index-renewal.css') . '" rel="stylesheet">';
+$page_script = '<script src="js/index-renewal.js?v=' . filemtime(__DIR__ . '/js/index-renewal.js') . '" defer></script>';
 include_once './header.php';
+
+$portfolio_response = microcms_get_list("/works", "limit=8&orders=-publishedAt");
+$portfolio_posts = ($portfolio_response && !empty($portfolio_response->contents)) ? $portfolio_response->contents : [];
+$blog_response = microcms_get_list("/blog", "limit=8&orders=-publishedAt");
+$blog_posts = ($blog_response && !empty($blog_response->contents)) ? $blog_response->contents : [];
+$column_response = microcms_get_list("/column", "limit=8&orders=-publishedAt");
+$column_posts = ($column_response && !empty($column_response->contents)) ? $column_response->contents : [];
+$home_notices = [
+  [
+    'date' => '2026-07-30',
+    'label' => '2026/07/30',
+    'title' => '沖縄のご家庭向け「デジタルのネコの手」を開始しました',
+    'href' => 'service_digital.php',
+  ],
+  [
+    'date' => '2026-07-23',
+    'label' => '2026/07/23',
+    'title' => 'デザネコのホームページをリニューアルしました',
+    'href' => 'entry_list.php?type=blog',
+  ],
+];
+
+if (!function_exists('dneko_home_escape')) {
+  function dneko_home_escape($value)
+  {
+    return htmlspecialchars((string)$value, ENT_QUOTES, 'UTF-8');
+  }
+}
+
+if (!function_exists('dneko_home_thumbnail')) {
+  function dneko_home_thumbnail($post, $width = 640)
+  {
+    if (isset($post->thumbnail->url) && $post->thumbnail->url !== '') {
+      return dneko_home_escape($post->thumbnail->url) . '?w=' . (int)$width;
+    }
+    return 'images/no-img.webp';
+  }
+}
+
+if (!function_exists('dneko_home_category')) {
+  function dneko_home_category($post)
+  {
+    if (isset($post->category)) {
+      return microcms_extract_category_name($post->category);
+    }
+    return '';
+  }
+}
 ?>
 
-<div class="overflow dnk_lp">
-
-  <section>
-    <div class="overflow relative bg_white">
-      <div class="puton center">
-        <h2 class="tcenter line_height_20 white">
-          <span class="act01 blur sponly">
-            <img class="width_2 width_sp5 b_m10" src='<?php echo $img; ?>/logo.webp' alt='<?php echo $title; ?>' loading='lazy'>
-          </span>
-          <br>
-          <span class="fs_50 fs_sp25 act02 blur">1,000件以上の制作現場を知る<br class="sponly">制作者のネコの手サポート。</span>
-          <br>
-          <span class="fs_50 fs_sp25 act03 blur">あなたのお店に寄り添うWeb担当サービス。</span>
-        </h2>
-        <p class="tcenter white t_m10 act04 blur">
-          チラシやブログ、作ったままになっていませんか？<br>
-          開業1〜3年目の個人事業主専門のデザネコ。<br>
-          「制作して終わり」じゃない、一緒に育てるパートナー。<br>
-          今すぐ、ネコの手を。
-        </p>
-        <div class='space_3 space_sp3'></div>
+<div class="dr_page">
+  <main>
+    <section class="dr_hero" aria-label="デザネコのサービス">
+      <div class="dr_slider dr_slider_hero" data-renewal-slider data-autoplay="6500">
+        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のスライド">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_viewport">
+          <div class="dr_slider_track">
+            <article class="dr_hero_slide dr_hero_slide_orange">
+              <img src="images/home-renewal/hero-flyer.webp" alt="" fetchpriority="high">
+              <div class="dr_hero_copy">
+                <p>沖縄のデザインを、もっと身近に。</p>
+                <h1>沖縄の<br><strong>チラシデザイン</strong>なら<br>デザネコへ</h1>
+                <a href="flyer-design.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+            <article class="dr_hero_slide dr_hero_slide_green">
+              <img src="images/home-renewal/hero-ai.webp" alt="" loading="lazy">
+              <div class="dr_hero_copy">
+                <p>やさしく始める、仕事のAI活用。</p>
+                <h2><strong>AI</strong>コンサルティング</h2>
+                <span>あなたの仕事に合う使い方から一緒に考えます。</span>
+                <a href="ai-consulting.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+            <article class="dr_hero_slide dr_hero_slide_mix">
+              <img src="images/home-renewal/hero-web.webp" alt="" loading="lazy">
+              <div class="dr_hero_copy">
+                <p>想いが伝わる、育てていける。</p>
+                <h2>ホームページ<br><strong>制作サービス</strong></h2>
+                <span>写真・文章・デザインから公開後まで伴走します。</span>
+                <a href="service_blog.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+            <article class="dr_hero_slide dr_hero_slide_digital">
+              <img src="images/home-renewal/hero-digital-support.jpg" alt="" loading="lazy">
+              <div class="dr_hero_copy">
+                <p>沖縄のご家庭のデジタルサポート</p>
+                <h2>沖縄のご家庭に、<br><strong>デジタルのネコの手。</strong></h2>
+                <span>
+                  スマホ、パソコン、Wi-Fi、LINE、AIまで。<br>
+                  「誰に聞けばいいか分からない」を、月額聞き放題でぜんぶ引き受ける<br>
+                  <b>おうち専属のデジタル担当サービス</b>です。
+                </span>
+                <a href="service_digital.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+              </div>
+            </article>
+          </div>
+        </div>
+        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のスライド">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_dots" data-slider-dots aria-label="スライド位置"></div>
       </div>
+    </section>
 
-      <div class='iframe_area cover'>
-        <video src='<?php echo $img; ?>/movie_mojacat.mp4' poster='<?php echo $img; ?>/movie_mojacat.webp' playsinline muted autoplay loop onclick='this.play();' width='100%' height='auto'></video>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div id="dnk_lp_top" class="dnk_lp_hero">
-      <div class="dnk_lp_leaf dnk_lp_leaf_left" aria-hidden="true"></div>
-      <div class="dnk_lp_dot dnk_lp_dot_right" aria-hidden="true"></div>
-      <div class="dnk_lp_inner dnk_lp_hero_inner">
-        <div class="dnk_lp_hero_text">
-          <p class="dnk_lp_label">沖縄・開業1〜3年目の個人事業主専門</p>
-          <h2 class="dnk_lp_hero_title">
-            作って終わりにしない。<br>
-            成果が<span>数字で見える</span><br>
-            ホームページ制作
-          </h2>
-          <p class="dnk_lp_hero_lead">
-            アクセス数も問い合わせも、あなた専用のダッシュボードでいつでも確認。撮影・文章・デザインまで全部おまかせで、月額9,800円から。
-          </p>
-          <ul class="dnk_lp_stats" aria-label="デザネコの実績">
+    <aside class="dr_notice" aria-labelledby="dr-notice-title">
+      <div class="dr_notice_inner">
+        <div class="dr_notice_heading">
+          <h2 id="dr-notice-title">重要なお知らせ</h2>
+          <a href="entry_list.php?type=blog">もっと見る <i class="fa-solid fa-circle-arrow-right" aria-hidden="true"></i></a>
+        </div>
+        <ul class="dr_notice_list">
+          <?php foreach ($home_notices as $notice): ?>
             <li>
-              <i class="fas fa-chart-simple" aria-hidden="true"></i>
-              <span>制作実績</span>
-              <strong>約1,000<small>件</small></strong>
+              <a href="<?php echo dneko_home_escape($notice['href']); ?>">
+                <time datetime="<?php echo dneko_home_escape($notice['date']); ?>"><?php echo dneko_home_escape($notice['label']); ?></time>
+                <span><?php echo dneko_home_escape($notice['title']); ?></span>
+              </a>
             </li>
-            <li>
-              <i class="fas fa-crown" aria-hidden="true"></i>
-              <span>業界歴</span>
-              <strong>20<small>年</small></strong>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    </aside>
+
+    <section id="service-banner" class="dr_service_banner">
+      <div class="dr_service_banner_inner">
+        <div class="dr_service_text">
+          <p class="dr_kicker">想いを、伝わるデザインへ。</p>
+          <h2><span>沖縄のチラシデザイン</span>なら<br>デザネコへ</h2>
+          <p>
+            チラシ・フライヤーはもちろん、名刺・ショップカード・パンフレットまで。<br>
+            撮影からデザイン、印刷・納品までトータルでサポートします。<br>
+            ふんわりしたご相談から、あなたのお店やサービスを形にします。
+          </p>
+          <ul>
+            <li><i class="fa-solid fa-file-image" aria-hidden="true"></i>チラシ</li>
+            <li><i class="fa-solid fa-address-card" aria-hidden="true"></i>名刺</li>
+            <li><i class="fa-solid fa-book-open" aria-hidden="true"></i>パンフレット</li>
+            <li><i class="fa-solid fa-camera" aria-hidden="true"></i>一眼レフ撮影</li>
+            <li><i class="fa-solid fa-print" aria-hidden="true"></i>印刷・納品</li>
+          </ul>
+          <a href="flyer-design.php">詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+        <div class="dr_service_visual" aria-hidden="true">
+          <img src="images/home-renewal/hero-flyer.webp" alt="" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section class="dr_section dr_portfolio">
+      <div class="dr_section_heading dr_heading_green">
+        <h2>Portfolio</h2>
+        <p>制作実績</p>
+      </div>
+
+      <div class="dr_slider dr_post_slider" data-renewal-slider>
+        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前の制作実績">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_viewport">
+          <div class="dr_slider_track">
+            <?php if (!empty($portfolio_posts)): ?>
+              <?php foreach ($portfolio_posts as $post): ?>
+                <article class="dr_post_card">
+                  <a href="entry.php?type=works&amp;eid=<?php echo urlencode($post->id); ?>">
+                    <img src="<?php echo dneko_home_thumbnail($post); ?>" alt="<?php echo dneko_home_escape($post->title); ?>" loading="lazy">
+                    <?php $category_name = dneko_home_category($post); ?>
+                    <?php if ($category_name !== ''): ?><span><?php echo dneko_home_escape($category_name); ?></span><?php endif; ?>
+                    <h3><?php echo dneko_home_escape($post->title); ?></h3>
+                  </a>
+                </article>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <p class="dr_empty">制作実績を準備中です。</p>
+            <?php endif; ?>
+          </div>
+        </div>
+        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次の制作実績">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+      <a class="dr_more_button dr_more_green" href="entry_list.php?type=works">
+        制作実績を見る <i class="fa-solid fa-paw" aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <section class="dr_creator">
+      <div class="dr_creator_inner">
+        <div class="dr_creator_copy">
+          <p class="dr_kicker">製作者について</p>
+          <h2>制作するのは、<br class="sponly">こんな人</h2>
+          <p>はじめまして、デザネコの比嘉一茂です。沖縄でデザイン・Web制作の現場に20年、約1,000件の制作に携わってきました。</p>
+          <p>大きな会社のような分業ではなく、あなたの想い・写真・文章・デザイン・公開後の改善まで、最初から最後まで同じ人間が責任を持ちます。</p>
+          <p>相棒の看板猫「もじゃ」と「くるる」とともに、あなたの商売のネコの手になれたら嬉しいです。</p>
+          <a href="about.php">デザネコについて <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+        <div class="dr_creator_visual">
+          <img class="dr_creator_profile" src="images/profile.jpg" alt="デザネコ代表 比嘉一茂" loading="lazy">
+          <img class="dr_creator_moja" src="images/sticker/42.webp" alt="看板猫もじゃ" loading="lazy">
+          <img class="dr_creator_kururu" src="images/sticker/01.webp" alt="看板猫くるる" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section class="dr_section dr_blog">
+      <div class="dr_section_heading dr_heading_green">
+        <h2>Blog</h2>
+        <p>ブログ</p>
+      </div>
+
+      <div class="dr_slider dr_post_slider" data-renewal-slider>
+        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のブログ">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_viewport">
+          <div class="dr_slider_track">
+            <?php if (!empty($blog_posts)): ?>
+              <?php foreach ($blog_posts as $post): ?>
+                <article class="dr_post_card">
+                  <a href="entry.php?type=blog&amp;eid=<?php echo urlencode($post->id); ?>">
+                    <img src="<?php echo dneko_home_thumbnail($post); ?>" alt="<?php echo dneko_home_escape($post->title); ?>" loading="lazy">
+                    <?php $category_name = dneko_home_category($post); ?>
+                    <?php if ($category_name !== ''): ?><span><?php echo dneko_home_escape($category_name); ?></span><?php endif; ?>
+                    <h3><?php echo dneko_home_escape($post->title); ?></h3>
+                  </a>
+                </article>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <p class="dr_empty">ブログ記事を準備中です。</p>
+            <?php endif; ?>
+          </div>
+        </div>
+        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のブログ">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+      <a class="dr_more_button dr_more_green" href="entry_list.php?type=blog">
+        ブログを見る <i class="fa-solid fa-paw" aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <section class="dr_creator dr_story dr_story_digital">
+      <div class="dr_creator_inner">
+        <div class="dr_creator_copy">
+          <p class="dr_kicker">ご家庭向けデジタルサポート</p>
+          <h2>沖縄のご家庭に、<br>デジタルのネコの手。</h2>
+          <p>スマホの設定、パソコンの困りごと、Wi-Fiの不調、LINEの使い方、AIへのちょっとした疑問まで。ご家族に代わって、同じ担当者が何度でもやさしくお答えします。</p>
+          <p>難しい言葉は使いません。「こんなことを聞いてもいいのかな？」という内容こそ、気兼ねなくご相談ください。</p>
+          <ul class="dr_story_points" aria-label="サポート内容">
+            <li><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>スマホ</li>
+            <li><i class="fa-solid fa-laptop" aria-hidden="true"></i>パソコン</li>
+            <li><i class="fa-solid fa-wifi" aria-hidden="true"></i>Wi-Fi</li>
+            <li><i class="fa-brands fa-line" aria-hidden="true"></i>LINE・AI</li>
+          </ul>
+          <a href="service_digital.php">サービスについて <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+        <div class="dr_story_visual">
+          <img src="images/home-renewal/home-digital-support-section.jpg" alt="もじゃとくるるが沖縄のご夫婦のスマホとパソコンをサポートする様子" loading="lazy">
+        </div>
+      </div>
+    </section>
+
+    <section class="dr_section dr_column">
+      <img class="dr_section_mascots dr_section_mascots_column" src="images/home-renewal/deco-column.jpg" alt="" width="1600" height="533" loading="lazy">
+      <div class="dr_section_heading dr_heading_orange">
+        <h2>Column</h2>
+        <p>お役立ちコラム</p>
+      </div>
+      <p class="dr_section_lead">デザインやAIについて、お役立ちコラムを配信中です。</p>
+
+      <div class="dr_slider dr_post_slider" data-renewal-slider>
+        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のコラム">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_viewport">
+          <div class="dr_slider_track">
+            <?php if (!empty($column_posts)): ?>
+              <?php foreach ($column_posts as $post): ?>
+                <article class="dr_post_card">
+                  <a href="entry.php?type=column&amp;eid=<?php echo urlencode($post->id); ?>">
+                    <img src="<?php echo dneko_home_thumbnail($post); ?>" alt="<?php echo dneko_home_escape($post->title); ?>" loading="lazy">
+                    <?php $category_name = dneko_home_category($post); ?>
+                    <?php if ($category_name !== ''): ?><span><?php echo dneko_home_escape($category_name); ?></span><?php endif; ?>
+                    <h3><?php echo dneko_home_escape($post->title); ?></h3>
+                  </a>
+                </article>
+              <?php endforeach; ?>
+            <?php else: ?>
+              <p class="dr_empty">コラムを準備中です。</p>
+            <?php endif; ?>
+          </div>
+        </div>
+        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のコラム">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+      <a class="dr_more_button dr_more_orange" href="entry_list.php?type=column">
+        コラムを見る <i class="fa-solid fa-paw" aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <section class="dr_creator dr_story dr_story_mascots">
+      <div class="dr_creator_inner">
+        <div class="dr_story_visual">
+          <img src="images/home-renewal/home-mascot-introduction.jpg" alt="デザインスタジオで仲良く制作する公式キャラクターのもじゃとくるる" loading="lazy">
+        </div>
+        <div class="dr_creator_copy">
+          <p class="dr_kicker">デザネコ公式キャラクター</p>
+          <h2>「もじゃ」と<br>「くるる」</h2>
+          <p>くるくるの前髪と金色の瞳がチャームポイントの黒猫「もじゃ」と、白い巻き毛にピンクのリボンが似合う「くるる」。</p>
+          <p>性格はちょっぴり違うけれど、デザインと人を笑顔にすることが大好きな仲良しコンビです。制作のお手伝いや音楽、グッズなど、いろいろな場所で活躍しています。</p>
+          <a href="moja-cat.php">もじゃとくるるについて <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+        </div>
+      </div>
+    </section>
+
+    <section class="dr_section dr_movies">
+      <img class="dr_section_mascots dr_section_mascots_youtube" src="images/home-renewal/deco-youtube.jpg" alt="" width="1600" height="533" loading="lazy">
+      <div class="dr_section_heading dr_heading_pink">
+        <h2>YouTube</h2>
+        <p>ムービー</p>
+      </div>
+
+      <div class="dr_slider dr_movie_slider" data-renewal-slider>
+        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のムービー">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_viewport">
+          <div class="dr_slider_track">
+            <article class="dr_movie_card">
+              <button class="dr_movie_trigger" type="button" data-youtube-id="SzaEuEhwsgY" aria-haspopup="dialog" aria-label="「酔いどれニャンコの夜」を再生">
+                <figure>
+                  <img src="images/home-renewal/youtube-halloween.webp" alt="【MV】酔いどれニャンコの夜" loading="lazy">
+                  <i class="fa-solid fa-play" aria-hidden="true"></i>
+                </figure>
+                <h3>【MV】酔いどれニャンコの夜</h3>
+              </button>
+            </article>
+            <article class="dr_movie_card">
+              <button class="dr_movie_trigger" type="button" data-youtube-id="ywfFxf84tIA" aria-haspopup="dialog" aria-label="「にゃん！にゃん！ハロウィンニャイト」を再生">
+                <figure>
+                  <img src="images/home-renewal/youtube-yoi.webp" alt="【MV】にゃん！にゃん！ハロウィンニャイト" loading="lazy">
+                  <i class="fa-solid fa-play" aria-hidden="true"></i>
+                </figure>
+                <h3>【MV】にゃん！にゃん！ハロウィンニャイト🐈️</h3>
+              </button>
+            </article>
+            <article class="dr_movie_card">
+              <button class="dr_movie_trigger" type="button" data-youtube-id="bDvGTUucj78" aria-haspopup="dialog" aria-label="「ありがとう僕の小さなネコ」を再生">
+                <figure>
+                  <img src="images/home-renewal/youtube-thanks.webp" alt="【MV】ありがとう僕の小さなネコ" loading="lazy">
+                  <i class="fa-solid fa-play" aria-hidden="true"></i>
+                </figure>
+                <h3>【MV】ありがとう僕の小さなネコ</h3>
+              </button>
+            </article>
+          </div>
+        </div>
+        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のムービー">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
+      </div>
+
+      <a class="dr_more_button dr_more_pink" href="https://www.youtube.com/@design-cat" target="_blank" rel="noopener">
+        もっと見る <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+      </a>
+    </section>
+
+    <section class="dr_section dr_goods">
+      <div class="dr_section_heading dr_heading_orange">
+        <h2>Goods</h2>
+        <p>もじゃねこグッズ 人気ランキング</p>
+      </div>
+
+      <div class="dr_slider dr_card_slider" data-renewal-slider>
+        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のグッズ">
+          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+        </button>
+        <div class="dr_slider_viewport">
+          <ol class="dr_slider_track dr_goods_track">
+            <li class="dr_goods_card">
+              <span class="dr_rank dr_rank_1">No.<b>1</b></span>
+              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
+                <img src="images/goods01.webp" alt="もじゃねこTシャツ" loading="lazy">
+                <h3>もじゃねこTシャツ</h3>
+                <p>もじゃ＆くるるの仲良しデザイン</p>
+              </a>
             </li>
-            <li>
-              <i class="fas fa-camera" aria-hidden="true"></i>
-              <span>撮影・ライティング</span>
-              <strong>100<small>%</small></strong>
+            <li class="dr_goods_card">
+              <span class="dr_rank dr_rank_2">No.<b>2</b></span>
+              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
+                <img src="images/goods02.webp" alt="もじゃねこトートバッグ" loading="lazy">
+                <h3>トートバッグ</h3>
+                <p>毎日使えるナチュラルカラー</p>
+              </a>
             </li>
-          </ul>
-          <div class="dnk_lp_cta_row dnk_lp_cta_row_single">
-            <a class="dnk_lp_btn dnk_lp_btn_orange" href="contact.php">
-              いまのHPを<br class="sponly">無料診断してもらう
-              <i class="fas fa-chevron-right" aria-hidden="true"></i>
-            </a>
-          </div>
+            <li class="dr_goods_card">
+              <span class="dr_rank dr_rank_3">No.<b>3</b></span>
+              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
+                <img src="images/goods03.webp" alt="スマホケースとマグカップ" loading="lazy">
+                <h3>スマホケース＆マグカップ</h3>
+                <p>いつでも一緒の定番アイテム</p>
+              </a>
+            </li>
+            <li class="dr_goods_card">
+              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
+                <img src="images/goods04.webp" alt="ソックスとアクリルキーホルダー" loading="lazy">
+                <h3>小物コレクション</h3>
+                <p>ソックス＆アクリルキーホルダー</p>
+              </a>
+            </li>
+            <li class="dr_goods_card dr_goods_card_sticker">
+              <a href="https://store.line.me/stickershop/author/5708453/ja" target="_blank" rel="noopener">
+                <img src="images/sticker/42.webp" alt="もじゃねこLINEスタンプ" loading="lazy">
+                <h3>LINEスタンプ</h3>
+                <p>会話がふわっと楽しくなるスタンプ</p>
+              </a>
+            </li>
+          </ol>
         </div>
-        <div class="dnk_lp_hero_visual">
-          <div class="dnk_lp_device_laptop" aria-label="アクセス解析ダッシュボードのイメージ">
-            <div class="dnk_lp_device_bar">
-              <span>ダッシュボード</span>
-              <i></i>
-            </div>
-            <p class="dnk_lp_dashboard_note" style="margin:-6px 0 12px;font-size:11px;color:#8a8f86;">※表示イメージです</p>
-            <div class="dnk_lp_metric_grid">
-              <div><span>アクセス数</span><strong>12,834</strong><em>+28.6%</em></div>
-              <div><span>問い合わせ数</span><strong>152</strong><em>+35.1%</em></div>
-            </div>
-            <div class="dnk_lp_chart">
-              <span style="height: 28%"></span>
-              <span style="height: 38%"></span>
-              <span style="height: 45%"></span>
-              <span style="height: 58%"></span>
-              <span style="height: 78%"></span>
-              <span style="height: 92%"></span>
-            </div>
-          </div>
-          <div class="dnk_lp_device_phone" aria-hidden="true">
-            <div class="dnk_lp_donut"></div>
-            <p>流入チャネル</p>
-            <span></span><span></span><span></span>
-          </div>
-          <img class="dnk_lp_hero_cat" src="<?php echo $img; ?>/sticker/42.webp" alt="手を振るもじゃのイラスト" loading="lazy">
-        </div>
+        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のグッズ">
+          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
+        </button>
       </div>
+
+      <a class="dr_more_button dr_more_orange" href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
+        グッズを見る <i class="fa-solid fa-paw" aria-hidden="true"></i>
+      </a>
+    </section>
+
+  </main>
+
+</div>
+
+<div class="dr_video_modal" data-video-modal hidden>
+  <div class="dr_video_modal_backdrop" data-video-close></div>
+  <div class="dr_video_dialog" role="dialog" aria-modal="true" aria-labelledby="dr-video-title" tabindex="-1">
+    <div class="dr_video_dialog_header">
+      <h2 id="dr-video-title">YouTubeムービー</h2>
+      <button class="dr_video_close" type="button" data-video-close aria-label="動画を閉じる">
+        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+      </button>
     </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_worries">
-      <div class="dnk_lp_inner dnk_lp_panel dnk_lp_worries_panel">
-        <h2 class="dnk_lp_section_title">ホームページのこと、こんなふうに悩んでいませんか？</h2>
-        <div class="dnk_lp_worries_grid">
-          <div class="dnk_lp_worry_owner">
-            <img src="<?php echo $img; ?>/top-worried-owner.png" alt="ホームページ運用に悩む事業主のイラスト" loading="lazy">
-          </div>
-          <ul class="dnk_lp_check_list">
-            <li>制作会社に見積もりを取ったら50万円。開業したばかりでそんな予算はない...</li>
-            <li>無料ツールで自分で作ってみたけど、時間ばかりかかって本業が進まない</li>
-            <li>ホームページはあるのに、問い合わせがまったく来ない</li>
-          </ul>
-          <ul class="dnk_lp_check_list">
-            <li>制作会社に頼んだけど、作ったあとは放置。効果があるのか分からない</li>
-            <li>写真や文章まで自分で用意してと言われて、結局止まってしまった</li>
-            <li>SNSやAIも気になるけど、何から始めればいいか分からない</li>
-          </ul>
-          <img class="dnk_lp_white_cat" src="<?php echo $img; ?>/sticker/01.webp" alt="くるるのイラスト" loading="lazy">
-        </div>
-        <p class="dnk_lp_answer">
-          その悩み、<strong>デザネコが全部引き受けます。</strong><br>
-          「作って終わり」の制作会社と違うのは、公開してからが本番だということ。
-        </p>
-      </div>
+    <div class="dr_video_frame">
+      <iframe title="デザネコ YouTube動画" src="" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
     </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_reasons">
-      <div class="dnk_lp_inner">
-        <h2 class="dnk_lp_section_title">デザネコが選ばれる3つの理由</h2>
-        <div class="dnk_lp_reason_grid">
-          <article class="dnk_lp_reason_card">
-            <span class="dnk_lp_num">1</span>
-            <h3>成果が“数字で見える”</h3>
-            <p>アクセス数・検索キーワード・問い合わせにつながった動きを、あなた専用のダッシュボードで確認できます。</p>
-          </article>
-          <article class="dnk_lp_reason_card">
-            <span class="dnk_lp_num">2</span>
-            <h3>写真も文章も、全部まるごとおまかせ</h3>
-            <p>撮影、キャッチコピー、文章作成、デザイン、システムまで内部対応。素材準備で止まりません。</p>
-          </article>
-          <article class="dnk_lp_reason_card">
-            <span class="dnk_lp_num">3</span>
-            <h3>開業1〜3年目の個人事業主専門だから、予算に無理がない</h3>
-            <p>大企業向けの高機能サイトは必要ありません。必要な設計だけを厳選し、毎月の運用費も抑えます。</p>
-            <p class="dnk_lp_price_note">初期費用を抑えた<span>月額9,800円〜</span>の制作・運用プランです。</p>
-          </article>
-        </div>
-        <div class="dnk_lp_center_buttons">
-          <a class="dnk_lp_btn_small dnk_lp_btn_orange" href="contact.php">いまのHPを無料診断してもらう</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div id="dnk_lp_price" class="dnk_lp_price_menu">
-      <div class="dnk_lp_inner dnk_lp_price_grid">
-        <div class="dnk_lp_price_card">
-          <h2>料金は、先に全部お見せします</h2>
-          <p class="dnk_lp_plan_name">ホームページ制作・運用プラン（いちばん人気）</p>
-          <div class="dnk_lp_price_box">
-            <span class="dnk_lp_initial_cost">初期費用<br>0円（制作費無料）</span>
-            <strong><span class="dnk_lp_price_main"><span class="dnk_lp_price_label">月額</span><span class="dnk_lp_price_amount">9,800</span><span class="dnk_lp_price_yen">円</span></span><small>（税込・長期割）</small></strong>
-          </div>
-          <div class="dnk_lp_price_body">
-            <ul class="dnk_lp_check_list dnk_lp_check_list_compact">
-              <li>デザイン制作／スマホ対応</li>
-              <li>取材・撮影／文章作成</li>
-              <li>サーバー・ドメイン管理</li>
-              <li>月次レポート＆ダッシュボード</li>
-              <li>更新対応（回数無制限）</li>
-            </ul>
-            <div class="dnk_lp_contract">
-              <b>契約縛り</b>
-              <span>縛りなし<br>いつでも解約OK</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="dnk_lp_menu_card">
-          <h2>そのほかのメニュー</h2>
-          <div class="dnk_lp_menu_item">
-            <img src="<?php echo $img; ?>/sticker/70.webp" alt="" loading="lazy">
-            <div>
-              <h3>印刷デザイン</h3>
-              <p>チラシ・名刺・パンフレットなど、Webと統一感のある発信に。</p>
-            </div>
-          </div>
-          <div class="dnk_lp_menu_item">
-            <img src="<?php echo $img; ?>/sticker/59.webp" alt="" loading="lazy">
-            <div>
-              <h3>システム構築</h3>
-              <p>ネットショップ・オンライン決済・予約システムの構築。</p>
-            </div>
-          </div>
-          <div class="dnk_lp_menu_item">
-            <img src="<?php echo $img; ?>/sticker/69.webp" alt="" loading="lazy">
-            <div>
-              <h3>AI活用サポート</h3>
-              <p>業務効率化・SNS運用の自動化など、AIでビジネスを加速。</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_works">
-      <div class="dnk_lp_inner">
-        <div class="dnk_lp_heading_line">
-          <h2 class="dnk_lp_section_title">数字で語れる、制作事例</h2>
-          <a href="entry_list.php?type=works">制作実績をもっと見る</a>
-        </div>
-        <div class="dnk_lp_work_grid">
-          <article class="dnk_lp_work_card">
-            <span>事例01</span>
-            <h3>地域イベント・告知サイト</h3>
-            <img src="<?php echo $img; ?>/works/fruitrun_1904.jpg" alt="地域イベントの制作事例" loading="lazy">
-            <dl>
-              <dt>課題</dt>
-              <dd>開催情報が分散し、申込導線が弱い</dd>
-              <dt>実施</dt>
-              <dd>ランディングページと告知導線を整理</dd>
-              <dt>結果</dt>
-              <dd>申込までの流れが明確に</dd>
-            </dl>
-          </article>
-          <article class="dnk_lp_work_card">
-            <span>事例02</span>
-            <h3>サービス紹介・信頼獲得ページ</h3>
-            <img src="<?php echo $img; ?>/works/ogawa.jpg" alt="サービス紹介の制作事例" loading="lazy">
-            <dl>
-              <dt>課題</dt>
-              <dd>強みが伝わりにくく比較されやすい</dd>
-              <dt>実施</dt>
-              <dd>写真・コピー・構成をまとめて改善</dd>
-              <dt>結果</dt>
-              <dd>相談前の不安を軽減</dd>
-            </dl>
-          </article>
-          <article class="dnk_lp_work_card">
-            <span>事例03</span>
-            <h3>飲食店の販促・メニュー設計</h3>
-            <img src="<?php echo $img; ?>/works/uojimaya_food.jpg" alt="飲食店の制作事例" loading="lazy">
-            <dl>
-              <dt>課題</dt>
-              <dd>お店の魅力が写真と文章で伝わらない</dd>
-              <dt>実施</dt>
-              <dd>撮影・文章・導線を一括で制作</dd>
-              <dt>結果</dt>
-              <dd>来店前に雰囲気が伝わるページへ</dd>
-            </dl>
-          </article>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_voice">
-      <div class="dnk_lp_inner dnk_lp_voice_inner">
-        <h2 class="dnk_lp_section_title">お客様の声</h2>
-        <div class="dnk_lp_voice_grid">
-          <article class="dnk_lp_voice_card">
-            <img src="<?php echo $img; ?>/voice01.webp" alt="お客様の声アイコン" loading="lazy">
-            <p>公開前は直接予約が月0件に近い状態でしたが、公開後は直接予約が増え、OTAの手数料を大幅に削減できました！</p>
-            <b>宿泊施設 様</b>
-          </article>
-          <article class="dnk_lp_voice_card">
-            <img src="<?php echo $img; ?>/voice02.webp" alt="お客様の声アイコン" loading="lazy">
-            <p>表示速度が速くなり、検索からのアクセスが増加。更新もLINEでお願いできるので助かっています。</p>
-            <b>音楽教室 様</b>
-          </article>
-          <article class="dnk_lp_voice_card">
-            <img src="<?php echo $img; ?>/voice03.webp" alt="お客様の声アイコン" loading="lazy">
-            <p>開業直前の忙しい中でも、取材から公開まで全部任せられて、本当に心強かったです！</p>
-            <b>飲食店 様</b>
-          </article>
-        </div>
-        <img class="dnk_lp_voice_cat" src="<?php echo $img; ?>/sticker/42.webp" alt="" loading="lazy">
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div id="dnk_lp_flow" class="dnk_lp_flow">
-      <div class="dnk_lp_inner">
-        <h2 class="dnk_lp_section_title">ご相談から公開まで</h2>
-        <ol class="dnk_lp_flow_list">
-          <li><span>1</span><b>LINEまたはフォームで相談</b>
-            <p>無料・営業電話はしません</p>
-          </li>
-          <li><span>2</span><b>ヒアリング＆無料診断</b>
-            <p>現状のサイトや集客の課題を数字で確認</p>
-          </li>
-          <li><span>3</span><b>ご提案・お見積り</b>
-            <p>予算に合わせたプランを提示</p>
-          </li>
-          <li><span>4</span><b>取材・撮影・制作</b>
-            <p>文章や素材の用意は不要</p>
-          </li>
-          <li><span>5</span><b>公開・運用スタート</b>
-            <p>公開後も毎月支援</p>
-          </li>
-        </ol>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_faq">
-      <div class="dnk_lp_inner dnk_lp_faq_panel">
-        <h2 class="dnk_lp_section_title">よくある質問</h2>
-        <div class="dnk_lp_faq_grid">
-          <dl>
-            <dt>パソコンが苦手でも大丈夫？</dt>
-            <dd>はい。専門用語をできるだけ使わず、必要な確認だけLINEやメールで進めます。</dd>
-            <dt>写真や文章は用意しないといけない？</dt>
-            <dd>不要です。取材・撮影・文章作成までデザネコが行います。</dd>
-            <dt>途中で解約できますか？</dt>
-            <dd>契約期間の縛りはありません。いつでも解約いただけます。</dd>
-          </dl>
-          <dl>
-            <dt>いまあるホームページのリニューアルもできる？</dt>
-            <dd>できます。現状の数字を見ながら、残す部分と直す部分を整理します。</dd>
-            <dt>補助金は使えますか？</dt>
-            <dd>小規模事業者持続化補助金などの活用実績があります。申請のご相談も可能です。</dd>
-            <dt>公開後の更新もお願いできますか？</dt>
-            <dd>月次レポートを見ながら、必要な改善や更新を継続して支援します。</dd>
-          </dl>
-        </div>
-        <img class="dnk_lp_faq_cat" src="<?php echo $img; ?>/sticker/01.webp" alt="" loading="lazy">
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_profile">
-      <div class="dnk_lp_inner dnk_lp_profile_panel">
-        <div class="dnk_lp_profile_photo">
-          <img src="<?php echo $img; ?>/profile.jpg" alt="デザネコ代表 比嘉一茂" loading="lazy">
-        </div>
-        <div class="dnk_lp_profile_text">
-          <h2>制作するのは、こんな人です</h2>
-          <p>
-            はじめまして、デザネコの比嘉一茂です。沖縄でデザイン・Web制作の現場に20年、約1,000件の制作に携わってきました。
-          </p>
-          <p>
-            大きな会社のような分業ではなく、あなたの想い・写真・文章・デザイン・公開後の改善まで、最初から最後まで同じ人間が責任を持ちます。
-          </p>
-          <p>
-            相棒の看板猫「もじゃ」と「くるる」とともに、あなたの商売のネコの手になれたら嬉しいです。
-          </p>
-        </div>
-        <div class="dnk_lp_profile_cats">
-          <figure>
-            <img src="<?php echo $img; ?>/sticker/49.webp" alt="もじゃ" loading="lazy">
-            <figcaption>もじゃ</figcaption>
-          </figure>
-          <figure>
-            <img src="<?php echo $img; ?>/sticker/01.webp" alt="くるる" loading="lazy">
-            <figcaption>くるる</figcaption>
-          </figure>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="dnk_lp_bottom_cta">
-      <div class="dnk_lp_inner dnk_lp_bottom_cta_inner">
-        <div class="dnk_lp_bottom_cats">
-          <img src="<?php echo $img; ?>/sticker/42.webp" alt="" loading="lazy">
-          <img src="<?php echo $img; ?>/sticker/41.webp" alt="" loading="lazy">
-        </div>
-        <div class="dnk_lp_bottom_text">
-          <h2>まずは、いまの状況を数字で見てみませんか？</h2>
-          <p>「うちのホームページ、実際どうなの？」を無料で初回診断します。アクセス数・検索での見え方・改善ポイントを見ながら、無理のない一歩をお話しします。</p>
-        </div>
-        <div class="dnk_lp_bottom_buttons">
-          <a class="dnk_lp_btn dnk_lp_btn_orange" href="contact.php">フォームから問い合わせる</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div>
-      <div class="single03">
-        <h2 class="line_height_14 tcenter">
-          <span class="eng base_color fs_60 act inup">
-            Portfolio
-          </span><br>
-          <span class="act txt_split type_lineup">
-            制作実績
-          </span>
-        </h2>
-        <div class='space_3 space_sp2'></div>
-
-        <?php
-        // Fetch portfolio items from microCMS works endpoint (公開済みのみ、多めに取得してカテゴリ分け)
-        $portfolio_response = microcms_get_list("/works", "limit=100&orders=-publishedAt");
-        $portfolio_posts = ($portfolio_response && !empty($portfolio_response->contents)) ? $portfolio_response->contents : [];
-
-        // カテゴリ別にグループ化
-        $idx_works_categories = [];
-        $idx_works_by_category = [];
-        foreach ($portfolio_posts as $pw) {
-          $pcat = microcms_extract_category_name($pw->category ?? null);
-          if (!in_array($pcat, $idx_works_categories)) {
-            $idx_works_categories[] = $pcat;
-          }
-          $idx_works_by_category[$pcat][] = $pw;
-        }
-        ?>
-
-        <?php if (!empty($portfolio_posts) && count($idx_works_categories) > 1): ?>
-          <!-- カテゴリタブ -->
-          <ul class="works-tab-nav" id="idxWorksTabNav">
-            <li><button class="works-tab-btn active" data-idx-tab="all">すべて</button></li>
-            <?php foreach ($idx_works_categories as $ipcat): ?>
-              <li><button class="works-tab-btn" data-idx-tab="<?php echo htmlspecialchars($ipcat, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ipcat, ENT_QUOTES, 'UTF-8'); ?></button></li>
-            <?php endforeach; ?>
-          </ul>
-
-          <!-- すべて（最新4件） -->
-          <div class="works-tab-content active" data-idx-panel="all">
-            <?php
-            $loop_posts = array_slice($portfolio_posts, 0, 4);
-            $loop_type = 'works';
-            $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-            $loop_show_desc = true;
-            $loop_empty_message = '該当する制作実績がありません。';
-            include 'loop_post.php';
-            ?>
-          </div>
-
-          <!-- カテゴリ別（各最新4件） -->
-          <?php foreach ($idx_works_categories as $ipcat): ?>
-            <div class="works-tab-content" data-idx-panel="<?php echo htmlspecialchars($ipcat, ENT_QUOTES, 'UTF-8'); ?>">
-              <?php
-              $loop_posts = array_slice($idx_works_by_category[$ipcat], 0, 4);
-              $loop_type = 'works';
-              $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-              $loop_show_desc = true;
-              $loop_empty_message = '該当する制作実績がありません。';
-              include 'loop_post.php';
-              ?>
-            </div>
-          <?php endforeach; ?>
-
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              var nav = document.getElementById('idxWorksTabNav');
-              if (!nav) return;
-              nav.addEventListener('click', function(e) {
-                var btn = e.target.closest('.works-tab-btn');
-                if (!btn) return;
-                var target = btn.getAttribute('data-idx-tab');
-                nav.querySelectorAll('.works-tab-btn').forEach(function(b) {
-                  b.classList.remove('active');
-                });
-                btn.classList.add('active');
-                document.querySelectorAll('[data-idx-panel]').forEach(function(p) {
-                  p.classList.remove('active');
-                });
-                var panel = document.querySelector('[data-idx-panel="' + target + '"]');
-                if (panel) panel.classList.add('active');
-              });
-            });
-          </script>
-
-        <?php else: ?>
-          <?php
-          $loop_posts = array_slice($portfolio_posts, 0, 4);
-          $loop_type = 'works';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-          $loop_show_desc = true;
-          $loop_empty_message = '該当する制作実績がありません。';
-          include 'loop_post.php';
-          ?>
-        <?php endif; ?>
-        <div class='space_3 space_sp3'></div>
-        <button class='btn_normal radius center'><a href='entry_list.php?type=works'>制作実績一覧</a></button>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div>
-      <div class="single03">
-        <h2 class="line_height_14 tcenter">
-          <span class="eng base_color fs_60 act inup">
-            Blog
-          </span><br>
-          <span class="act txt_split type_lineup">
-            ブログ
-          </span>
-        </h2>
-        <div class='space_3 space_sp2'></div>
-        <?php
-        // Fetch blog posts from microCMS blog endpoint (公開済みのみ、多めに取得してカテゴリ分け)
-        $blog_response = microcms_get_list("/blog", "limit=100&orders=-publishedAt");
-        $blog_posts = ($blog_response && !empty($blog_response->contents)) ? $blog_response->contents : [];
-
-        // カテゴリ別にグループ化
-        $idx_blog_categories = [];
-        $idx_blog_by_category = [];
-        foreach ($blog_posts as $pb) {
-          $pbcat = microcms_extract_category_name($pb->category ?? null);
-          if (!in_array($pbcat, $idx_blog_categories)) {
-            $idx_blog_categories[] = $pbcat;
-          }
-          $idx_blog_by_category[$pbcat][] = $pb;
-        }
-        ?>
-
-        <?php if (!empty($blog_posts) && count($idx_blog_categories) > 1): ?>
-          <!-- ブログ カテゴリタブ -->
-          <ul class="works-tab-nav" id="idxBlogTabNav">
-            <li><button class="works-tab-btn active" data-idx-blog-tab="all">すべて</button></li>
-            <?php foreach ($idx_blog_categories as $ibcat): ?>
-              <li><button class="works-tab-btn" data-idx-blog-tab="<?php echo htmlspecialchars($ibcat, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($ibcat, ENT_QUOTES, 'UTF-8'); ?></button></li>
-            <?php endforeach; ?>
-          </ul>
-
-          <!-- すべて（最新4件） -->
-          <div class="works-tab-content active" data-idx-blog-panel="all">
-            <?php
-            $loop_posts = array_slice($blog_posts, 0, 4);
-            $loop_type = 'blog';
-            $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-            $loop_show_desc = true;
-            $loop_empty_message = '該当する記事がありません。';
-            include 'loop_post.php';
-            ?>
-          </div>
-
-          <!-- カテゴリ別（各最新4件） -->
-          <?php foreach ($idx_blog_categories as $ibcat): ?>
-            <div class="works-tab-content" data-idx-blog-panel="<?php echo htmlspecialchars($ibcat, ENT_QUOTES, 'UTF-8'); ?>">
-              <?php
-              $loop_posts = array_slice($idx_blog_by_category[$ibcat], 0, 4);
-              $loop_type = 'blog';
-              $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-              $loop_show_desc = true;
-              $loop_empty_message = '該当する記事がありません。';
-              include 'loop_post.php';
-              ?>
-            </div>
-          <?php endforeach; ?>
-
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              var nav = document.getElementById('idxBlogTabNav');
-              if (!nav) return;
-              nav.addEventListener('click', function(e) {
-                var btn = e.target.closest('.works-tab-btn');
-                if (!btn) return;
-                var target = btn.getAttribute('data-idx-blog-tab');
-                nav.querySelectorAll('.works-tab-btn').forEach(function(b) {
-                  b.classList.remove('active');
-                });
-                btn.classList.add('active');
-                document.querySelectorAll('[data-idx-blog-panel]').forEach(function(p) {
-                  p.classList.remove('active');
-                });
-                var panel = document.querySelector('[data-idx-blog-panel="' + target + '"]');
-                if (panel) panel.classList.add('active');
-              });
-            });
-          </script>
-
-        <?php else: ?>
-          <?php
-          $loop_posts = array_slice($blog_posts, 0, 4);
-          $loop_type = 'blog';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-          $loop_show_desc = true;
-          $loop_empty_message = '該当する記事がありません。';
-          include 'loop_post.php';
-          ?>
-        <?php endif; ?>
-        <div class='space_3 space_sp3'></div>
-        <button class='btn_normal radius center'><a href='entry_list.php?type=blog'>ブログ一覧</a></button>
-      </div>
-    </div>
-  </section>
-
-  <section>
-    <div class="bg_base">
-      <div class="single03">
-        <h2 class="line_height_14 tcenter">
-          <span class="eng base_color fs_60 act inup">
-            Column
-          </span><br>
-          <span class="act txt_split type_lineup">
-            お役立ちコラム
-          </span>
-        </h2>
-        <div class='space_3 space_sp2'></div>
-        <?php
-        // Fetch column posts from microCMS column endpoint (公開済みのみ、多めに取得してカテゴリ分け)
-        $column_response = microcms_get_list("/column", "limit=100&orders=-publishedAt");
-        $column_posts = ($column_response && !empty($column_response->contents)) ? $column_response->contents : [];
-
-        // カテゴリ別にグループ化
-        $idx_column_categories = [];
-        $idx_column_by_category = [];
-        foreach ($column_posts as $pc) {
-          $pccat = microcms_extract_category_name($pc->category ?? null);
-          if (!in_array($pccat, $idx_column_categories)) {
-            $idx_column_categories[] = $pccat;
-          }
-          $idx_column_by_category[$pccat][] = $pc;
-        }
-        ?>
-
-        <?php if (!empty($column_posts) && count($idx_column_categories) > 1): ?>
-          <!-- コラム カテゴリタブ -->
-          <ul class="works-tab-nav" id="idxColumnTabNav">
-            <li><button class="works-tab-btn active" data-idx-column-tab="all">すべて</button></li>
-            <?php foreach ($idx_column_categories as $iccat): ?>
-              <li><button class="works-tab-btn" data-idx-column-tab="<?php echo htmlspecialchars($iccat, ENT_QUOTES, 'UTF-8'); ?>"><?php echo htmlspecialchars($iccat, ENT_QUOTES, 'UTF-8'); ?></button></li>
-            <?php endforeach; ?>
-          </ul>
-
-          <!-- すべて（最新4件） -->
-          <div class="works-tab-content active" data-idx-column-panel="all">
-            <?php
-            $loop_posts = array_slice($column_posts, 0, 4);
-            $loop_type = 'column';
-            $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-            $loop_show_desc = true;
-            $loop_empty_message = '該当するコラムがありません。';
-            include 'loop_post.php';
-            ?>
-          </div>
-
-          <!-- カテゴリ別（各最新4件） -->
-          <?php foreach ($idx_column_categories as $iccat): ?>
-            <div class="works-tab-content" data-idx-column-panel="<?php echo htmlspecialchars($iccat, ENT_QUOTES, 'UTF-8'); ?>">
-              <?php
-              $loop_posts = array_slice($idx_column_by_category[$iccat], 0, 4);
-              $loop_type = 'column';
-              $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-              $loop_show_desc = true;
-              $loop_empty_message = '該当するコラムがありません。';
-              include 'loop_post.php';
-              ?>
-            </div>
-          <?php endforeach; ?>
-
-          <script>
-            document.addEventListener('DOMContentLoaded', function() {
-              var nav = document.getElementById('idxColumnTabNav');
-              if (!nav) return;
-              nav.addEventListener('click', function(e) {
-                var btn = e.target.closest('.works-tab-btn');
-                if (!btn) return;
-                var target = btn.getAttribute('data-idx-column-tab');
-                nav.querySelectorAll('.works-tab-btn').forEach(function(b) {
-                  b.classList.remove('active');
-                });
-                btn.classList.add('active');
-                document.querySelectorAll('[data-idx-column-panel]').forEach(function(p) {
-                  p.classList.remove('active');
-                });
-                var panel = document.querySelector('[data-idx-column-panel="' + target + '"]');
-                if (panel) panel.classList.add('active');
-              });
-            });
-          </script>
-
-        <?php else: ?>
-          <?php
-          $loop_posts = array_slice($column_posts, 0, 4);
-          $loop_type = 'column';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
-          $loop_show_desc = true;
-          $loop_empty_message = '該当するコラムがありません。';
-          include 'loop_post.php';
-          ?>
-        <?php endif; ?>
-        <div class='space_3 space_sp3'></div>
-        <button class='btn_normal radius center'><a href='entry_list.php?type=column'>コラム一覧</a></button>
-      </div>
-    </div>
-  </section>
+  </div>
 </div>
 
 <?php include_once './footer.php'; ?>
