@@ -66,7 +66,10 @@ if (!function_exists('dneko_home_category')) {
         <div class="dr_slider_viewport">
           <div class="dr_slider_track">
             <article class="dr_hero_slide dr_hero_slide_orange">
-              <img src="images/home-renewal/hero-flyer.webp" alt="" fetchpriority="high">
+              <picture class="dr_hero_media">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-flyer-mobile.webp">
+                <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" fetchpriority="high">
+              </picture>
               <div class="dr_hero_copy">
                 <p>沖縄のデザインを、もっと身近に。</p>
                 <h1>沖縄の<br><strong>チラシデザイン</strong>なら<br>デザネコへ</h1>
@@ -74,7 +77,10 @@ if (!function_exists('dneko_home_category')) {
               </div>
             </article>
             <article class="dr_hero_slide dr_hero_slide_green">
-              <img src="images/home-renewal/hero-ai.webp" alt="" loading="lazy">
+              <picture class="dr_hero_media">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-ai-mobile.webp">
+                <img src="images/home-renewal/hero-ai.webp" alt="" width="1672" height="941" loading="lazy">
+              </picture>
               <div class="dr_hero_copy">
                 <p>やさしく始める、仕事のAI活用。</p>
                 <h2><strong>AI</strong>コンサルティング</h2>
@@ -83,7 +89,10 @@ if (!function_exists('dneko_home_category')) {
               </div>
             </article>
             <article class="dr_hero_slide dr_hero_slide_mix">
-              <img src="images/home-renewal/hero-web.webp" alt="" loading="lazy">
+              <picture class="dr_hero_media">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-web-mobile.webp">
+                <img src="images/home-renewal/hero-web.webp" alt="" width="1672" height="941" loading="lazy">
+              </picture>
               <div class="dr_hero_copy">
                 <p>想いが伝わる、育てていける。</p>
                 <h2>ホームページ<br><strong>制作サービス</strong></h2>
@@ -92,7 +101,10 @@ if (!function_exists('dneko_home_category')) {
               </div>
             </article>
             <article class="dr_hero_slide dr_hero_slide_digital">
-              <img src="images/home-renewal/hero-digital-support.jpg" alt="" loading="lazy">
+              <picture class="dr_hero_media">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-digital-support-mobile.webp">
+                <img src="images/home-renewal/hero-digital-support.jpg" alt="" width="1672" height="941" loading="lazy">
+              </picture>
               <div class="dr_hero_copy">
                 <p>沖縄のご家庭のデジタルサポート</p>
                 <h2>沖縄のご家庭に、<br><strong>デジタルのネコの手。</strong></h2>
