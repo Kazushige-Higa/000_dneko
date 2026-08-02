@@ -485,6 +485,7 @@
 .dr_movie_slider,
 .dr_post_slider {
   width: 100%;
+  max-width: 1600px;
   margin: 0 auto;
 }
 
@@ -897,6 +898,91 @@
   line-height: 1.5;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
+}
+
+/* 一覧スライダーはPCで最大3カラム。カードを主役として見せる。 */
+@media (min-width: 1200px) {
+  .dr_card_slider .dr_slider_track,
+  .dr_movie_slider .dr_slider_track,
+  .dr_post_slider .dr_slider_track {
+    gap: 24px;
+  }
+
+  .dr_goods_card,
+  .dr_movie_card,
+  .dr_post_card {
+    flex-basis: calc((min(100vw, 1600px) - 48px) / 3);
+  }
+}
+
+/* 横幅の狭いPC・タブレットは読みやすさを優先して2カラム。 */
+@media (min-width: 821px) and (max-width: 1199px) {
+  .dr_card_slider .dr_slider_track,
+  .dr_movie_slider .dr_slider_track,
+  .dr_post_slider .dr_slider_track {
+    gap: 24px;
+  }
+
+  .dr_goods_card,
+  .dr_movie_card,
+  .dr_post_card {
+    flex-basis: calc((100vw - 24px) / 2);
+  }
+}
+
+@media (min-width: 821px) {
+  .dr_goods_card {
+    border-radius: 22px;
+  }
+
+  .dr_goods_card a,
+  .dr_post_card a {
+    padding: 12px 12px 20px;
+  }
+
+  .dr_goods_card img,
+  .dr_post_card img {
+    border-radius: 15px;
+  }
+
+  .dr_goods_card h3,
+  .dr_movie_card h3,
+  .dr_post_card h3 {
+    font-size: 18px;
+  }
+
+  .dr_goods_card h3 {
+    min-height: 52px;
+    margin-top: 16px;
+  }
+
+  .dr_goods_card p {
+    font-size: 14px;
+  }
+
+  .dr_post_card {
+    border-radius: 21px;
+  }
+
+  .dr_post_card span {
+    margin-top: 15px;
+    padding: 6px 13px;
+    font-size: 12px;
+  }
+
+  .dr_post_card h3 {
+    min-height: 82px;
+    margin: 5px 4px;
+    line-height: 1.55;
+  }
+
+  .dr_movie_card figure {
+    border-radius: 21px;
+  }
+
+  .dr_movie_card h3 {
+    margin-top: 15px;
+  }
 }
 
 .dr_empty {

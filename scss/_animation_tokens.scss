@@ -2,3 +2,21 @@
 $duration: 1.2s;
 $base_color: #F9B104;
 $sub_color: #8ECC6F;
+
+// animation_scroll.scss内で使用するレスポンシブ用ミックスイン。
+// _vars.scssを読み込まず、アニメーションCSSの重複出力を防ぐ。
+@mixin for-size($size) {
+  @if $size == pro {
+    @media screen and (max-width: 1100px) {
+      @content;
+    }
+  } @else if $size == tablet {
+    @media (min-width: 640px) and (max-width: 896px) {
+      @content;
+    }
+  } @else if $size == phone-only {
+    @media screen and (max-width: 500px) {
+      @content;
+    }
+  }
+}
