@@ -4,6 +4,8 @@ $page_title = "デザネコ｜沖縄のデザイン・Web制作・AI活用相談
 $page_description = "沖縄のチラシ・ホームページ制作・AI活用相談ならデザネコへ。看板猫もじゃ・くるると一緒に、撮影からデザイン、公開後の改善まで伴走します。";
 $page_og_image = "https://d-neko.com/images/home-renewal/ogp-home.jpg";
 $page_style = '<link href="css/index-renewal.css?v=' . filemtime(__DIR__ . '/css/index-renewal.css') . '" rel="stylesheet">';
+$page_head = '<link rel="preload" as="image" href="images/home-renewal/hero-flyer-mobile.webp" type="image/webp" media="(max-width: 600px)" fetchpriority="high">'
+  . '<link rel="preload" as="image" href="images/home-renewal/hero-flyer.webp" type="image/webp" media="(min-width: 601px)" fetchpriority="high">';
 $page_script = '<script src="js/index-renewal.js?v=' . filemtime(__DIR__ . '/js/index-renewal.js') . '" defer></script>';
 include_once './header.php';
 
@@ -67,8 +69,8 @@ if (!function_exists('dneko_home_category')) {
           <div class="dr_slider_track">
             <article class="dr_hero_slide dr_hero_slide_orange">
               <picture class="dr_hero_media">
-                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-flyer-mobile.webp">
-                <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" fetchpriority="high">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-flyer-mobile.webp" width="1024" height="1536">
+                <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" loading="eager" fetchpriority="high" decoding="async">
               </picture>
               <div class="dr_hero_copy">
                 <p>沖縄のデザインを、もっと身近に。</p>
@@ -78,8 +80,8 @@ if (!function_exists('dneko_home_category')) {
             </article>
             <article class="dr_hero_slide dr_hero_slide_green">
               <picture class="dr_hero_media">
-                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-ai-mobile.webp">
-                <img src="images/home-renewal/hero-ai.webp" alt="" width="1672" height="941" loading="lazy">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-ai-mobile.webp" width="1024" height="1536">
+                <img src="images/home-renewal/hero-ai.webp" alt="" width="1672" height="941" loading="lazy" fetchpriority="low" decoding="async">
               </picture>
               <div class="dr_hero_copy">
                 <p>やさしく始める、仕事のAI活用。</p>
@@ -90,8 +92,8 @@ if (!function_exists('dneko_home_category')) {
             </article>
             <article class="dr_hero_slide dr_hero_slide_mix">
               <picture class="dr_hero_media">
-                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-web-mobile.webp">
-                <img src="images/home-renewal/hero-web.webp" alt="" width="1672" height="941" loading="lazy">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-web-mobile.webp" width="1024" height="1536">
+                <img src="images/home-renewal/hero-web.webp" alt="" width="1672" height="941" loading="lazy" fetchpriority="low" decoding="async">
               </picture>
               <div class="dr_hero_copy">
                 <p>想いが伝わる、育てていける。</p>
@@ -102,8 +104,8 @@ if (!function_exists('dneko_home_category')) {
             </article>
             <article class="dr_hero_slide dr_hero_slide_digital">
               <picture class="dr_hero_media">
-                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-digital-support-mobile.webp">
-                <img src="images/home-renewal/hero-digital-support.jpg" alt="" width="1672" height="941" loading="lazy">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-digital-support-mobile.webp" width="1024" height="1536">
+                <img src="images/home-renewal/hero-digital-support.webp" alt="" width="1672" height="941" loading="lazy" fetchpriority="low" decoding="async">
               </picture>
               <div class="dr_hero_copy">
                 <p>沖縄のご家庭のデジタルサポート</p>
@@ -164,7 +166,7 @@ if (!function_exists('dneko_home_category')) {
           <a href="flyer-design.php">詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="dr_service_visual" aria-hidden="true">
-          <img src="images/home-renewal/hero-flyer.webp" alt="" loading="lazy">
+          <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
@@ -277,13 +279,13 @@ if (!function_exists('dneko_home_category')) {
           <a href="service_digital.php">サービスについて <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="dr_story_visual">
-          <img src="images/home-renewal/home-digital-support-section.jpg" alt="もじゃとくるるが沖縄のご夫婦のスマホとパソコンをサポートする様子" loading="lazy">
+          <img src="images/home-renewal/home-digital-support-section.webp" alt="もじゃとくるるが沖縄のご夫婦のスマホとパソコンをサポートする様子" width="1100" height="825" loading="lazy" decoding="async">
         </div>
       </div>
     </section>
 
     <section class="dr_section dr_column">
-      <img class="dr_section_mascots dr_section_mascots_column" src="images/home-renewal/deco-column.jpg" alt="" width="1600" height="533" loading="lazy">
+      <img class="dr_section_mascots dr_section_mascots_column" src="images/home-renewal/deco-column.webp" alt="" width="1600" height="533" loading="lazy" decoding="async">
       <div class="dr_section_heading dr_heading_orange">
         <h2>Column</h2>
         <p>お役立ちコラム</p>
@@ -324,7 +326,7 @@ if (!function_exists('dneko_home_category')) {
     <section class="dr_creator dr_story dr_story_mascots">
       <div class="dr_creator_inner">
         <div class="dr_story_visual">
-          <img src="images/home-renewal/home-mascot-introduction.jpg" alt="デザインスタジオで仲良く制作する公式キャラクターのもじゃとくるる" loading="lazy">
+          <img src="images/home-renewal/home-mascot-introduction.webp" alt="デザインスタジオで仲良く制作する公式キャラクターのもじゃとくるる" width="1100" height="825" loading="lazy" decoding="async">
         </div>
         <div class="dr_creator_copy">
           <p class="dr_kicker">デザネコ公式キャラクター</p>
@@ -337,7 +339,7 @@ if (!function_exists('dneko_home_category')) {
     </section>
 
     <section class="dr_section dr_movies">
-      <img class="dr_section_mascots dr_section_mascots_youtube" src="images/home-renewal/deco-youtube.jpg" alt="" width="1600" height="533" loading="lazy">
+      <img class="dr_section_mascots dr_section_mascots_youtube" src="images/home-renewal/deco-youtube.webp" alt="" width="1600" height="533" loading="lazy" decoding="async">
       <div class="dr_section_heading dr_heading_pink">
         <h2>YouTube</h2>
         <p>ムービー</p>

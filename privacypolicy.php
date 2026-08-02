@@ -1,7 +1,8 @@
 <?php
 $page_title = "プライバシーポリシー";
 $page_title_eng = "Privacy policy";
-$page_description = "";
+$page_seo_title = "プライバシーポリシー";
+$page_description = "デザネコにおける個人情報の取得、利用目的、安全管理、第三者提供、お問い合わせ窓口についてご案内します。";
 $page_style = "";
 $page_script = '';
 ?>

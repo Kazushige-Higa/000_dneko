@@ -13,7 +13,7 @@ if (!isset($dr_navigation_items)) {
             <div class='flexbox'>
                 <div class='width_3 width_sp10'>
                     <div class="b_m5 tcenter">
-                        <img src='<?php echo $img; ?>/logo.png' alt='<?php echo $company; ?>' loading='lazy'>
+                        <img src='<?php echo $img; ?>/logo.png' alt='<?php echo $company; ?>' width='424' height='160' loading='lazy' decoding='async'>
                     </div>
                     <ul class="sns_btn type1 center b_m5">
 
@@ -78,8 +78,8 @@ if (!isset($dr_navigation_items)) {
 </div>
 
 <script src="js/site-common.js?v=<?= filemtime(__DIR__ . '/js/site-common.js') ?>" defer></script>
-<script src="js/javascript.js" defer></script>
-<script src="js/bg_parallax.js" defer></script>
+<script src="js/javascript.js?v=<?= filemtime(__DIR__ . '/js/javascript.js') ?>" defer></script>
+<script src="js/bg_parallax.js?v=<?= filemtime(__DIR__ . '/js/bg_parallax.js') ?>" defer></script>
 
 <?php echo $page_script ?? ''; ?>
 </body>

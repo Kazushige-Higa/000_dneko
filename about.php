@@ -1,7 +1,8 @@
 <?php
 $page_title = "デザネコについて";
 $page_title_eng = "About us";
-$page_description = "";
+$page_seo_title = "デザネコについて｜沖縄のデザイン・Web制作事務所";
+$page_description = "沖縄県宜野湾市のデザイン事務所デザネコについて。代表・比嘉一茂が、チラシやホームページ制作、撮影、文章作成から公開後の改善まで一貫して支援します。";
 $page_style = "";
 $page_script = '';
 ?>

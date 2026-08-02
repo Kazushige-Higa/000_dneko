@@ -1,7 +1,8 @@
 <?php
 $page_title = "お客様の声";
 $page_title_eng = "Voice";
-$page_description = "";
+$page_seo_title = "お客様の声｜沖縄のデザイン・ホームページ制作";
+$page_description = "デザネコへチラシやホームページ制作をご依頼いただいた沖縄のお客様の声をご紹介します。相談時の対応、制作過程、完成後の変化をご覧ください。";
 $page_style = "";
 $page_script = '';
 ?>

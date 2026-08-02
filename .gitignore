@@ -43,6 +43,9 @@ data/ga4/cache.json
 # Build artifacts
 dist/
 build/
+__pycache__/
+*.py[cod]
+tmp/pdfs/
 
 # analytics フォルダ内の秘密鍵・トークン・キャッシュ
 analytics/data/ga4/service_account.json

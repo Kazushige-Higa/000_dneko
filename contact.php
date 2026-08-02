@@ -1,6 +1,7 @@
 <?php
 $page_title = 'お問い合わせ';
 $page_title_eng = 'Contact';
+$page_seo_title = 'デザイン制作のご相談・お問い合わせ';
 $page_description = 'デザネコへの制作相談・お見積り依頼はこちらから。チラシ、名刺、ショップカード、Webまわりのご相談などお気軽にお問い合わせください。';
 $page_style = "
 <link href='mailform/jquery.datetimepicker.css' type='text/css' media='all' rel='stylesheet'>

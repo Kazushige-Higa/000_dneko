@@ -1,7 +1,8 @@
 <?php
 $page_title = "特定商取引法に基づく表記";
 $page_title_eng = "Law";
-$page_description = "";
+$page_seo_title = "特定商取引法に基づく表記";
+$page_description = "デザネコのサービス提供事業者、所在地、連絡先、料金、支払い方法、キャンセルなど、特定商取引法に基づく表示をご案内します。";
 $page_style = "";
 $page_script = '';
 ?>

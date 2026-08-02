@@ -1,7 +1,8 @@
 <?php
 $page_title = "ホームページ制作サービス";
 $page_title_eng = "Service blog";
-$page_description = "";
+$page_seo_title = "沖縄のホームページ制作｜個人事業主に寄り添うWeb制作";
+$page_description = "沖縄の個人事業主・小さなお店向けホームページ制作。企画、撮影、文章、デザイン、スマホ対応から公開後の更新・改善まで、同じ担当者が一貫して支援します。";
 $page_style = "";
 $page_script = '';
 ?>

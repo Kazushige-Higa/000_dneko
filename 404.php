@@ -2,7 +2,9 @@
 http_response_code(404);
 $page_title = "404エラー";
 $page_title_eng = "404";
-$page_description = "";
+$page_seo_title = "ページが見つかりません";
+$page_description = "お探しのページは移動または削除された可能性があります。デザネコのトップページやサービス一覧から目的の情報をお探しください。";
+$page_noindex = true;
 $page_style = "";
 $page_script = '';
 ?>

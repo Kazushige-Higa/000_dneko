@@ -1,7 +1,8 @@
 <?php
 $page_title = "印刷デザイン・料金";
 $page_title_eng = "Service design";
-$page_description = "";
+$page_seo_title = "沖縄の印刷デザイン・料金｜チラシ・名刺・パンフレット";
+$page_description = "沖縄でチラシ、名刺、ショップカード、パンフレット、メニューなどの印刷デザインを制作。デザイン料金と制作事例、依頼できる内容をご案内します。";
 $page_style = "";
 $page_script = '';
 ?>
@@ -53,7 +54,7 @@ $page_script = '';
                             <figure><img src="<?php echo $img; ?>/works/uojimaya_drink.jpg" alt=""></figure>
                         </a></li>
                     <li><a href="<?php echo $img; ?>/works/bones_dinner_ol.pdf" target="_blank">
-                            <figure><img src="<?php echo $img; ?>/works/bones_dinner_ol.png" alt=""></figure>
+                            <figure><img src="<?php echo $img; ?>/works/bones_dinner_ol.webp" alt="焼肉店のディナーメニューデザイン" width="800" height="1132" loading="lazy" decoding="async"></figure>
                         </a></li>
                     <li><a href="<?php echo $img; ?>/works/nikusima_food.pdf" target="_blank">
                             <figure><img src="<?php echo $img; ?>/works/nikusima_food.jpg" alt=""></figure>

@@ -98,7 +98,7 @@ $faq_schema = [
                     </ul>
                 </div>
                 <div class="fd_trouble_mascot_wrap">
-                    <img class="fd_trouble_mascot" src="<?php echo $img; ?>/flyer-design/mascot-kururu-wave.png"
+                    <img class="fd_trouble_mascot" src="<?php echo $img; ?>/flyer-design/mascot-kururu-wave.webp"
                         alt="相談を呼びかける白猫のくるる" width="519" height="694" loading="lazy">
                 </div>
             </div>
@@ -346,7 +346,7 @@ $faq_schema = [
                     <?php endforeach; ?>
                     <p class="fd_text_link_wrap"><a class="fd_text_link" href="faq.php">そのほかのよくあるご質問はこちら<i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a></p>
                 </div>
-                <img class="fd_faq_mascot" src="<?php echo $img; ?>/flyer-design/mascot-moja-wave.png"
+                <img class="fd_faq_mascot" src="<?php echo $img; ?>/flyer-design/mascot-moja-wave.webp"
                     alt="よくある質問をご案内する黒猫のもじゃ" width="539" height="693" loading="lazy">
             </div>
         </div>

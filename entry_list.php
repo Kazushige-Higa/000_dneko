@@ -1,7 +1,9 @@
 <?php
+require_once __DIR__ . '/common.php';
+
 $requested_list_type = isset($_GET['type']) ? trim((string)$_GET['type']) : '';
 $archive_month = isset($_GET['archive']) ? trim((string)$_GET['archive']) : '';
-if (!preg_match('/^\d{4}-\d{2}$/', $archive_month)) {
+if (!preg_match('/^\d{4}-(?:0[1-9]|1[0-2])$/', $archive_month)) {
   $archive_month = '';
 }
 
@@ -17,20 +19,108 @@ if ($requested_list_type === 'blog' || $requested_list_type === 'works' || $requ
   $list_type = 'blog';
 }
 
+// canonical と本文のページ番号を一致させるため、head 出力前に一覧を確定する。
+$sidebar_posts = [];
+$list_limit = 100;
+$list_targets = ($list_type === 'all')
+  ? ['blog' => '/blog', 'works' => '/works', 'column' => '/column']
+  : [$list_type => (($list_type === 'works') ? '/works' : (($list_type === 'column') ? '/column' : '/blog'))];
+
+foreach ($list_targets as $entry_type_key => $list_endpoint) {
+  $list_offset = 0;
+  $list_total = 0;
+
+  do {
+    $list_response = microcms_get_list($list_endpoint, "limit=" . $list_limit . "&offset=" . $list_offset . "&orders=-publishedAt");
+    if (!$list_response || empty($list_response->contents)) {
+      break;
+    }
+
+    foreach ($list_response->contents as $list_post) {
+      $list_date_source = '';
+      if (!empty($list_post->publishedAt)) {
+        $list_date_source = $list_post->publishedAt;
+      } elseif (!empty($list_post->createdAt)) {
+        $list_date_source = $list_post->createdAt;
+      }
+
+      if ($archive_month !== '' && strpos($list_date_source, $archive_month) !== 0) {
+        continue;
+      }
+
+      $list_post->_entry_type = $entry_type_key;
+      $list_post->_sort_timestamp = ($list_date_source !== '' && strtotime($list_date_source) !== false) ? strtotime($list_date_source) : 0;
+      $sidebar_posts[] = $list_post;
+    }
+
+    $list_offset += $list_limit;
+    $list_total = isset($list_response->totalCount) ? (int)$list_response->totalCount : $list_offset;
+  } while ($list_offset < $list_total);
+}
+
+if ($list_type === 'all' && !empty($sidebar_posts)) {
+  usort($sidebar_posts, function ($a, $b) {
+    $a_sort = isset($a->_sort_timestamp) ? (int)$a->_sort_timestamp : 0;
+    $b_sort = isset($b->_sort_timestamp) ? (int)$b->_sort_timestamp : 0;
+    if ($a_sort === $b_sort) {
+      return 0;
+    }
+    return ($a_sort > $b_sort) ? -1 : 1;
+  });
+}
+
+$total_posts = count($sidebar_posts);
+$total_pages = ($total_posts > 0) ? (int)ceil($total_posts / $per_page) : 1;
+$current_page = min($current_page, $total_pages);
+$paged_offset = ($current_page - 1) * $per_page;
+$all_posts_backup = $sidebar_posts;
+$sidebar_posts = array_slice($sidebar_posts, $paged_offset, $per_page);
+
 if ($list_type === 'works') {
   $page_title = "制作実績";
   $page_title_eng = "Portfolio";
+  $page_seo_title = "デザイン・ホームページ制作実績";
+  $page_description = "デザネコが手がけたチラシ、ホームページ、名刺、パッケージなどの制作実績をご紹介します。沖縄の店舗・個人事業主を中心に幅広い業種へ対応しています。";
 } elseif ($list_type === 'column') {
   $page_title = "コラム";
   $page_title_eng = "Column";
+  $page_seo_title = "デザイン・AI活用のお役立ちコラム";
+  $page_description = "チラシやホームページのデザイン、集客、文章作成、AI活用について、沖縄の小さなお店や個人事業主に役立つ情報を分かりやすく発信します。";
 } elseif ($list_type === 'all') {
   $page_title = "アーカイブ";
   $page_title_eng = "Archive";
+  $page_seo_title = "デザネコの記事アーカイブ";
+  $page_description = "デザネコの新着情報、ブログ、制作実績、お役立ちコラムを月別にご覧いただける記事アーカイブです。";
 } else {
   $page_title = "新着情報";
   $page_title_eng = "News";
+  $page_seo_title = "新着情報・ブログ";
+  $page_description = "デザネコからのお知らせ、制作の舞台裏、デザインやWeb制作に関するブログ記事を掲載しています。";
 }
-$page_description = "";
+if ($archive_month !== '') {
+  $archive_timestamp_for_meta = strtotime($archive_month . '-01');
+  if ($archive_timestamp_for_meta !== false) {
+    $archive_meta_label = 'の記事一覧';
+    if ($list_type === 'works') {
+      $archive_meta_label = 'の制作実績一覧';
+    } elseif ($list_type === 'column') {
+      $archive_meta_label = 'のコラム一覧';
+    } elseif ($list_type === 'all') {
+      $archive_meta_label = 'のアーカイブ一覧';
+    }
+    $page_seo_title = date('Y年n月', $archive_timestamp_for_meta) . $archive_meta_label;
+  }
+}
+if ($current_page > 1) {
+  $page_seo_title .= '（' . $current_page . 'ページ目）';
+}
+$page_canonical_params = ['type' => $list_type];
+if ($archive_month !== '') {
+  $page_canonical_params['archive'] = $archive_month;
+}
+if ($current_page > 1) {
+  $page_canonical_params['page'] = $current_page;
+}
 $page_style = "";
 $page_script = '';
 ?>
@@ -68,71 +158,6 @@ $page_script = '';
           </span>
         </div>
         <div class='space_3 space_sp1'></div>
-
-        <?php
-        // Fetch list from microCMS endpoint (archive filter is applied in PHP)
-        $sidebar_posts = [];
-        $list_limit = 100;
-        $list_targets = ($list_type === 'all')
-          ? ['blog' => '/blog', 'works' => '/works', 'column' => '/column']
-          : [$list_type => (($list_type === 'works') ? '/works' : (($list_type === 'column') ? '/column' : '/blog'))];
-
-        foreach ($list_targets as $entry_type_key => $list_endpoint) {
-          $list_offset = 0;
-          $list_total = 0;
-
-          do {
-            // 下書き記事を除外して公開済みのみ取得
-            $list_response = microcms_get_list($list_endpoint, "limit=" . $list_limit . "&offset=" . $list_offset . "&orders=-publishedAt");
-            if (!$list_response || empty($list_response->contents)) {
-              break;
-            }
-
-            foreach ($list_response->contents as $list_post) {
-              $list_date_source = '';
-              if (!empty($list_post->publishedAt)) {
-                $list_date_source = $list_post->publishedAt;
-              } elseif (!empty($list_post->createdAt)) {
-                $list_date_source = $list_post->createdAt;
-              }
-
-              if ($archive_month !== '' && strpos($list_date_source, $archive_month) !== 0) {
-                continue;
-              }
-
-              $list_post->_entry_type = $entry_type_key;
-              $list_post->_sort_timestamp = ($list_date_source !== '' && strtotime($list_date_source) !== false) ? strtotime($list_date_source) : 0;
-              $sidebar_posts[] = $list_post;
-            }
-
-            $list_offset += $list_limit;
-            $list_total = isset($list_response->totalCount) ? (int)$list_response->totalCount : $list_offset;
-          } while ($list_offset < $list_total);
-        }
-
-        if ($list_type === 'all' && !empty($sidebar_posts)) {
-          usort($sidebar_posts, function ($a, $b) {
-            $a_sort = isset($a->_sort_timestamp) ? (int)$a->_sort_timestamp : 0;
-            $b_sort = isset($b->_sort_timestamp) ? (int)$b->_sort_timestamp : 0;
-            if ($a_sort === $b_sort) {
-              return 0;
-            }
-            return ($a_sort > $b_sort) ? -1 : 1;
-          });
-        }
-
-        // ページネーション計算（全件）
-        $total_posts = count($sidebar_posts);
-        $total_pages = ($total_posts > 0) ? (int)ceil($total_posts / $per_page) : 1;
-        if ($current_page > $total_pages) {
-          $current_page = $total_pages;
-        }
-        $paged_offset = ($current_page - 1) * $per_page;
-
-        // 現在ページ分だけスライス
-        $all_posts_backup = $sidebar_posts;
-        $sidebar_posts = array_slice($sidebar_posts, $paged_offset, $per_page);
-        ?>
 
         <?php if ($list_type === 'works' && !empty($sidebar_posts)):
           // カテゴリ別にグループ化
@@ -376,10 +401,7 @@ $page_script = '';
         // ==========================================
         if ($total_posts > 0):
           // 現在のURLパラメータを保持してページリンクを生成
-          $pager_params = [];
-          if ($list_type !== 'blog') {
-            $pager_params['type'] = $list_type;
-          }
+          $pager_params = ['type' => $list_type];
           if ($archive_month !== '') {
             $pager_params['archive'] = $archive_month;
           }

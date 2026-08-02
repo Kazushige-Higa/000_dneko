@@ -1,0 +1,287 @@
+.dneko-opening {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  overflow: hidden;
+  background: #fff;
+  opacity: 1;
+  transition: opacity 0.4s ease;
+
+  &.is-visible {
+    display: block;
+  }
+
+  &.is-leaving {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &__stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    min-height: 100svh;
+    color: #231815;
+    font-family: "Kiwi Maru", "Hiragino Kaku Gothic ProN", sans-serif;
+  }
+
+  &__hand,
+  &__word,
+  &__lockup {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  &__hand {
+    opacity: 0;
+  }
+
+  &__label {
+    position: absolute;
+    top: calc(50% - 205px);
+    left: 50%;
+    margin: 0;
+    padding: 0.45em 1.1em 0.55em;
+    transform: translateX(-50%) translateY(-50px) scale(0.6);
+    border: 3px solid #231815;
+    border-radius: 999px;
+    background: #fff;
+    font-size: clamp(16px, 1.3vw, 20px);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    opacity: 0;
+  }
+
+  &__cat-crop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(48vw, 210px);
+    height: auto;
+    overflow: hidden;
+    transform: translate(-50%, -50%) translateY(150px) rotate(-12deg) scale(0.55);
+    opacity: 0;
+  }
+
+  &__welcome {
+    position: absolute;
+    top: calc(50% + 135px);
+    left: 50%;
+    margin: 0;
+    transform: translate(-50%, 40px) scale(0.7);
+    font-size: clamp(26px, 2.5vw, 38px);
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    opacity: 0;
+    white-space: nowrap;
+  }
+
+  &__word {
+    opacity: 0;
+
+    p {
+      position: absolute;
+      top: calc(50% + 105px);
+      left: 50%;
+      margin: 0;
+      transform: translate(-50%, 35px) scale(0.82);
+      font-size: clamp(16px, 1.4vw, 22px);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      opacity: 0;
+      white-space: nowrap;
+    }
+  }
+
+  &__word-crop {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(76vw, 330px);
+    height: auto;
+    overflow: hidden;
+    transform: translate(-50%, -50%) translateY(90px) scale(0.4);
+    opacity: 0;
+  }
+
+  &__lockup {
+    opacity: 0;
+
+    img {
+      width: min(80vw, 424px);
+      transform: rotate(-8deg) scale(0.3);
+      opacity: 0;
+    }
+
+    p {
+      position: absolute;
+      top: calc(50% + 115px);
+      left: 50%;
+      margin: 0;
+      transform: translate(-50%, 35px);
+      font-size: clamp(15px, 1.3vw, 20px);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      opacity: 0;
+      white-space: nowrap;
+    }
+
+    span {
+      position: absolute;
+      top: calc(50% + 158px);
+      left: 50%;
+      width: min(48vw, 260px);
+      height: 8px;
+      transform: translateX(-50%) scaleX(0);
+      transform-origin: center;
+      border-radius: 999px;
+      background: #ff9e27;
+    }
+  }
+
+  &.is-playing {
+    .dneko-opening__hand {
+      animation: dneko-hand-scene 1.55s both;
+    }
+
+    .dneko-opening__label {
+      animation: dneko-label-pop 0.34s 0.28s both;
+    }
+
+    .dneko-opening__cat-crop {
+      animation: dneko-cat-pop 0.55s 0.2s both;
+    }
+
+    .dneko-opening__welcome {
+      animation: dneko-copy-pop 0.35s 0.67s both;
+    }
+
+    .dneko-opening__word {
+      animation: dneko-word-scene 1.5s 1.55s both;
+    }
+
+    .dneko-opening__word-crop {
+      animation: dneko-word-pop 0.5s 1.55s both;
+    }
+
+    .dneko-opening__word p {
+      animation: dneko-copy-pop 0.34s 2.08s both;
+    }
+
+    .dneko-opening__lockup {
+      animation: dneko-scene-show 0.01s 3.02s both;
+    }
+
+    .dneko-opening__lockup img {
+      animation: dneko-logo-pop 0.55s 3.02s both;
+    }
+
+    .dneko-opening__lockup p {
+      animation: dneko-copy-pop 0.34s 3.65s both;
+    }
+
+    .dneko-opening__lockup span {
+      animation: dneko-line-grow 0.34s 3.82s both;
+    }
+  }
+}
+
+.dneko-opening-lock {
+  overflow: hidden;
+}
+
+@keyframes dneko-hand-scene {
+  0%, 82% { opacity: 1; }
+  100% { opacity: 0; transform: scale(1.13); }
+}
+
+@keyframes dneko-label-pop {
+  to { transform: translateX(-50%) translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes dneko-cat-pop {
+  0% { transform: translate(-50%, -50%) translateY(150px) rotate(-12deg) scale(0.55); opacity: 0; }
+  70% { transform: translate(-50%, -50%) translateY(0) rotate(0) scale(1.06); opacity: 1; }
+  100% { transform: translate(-50%, -50%) translateY(0) rotate(0) scale(1); opacity: 1; }
+}
+
+@keyframes dneko-copy-pop {
+  to { transform: translate(-50%, 0) scale(1); opacity: 1; }
+}
+
+@keyframes dneko-scene-show {
+  to { opacity: 1; }
+}
+
+@keyframes dneko-word-scene {
+  0%, 78% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: translateY(-45px) scale(0.86); }
+}
+
+@keyframes dneko-word-pop {
+  0% { transform: translate(-50%, -50%) translateY(90px) scale(0.4); opacity: 0; }
+  72% { transform: translate(-50%, -50%) translateY(0) scale(1.07); opacity: 1; }
+  100% { transform: translate(-50%, -50%) translateY(0) scale(1); opacity: 1; }
+}
+
+@keyframes dneko-logo-pop {
+  0% { transform: rotate(-8deg) scale(0.3); opacity: 0; }
+  74% { transform: rotate(0) scale(1.04); opacity: 1; }
+  100% { transform: rotate(0) scale(1); opacity: 1; }
+}
+
+@keyframes dneko-line-grow {
+  to { transform: translateX(-50%) scaleX(1); }
+}
+
+@media screen and (max-width: 767px) {
+  .dneko-opening {
+    &__cat-crop {
+      width: 48vw;
+    }
+
+    &__word-crop {
+      width: 76vw;
+    }
+
+    &__lockup img {
+      width: 82vw;
+    }
+
+    &__welcome {
+      top: calc(50% + 31vw);
+    }
+
+    &__word p,
+    &__lockup p {
+      top: calc(50% + 24vw);
+      font-size: 14px;
+      letter-spacing: 0.1em;
+    }
+
+    &__lockup span {
+      top: calc(50% + 34vw);
+      height: 7px;
+      width: 48vw;
+    }
+  }
+}
+
+html.dneko-opening-pending {
+  background: #fff;
+
+  body {
+    background: #fff;
+
+    > * {
+      visibility: hidden !important;
+    }
+
+    > #dneko-opening {
+      visibility: visible !important;
+    }
+  }
+}

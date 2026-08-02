@@ -1,7 +1,8 @@
 <?php
 $page_title = "ホームページ制作実績一覧";
 $page_title_eng = "Works Archive";
-$page_description = "";
+$page_seo_title = "沖縄のホームページ制作実績一覧";
+$page_description = "デザネコが制作した沖縄県内外のホームページ制作実績を一覧でご紹介します。業種や目的に合わせたデザイン、スマホ対応、運用支援の事例をご覧ください。";
 $page_noindex = true;
 $page_style = <<<'CSS'
 <style>

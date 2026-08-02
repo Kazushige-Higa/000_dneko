@@ -1,7 +1,10 @@
 <?php
 $page_title = "よくあるご質問";
 $page_title_eng = "FAQ";
-$page_description ="";
+$page_seo_title = "よくあるご質問｜デザイン・ホームページ制作の相談";
+$page_description = "デザネコへ寄せられる、チラシ・ホームページ制作、料金、制作期間、修正、納品後のサポートに関するよくあるご質問と回答をまとめています。";
+$page_noindex = true;
+$page_canonical = 'https://d-neko.com/faq.php';
 $page_style = "";
 $page_script = '';
 ?>
