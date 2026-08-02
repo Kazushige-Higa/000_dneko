@@ -12,15 +12,14 @@
   --dr-page-title-orange: #f8bc80;
   --dr-page-title-orange-deep: #f28a28;
   --dr-page-title-green: #2aac38;
+  --dr-page-title-cream: #fdf7eb;
   position: relative;
   isolation: isolate;
   display: grid;
   min-height: 350px;
   overflow: hidden;
   place-items: end center;
-  background:
-    linear-gradient(115deg, rgba(255, 255, 255, .14), transparent 42%),
-    var(--dr-page-title-orange);
+  background: var(--dr-page-title-cream);
 }
 
 .dr_page_title::before {
@@ -40,8 +39,8 @@
   position: absolute;
   z-index: -2;
   inset: 0;
-  opacity: .24;
-  background-image: radial-gradient(circle, #fff 0 3px, transparent 4px);
+  opacity: .7;
+  background-image: radial-gradient(circle, rgba(255, 255, 255, .72) 0 3px, transparent 4px);
   background-position: 20px 18px;
   background-size: 42px 42px;
   pointer-events: none;
@@ -248,9 +247,9 @@
   z-index: 1000;
   width: 100%;
   color: var(--dr-common-ink);
-  background: rgba(255, 255, 255, .98);
+  background: #fdf7eb;
   font-family: "Kiwi Maru", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
-  box-shadow: 0 4px 18px rgba(113, 78, 38, .06);
+  box-shadow: none;
 }
 
 .dr_header_inner {
