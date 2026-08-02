@@ -5,6 +5,239 @@
   --dr-common-ink: #40382f;
 }
 
+/* --------------------------------------------------------------------------
+   Shared page title
+   -------------------------------------------------------------------------- */
+.dr_page_title {
+  --dr-page-title-orange: #f8bc80;
+  --dr-page-title-orange-deep: #f28a28;
+  --dr-page-title-green: #2aac38;
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 350px;
+  overflow: hidden;
+  place-items: end center;
+  background:
+    linear-gradient(115deg, rgba(255, 255, 255, .14), transparent 42%),
+    var(--dr-page-title-orange);
+}
+
+.dr_page_title::before {
+  position: absolute;
+  z-index: -1;
+  bottom: -98px;
+  left: 50%;
+  width: max(1450px, 125vw);
+  height: 330px;
+  transform: translateX(-50%);
+  border-radius: 50% 50% 0 0 / 100% 100% 0 0;
+  background: #fff;
+  content: "";
+}
+
+.dr_page_title_pattern {
+  position: absolute;
+  z-index: -2;
+  inset: 0;
+  opacity: .24;
+  background-image: radial-gradient(circle, #fff 0 3px, transparent 4px);
+  background-position: 20px 18px;
+  background-size: 42px 42px;
+  pointer-events: none;
+}
+
+.dr_page_title_inner {
+  position: relative;
+  z-index: 2;
+  width: min(680px, calc(100% - 360px));
+  min-height: 264px;
+  padding: 72px 24px 22px;
+  text-align: center;
+}
+
+.dr_page_title_icon {
+  display: grid;
+  width: 54px;
+  height: 54px;
+  margin: 0 auto 2px;
+  place-items: center;
+  color: var(--dr-page-title-orange-deep);
+  font-size: 36px;
+  line-height: 1;
+}
+
+.dr_page_title_eng,
+.dr_page_title_jp {
+  position: relative;
+  z-index: 1;
+  margin: 0;
+  text-wrap: balance;
+}
+
+.dr_page_title_eng {
+  color: var(--dr-page-title-green);
+  font-family: "Courgette", "Kiwi Maru", cursive;
+  font-size: clamp(40px, 4.2vw, 64px);
+  font-weight: 400;
+  letter-spacing: .01em;
+  line-height: 1.05;
+}
+
+.dr_page_title_jp {
+  margin-top: 8px;
+  color: #473d34;
+  font-family: "Kiwi Maru", "Hiragino Kaku Gothic ProN", sans-serif;
+  font-size: clamp(18px, 1.65vw, 26px);
+  font-weight: 700;
+  letter-spacing: .08em;
+  line-height: 1.45;
+}
+
+.dr_page_title_breadcrumb {
+  margin-top: 14px;
+  color: #8a7c70;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.dr_page_title_breadcrumb ol {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.dr_page_title_breadcrumb li + li::before {
+  margin-right: 6px;
+  color: #d3b392;
+  content: "/";
+}
+
+.dr_page_title_breadcrumb a {
+  color: #17852c;
+  text-decoration: none;
+}
+
+.dr_page_title_breadcrumb a:hover,
+.dr_page_title_breadcrumb a:focus-visible {
+  color: var(--dr-page-title-orange-deep);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.dr_page_title_mascot {
+  position: absolute;
+  z-index: 1;
+  bottom: 2px;
+  width: clamp(125px, 13vw, 200px);
+  height: clamp(125px, 13vw, 200px);
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 9px 12px rgba(103, 68, 36, .12));
+}
+
+.dr_page_title_mascot_left {
+  left: max(4vw, calc(50% - 570px));
+}
+
+.dr_page_title_mascot_right {
+  right: max(4vw, calc(50% - 570px));
+}
+
+@media (max-width: 900px) {
+  .dr_page_title {
+    min-height: 315px;
+  }
+
+  .dr_page_title::before {
+    bottom: -102px;
+    height: 300px;
+  }
+
+  .dr_page_title_inner {
+    width: min(590px, calc(100% - 230px));
+    min-height: 245px;
+    padding-top: 62px;
+  }
+
+  .dr_page_title_mascot {
+    width: 130px;
+    height: 145px;
+  }
+
+  .dr_page_title_mascot_left {
+    left: 2vw;
+  }
+
+  .dr_page_title_mascot_right {
+    right: 2vw;
+  }
+}
+
+@media (max-width: 520px) {
+  .dr_page_title {
+    min-height: 262px;
+  }
+
+  .dr_page_title::before {
+    bottom: -58px;
+    width: 760px;
+    height: 228px;
+  }
+
+  .dr_page_title_pattern {
+    background-position: 12px 10px;
+    background-size: 32px 32px;
+  }
+
+  .dr_page_title_inner {
+    width: calc(100% - 112px);
+    min-height: 210px;
+    padding: 48px 4px 16px;
+  }
+
+  .dr_page_title_icon {
+    width: 38px;
+    height: 38px;
+    font-size: 27px;
+  }
+
+  .dr_page_title_eng {
+    font-size: clamp(31px, 10vw, 42px);
+    line-height: 1;
+  }
+
+  .dr_page_title_jp {
+    margin-top: 7px;
+    font-size: clamp(16px, 4.6vw, 20px);
+    letter-spacing: .04em;
+  }
+
+  .dr_page_title_breadcrumb {
+    margin-top: 10px;
+    font-size: 10px;
+  }
+
+  .dr_page_title_mascot {
+    bottom: 3px;
+    width: 72px;
+    height: 90px;
+  }
+
+  .dr_page_title_mascot_left {
+    left: 4px;
+  }
+
+  .dr_page_title_mascot_right {
+    right: 4px;
+  }
+}
+
 .dr_header,
 .dr_header * {
   box-sizing: border-box;
