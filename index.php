@@ -216,7 +216,8 @@ if (!function_exists('dneko_home_category')) {
           <p>はじめまして、デザネコの比嘉一茂です。沖縄でデザイン・Web制作の現場に20年、約1,000件の制作に携わってきました。</p>
           <p>大きな会社のような分業ではなく、あなたの想い・写真・文章・デザイン・公開後の改善まで、最初から最後まで同じ人間が責任を持ちます。</p>
           <p>相棒の看板猫「もじゃ」と「くるる」とともに、あなたの商売のネコの手になれたら嬉しいです。</p>
-          <a href="about.php">デザネコについて <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+          <p>新しく公開したプロフィールページでは、仕事風景やデザネコの強み、これまでの歩み、よくあるご質問まで詳しくご紹介しています。</p>
+          <a href="profile.php">ガーヒーのプロフィールを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="dr_creator_visual">
           <img class="dr_creator_profile" src="images/profile.jpg" alt="デザネコ代表 比嘉一茂" loading="lazy">
