@@ -192,7 +192,7 @@ $faq_schema = [
                 </aside>
             </div>
 
-            <p class="fd_price_caution">上記は目安です。ご予算に合わせたご提案も可能です。詳しくは<a href="service_design.php">印刷デザイン・料金ページ</a>をご覧ください。</p>
+            <p class="fd_price_caution">上記は目安です。ご予算に合わせたご提案も可能です。詳しくは<a href="contact.php">お問い合わせください</a>。</p>
         </div>
     </section>
 

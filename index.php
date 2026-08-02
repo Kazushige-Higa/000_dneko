@@ -90,6 +90,7 @@ if (!function_exists('dneko_home_category')) {
                 <a href="ai-consulting.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </article>
+            <?php if (false): // ホームページ制作バナーは一時非表示 ?>
             <article class="dr_hero_slide dr_hero_slide_mix">
               <picture class="dr_hero_media">
                 <source media="(max-width: 600px)" srcset="images/home-renewal/hero-web-mobile.webp" width="1024" height="1536">
@@ -102,6 +103,7 @@ if (!function_exists('dneko_home_category')) {
                 <a href="service_blog.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </article>
+            <?php endif; ?>
             <article class="dr_hero_slide dr_hero_slide_digital">
               <picture class="dr_hero_media">
                 <source media="(max-width: 600px)" srcset="images/home-renewal/hero-digital-support-mobile.webp" width="1024" height="1536">

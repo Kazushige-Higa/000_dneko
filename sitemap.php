@@ -73,8 +73,7 @@ $urls = [];
 $staticPages = [
     '/' => 'index.php',
     '/flyer-design.php' => 'flyer-design.php',
-    '/service_blog.php' => 'service_blog.php',
-    '/service_design.php' => 'service_design.php',
+    // ホームページ制作ページは一時非公開
     '/ai-consulting.php' => 'ai-consulting.php',
     '/service_digital.php' => 'service_digital.php',
     '/about.php' => 'about.php',

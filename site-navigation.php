@@ -19,10 +19,9 @@ if (!function_exists('dneko_navigation_items')) {
     'icon' => 'fa-solid fa-palette',
     'children' => [
       ['label' => 'チラシデザイン', 'href' => 'flyer-design.php'],
-      ['label' => 'ホームページ制作', 'href' => 'service_blog.php'],
+      // ホームページ制作ページへの導線は一時非表示
       ['label' => 'デジタルのネコの手', 'href' => 'service_digital.php'],
       ['label' => 'AI活用コンサルティング', 'href' => 'ai-consulting.php'],
-      ['label' => '印刷デザイン', 'href' => 'service_design.php'],
     ],
   ],
   [

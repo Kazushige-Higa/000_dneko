@@ -296,7 +296,7 @@ $digital_faqs = [
             </div>
             <nav aria-label="デジタルのネコの手 フッターナビ">
                 <a href="./">ホーム</a>
-                <a href="service_blog.php">ホームページ制作</a>
+                <?php /* ホームページ制作ページへのリンクは一時非表示 */ ?>
                 <a href="ai-consulting.php">AIコンサル</a>
                 <a href="service_digital.php" aria-current="page">デジタルのネコの手</a>
                 <a href="contact.php">お問い合わせ</a>
