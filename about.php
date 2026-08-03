@@ -2,407 +2,145 @@
 $page_title = "デザネコについて";
 $page_title_eng = "About us";
 $page_seo_title = "デザネコについて｜沖縄のデザイン・Web制作事務所";
-$page_description = "沖縄県宜野湾市のデザイン事務所デザネコについて。代表・比嘉一茂が、チラシやホームページ制作、撮影、文章作成から公開後の改善まで一貫して支援します。";
-$page_style = "";
+$page_description = "沖縄県宜野湾市のデザイン事務所デザネコについて。チラシ、ホームページ、撮影、AI活用、公開後の改善まで、おうちのデジタルを一緒に支えます。";
+$page_style = '<link href="css/about-renewal.css?v=' . filemtime(__DIR__ . '/css/about-renewal.css') . '" rel="stylesheet">';
 $page_script = '';
 ?>
 <?php include_once './header.php'; ?>
-<?php include_once './page_title.php'; ?>
 
-<!-- デザネコについて -->
-<div class='overflow'>
-
-    <section>
-        <div class='bg_grd_anime'>
-            <div class='space_3 space_sp4'></div>
-            <div class="tcenter b_m5">
-                <img width="80px" src='<?php echo $img; ?>/favicon.png' alt='イメージ画像' loading='lazy'>
-            </div>
-            <h2 class="tcenter line_height_20 tcenter">
-                <span class="fs_30 fs_sp25 white tcenter act inup">
-                    多くのブログは<br class="sponly">「作って終わり」になっています。<br>
-                    でも、本当に大切なのはブログを<br class="sponly">「育てる」こと。
-                </span>
-            </h2>
-
-            <div class="mbox act set">
-                <div class="sbox bold white">
-                    <div class="tjustify">
-                        <p>
-                            デザネコでは、飲食店・音楽教室・旅行代理店など、開業1〜3年目の個人事業主の「外部Web担当」として、ブログ制作からブログ運用、チラシ・SNS・撮影まで一括でサポートしています。10年以上、1000件以上のブログ制作に携わってきた現場経験型Web制作者が、あなたのお店に寄り添います。
-                        </p>
-                    </div>
-                </div>
-            </div>
-            <div class='space_3 space_sp4'></div>
-        </div>
-    </section>
-
-    <section>
-        <div class='bg_base'>
-            <div class='single03'>
-                <div class='space_1 space_sp1'></div>
-                <h3 class="line_height_14 tcenter">
-                    <span class="fs_40 fs_sp35 base_color">よくある個人事業主のお悩み
-                    </span>
-                </h3>
-                <div class="h_m5 tcenter">
-                    <img src='<?php echo $img; ?>/sticker/60.webp' alt='イメージ画像' loading='lazy'>
-                </div>
-                <p class="tcenter">開業1〜3年目の個人事業主の方から、日々こんなお悩みを伺います。</p>
-                <div class='space_3 space_sp3'></div>
-                <ul class="grid set4 sp1 gap3">
-
-                    <li>
-                        <h3 class="tcenter h_m5">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                ブログの課題…
-                            </span>
-                        </h3>
-                        <div class="hr_border"></div>
-                        <ul class='list_disc'>
-                            <li>ブログを作りたいけど、予算がない…</li>
-                            <li>制作会社の見積もりが50万円で諦めた…</li>
-                            <li>どこに頼めばいいか分からない…</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3 class="tcenter h_m5 space_2">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                運用・更新の課題…
-                            </span>
-                        </h3>
-                        <div class="hr_border"></div>
-                        <ul class='list_disc'>
-                            <li>作ったブログが放置されている…</li>
-                            <li>ブログを書きたいけど間がない…</li>
-                            <li>更新の仕方が分からない…</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3 class="tcenter h_m5 space_2">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                集客の課題…
-                            </span>
-                        </h3>
-                        <div class="hr_border"></div>
-                        <ul class='list_disc'>
-                            <li>ブログからの問い合わせがゼロ…</li>
-                            <li>SEOって何をすればいいか分からない…</li>
-                            <li>SNSとブログの連携ができていない…</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3 class="tcenter h_m5 space_2">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                制作物全般の課題…
-                            </span>
-                        </h3>
-                        <div class="hr_border"></div>
-                        <ul class='list_disc'>
-                            <li>チラシ、名刺をバラバラに発注している…</li>
-                            <li>デザインの統一感がない…</li>
-                            <li>撮影も別業者で、費用がかさむ…</li>
-                        </ul>
-                    </li>
-
-                </ul>
-
-            </div>
-        </div>
-        <div class="hr_down_arrow z_index_10 bg_base"></div>
-    </section>
-
-    <section>
-        <div class="bg_base_color">
-            <div class='single03'>
-                <h3 class="line_height_14 tcenter white">
-                    <span class="fs_40 fs_sp35">デザネコなら解決できること
-                    </span>
-                </h3>
-                <div class="h_m5 tcenter">
-                    <img src='<?php echo $img; ?>/sticker/59.webp' alt='イメージ画像' loading='lazy'>
-                </div>
-                <p class="tcenter white">デザネコは、ブログ制作から運用まで、<br>
-                    個人事業主に"寄り添う"ことでこれらの課題をまとめて解決します。</p>
-                <div class='space_3 space_sp3'></div>
-
-
-                <ul class="grid set4 sp1 gap3 white">
-
-                    <li>
-                        <h3 class="tcenter h_m5">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                ブログ面
-                            </span>
-                        </h3>
-                        <div class="hr_border white"></div>
-                        <ul class="list_disc white">
-                            <li>初期費用0円でブログ制作</li>
-                            <li>月額1万円以内のだから始めやすい</li>
-                            <li>WordPressで更新しやすいサイト設計</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3 class="tcenter h_m5">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                運用・更新面
-                            </span>
-                        </h3>
-
-                        <div class="hr_border white"></div>
-                        <ul class="list_disc white">
-                            <li>ブログ運用サポートで継続的に更新</li>
-                            <li>AIを活用した記事作成サポート</li>
-                            <li>LINEで24時間以内に相談OK</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3 class="tcenter h_m5">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                集客面
-                            </span>
-                        </h3>
-
-                        <div class="hr_border white"></div>
-                        <ul class="list_disc white">
-                            <li>SEOを意識したサイト設計</li>
-                            <li>ブログで検索流入を増やす</li>
-                            <li>SNS用画像作成で集客を強化</li>
-                        </ul>
-                    </li>
-                    <li>
-                        <h3 class="tcenter h_m5">
-                            <span class="fs_35 fs_sp25 line_height_15">
-                                制作物全般面
-                            </span>
-                        </h3>
-
-                        <div class="hr_border white"></div>
-                        <ul class="list_disc white">
-                            <li>チラシ、名刺、メニュー表も一括対応</li>
-                            <li>ブログとデザインを統一</li>
-                            <li>撮影も対応、窓口が一つでスムーズ</li>
-                        </ul>
-                    </li>
-
+<main class="dnk_about_page">
+    <section class="dnk_about_hero" aria-labelledby="about-hero-title">
+        <div class="dnk_about_hero_image" aria-hidden="true"></div>
+        <div class="dnk_about_inner dnk_about_hero_inner">
+            <div class="dnk_about_hero_copy">
+                <p class="dnk_about_kicker">Design partner in Okinawa</p>
+                <h1 id="about-hero-title">沖縄の<span>「作って終わり」</span>を、<br>なくしたくて。</h1>
+                <p>デザインもホームページも、お渡しした日がゴールじゃないと思っています。</p>
+                <p>デザネコは、沖縄で20年・1,000件以上の制作に関わってきた僕ひとりが、取材から撮影、デザイン、公開したあとのお手伝いまで受け持つ小さな事務所です。</p>
+                <p>お店のことも、おうちのことも、まとめて相談できる<span class="dnk_about_orange">「ネコの手」</span>でいたい。そう思ってやっています。</p>
+                <ul class="dnk_about_stats" aria-label="デザネコの実績">
+                    <li><span class="dnk_about_stat_icon">🌺</span><strong>20<small>年</small></strong><em>デザイン・Web制作<br>の実績</em></li>
+                    <li><span class="dnk_about_stat_icon">🐾</span><strong>1,000<small>件以上</small></strong><em>制作・サポート<br>実績</em></li>
+                    <li><span class="dnk_about_stat_icon">🌴</span><strong>沖縄発</strong><em>沖縄の事業者様を<br>全力サポート</em></li>
                 </ul>
             </div>
         </div>
     </section>
 
-    <section>
-        <div>
-            <div class='single'>
-                <div class='space_3 space_sp1'></div>
-                <div class='mbox border bc_base act blur bg_white'>
-                    <div class='flexbox gap5'>
-                        <div class='width_5 width_sp5 b_m10'>
-                            <img src='<?php echo $img; ?>/profile_sns.webp' alt='イメージ画像' loading='lazy'>
-                        </div>
-                        <div class='width_5 width_sp10 act inup'>
-                            <div class='space_0 space_sp1'></div>
-                            <h3 class="tcenter">
-                                <span class='bold base_color fs_30 fs_sp30'>
-                                    代表の現場経験があるから実現できる
-                                </span>
-                            </h3>
-                            <div class='space_3 space_sp1'></div>
-                            <p>
-                                デザネコ代表（ガーヒー）は、
-                            </p>
-                            <ul class='list_disc'>
-                                <li>格安制作会社で 10年以上</li>
-                                <li>制作担当として 1000件超えの実績</li>
-                                <li>取材・撮影・デザイン・コーディング・ライティング</li>
-                                <li>全ての工程を一貫して担当</li>
-                            </ul>
-                            <p>
-                                「現場経験型Web制作者」です。小さなお店の「リアルな課題」を知っているからこそ、机上の空論ではなく、実務感のある提案ができます。
-                            </p>
-                            <div class='space_3 space_sp3'></div>
-                            <button class='btn_normal radius center'><a href='profile.php'>Profile</a></button>
-                            <div class='space_0 space_sp3'></div>
-                        </div>
-                    </div>
-                </div>
+    <section class="dnk_about_section dnk_about_services" aria-labelledby="about-service-title">
+        <div class="dnk_about_inner">
+            <img class="dnk_about_mascot dnk_about_mascot_left" src="images/about-renewal/moja-laptop.png" alt="パソコンを使う黒猫のもじゃ" loading="lazy">
+            <img class="dnk_about_mascot dnk_about_mascot_right" src="images/about-renewal/kururu-laptop.png" alt="パソコンを使う白猫のくるる" loading="lazy">
+            <header class="dnk_about_section_header">
+                <span>Service</span>
+                <h2 id="about-service-title"><em>デザネコ</em>ができること</h2>
+                <p>デザインのこと、Webのこと、パソコンやスマホのこと。<br>「これは誰に頼めばいいんだろう？」を、まとめて引き受けます。</p>
+            </header>
+            <ol class="dnk_about_service_grid">
+                <li>
+                    <span class="dnk_about_number is_orange">1</span>
+                    <div><h3>チラシ・印刷物デザイン</h3><p>撮影からデザイン、印刷・納品まで。チラシ、名刺、ショップカード、パンフレットまでおまかせください。</p><a href="flyer-design.php">くわしく見る <b>→</b></a></div>
+                    <img class="dnk_about_card_icon" src="images/about-renewal/icons/service-print.png" alt="チラシ・パンフレット・名刺のイメージ" loading="lazy">
+                </li>
+                <li>
+                    <span class="dnk_about_number is_green">2</span>
+                    <div><h3>ホームページ制作・運用</h3><p>初期費用0円、月額1万円以内から。公開してからの更新や改善まで、ずっと一緒に育てていきます。</p><a href="website-design.php">くわしく見る <b>→</b></a></div>
+                    <img class="dnk_about_card_icon" src="images/about-renewal/icons/website.png" alt="ホームページを表示したパソコンのイメージ" loading="lazy">
+                </li>
+                <li>
+                    <span class="dnk_about_number is_green">3</span>
+                    <div><h3>AI活用コンサルティング</h3><p>仕事のどこにAIを使えるのか。むずかしい設定の話ではなく、あなたの仕事に合う使い方から一緒に考えます。</p><a href="ai-consulting.php">くわしく見る <b>→</b></a></div>
+                    <img class="dnk_about_card_icon" src="images/about-renewal/icons/ai-support.png" alt="AI活用サポートのイメージ" loading="lazy">
+                </li>
+                <li>
+                    <span class="dnk_about_number is_orange">4</span>
+                    <div><h3>おうちのデジタルサポート</h3><p>スマホ、パソコン、Wi-Fi、LINE。「誰に聞けばいいか分からない」を、月額制の相談窓口でしっかり受けます。</p><a href="service_digital.php">くわしく見る <b>→</b></a></div>
+                    <img class="dnk_about_card_icon" src="images/about-renewal/icons/digital-support.png" alt="スマートフォンとWi-Fiサポートのイメージ" loading="lazy">
+                </li>
+            </ol>
+        </div>
+    </section>
+
+    <section class="dnk_about_section dnk_about_worries" aria-labelledby="about-worries-title">
+        <div class="dnk_about_inner">
+            <header class="dnk_about_section_header is_compact">
+                <h2 id="about-worries-title">🐾 よくあるお悩み 🐾</h2>
+                <p>開業したばかりの方や、お店をひとりで回している方から、日々こんなお話を伺います。</p>
+            </header>
+            <div class="dnk_about_worry_grid">
+                <article><h3>A. ホームページの課題…</h3><ul><li>ホームページを作りたいけど、予算がない…</li><li>制作会社の見積もりが50万円で諦めた…</li><li>どこに頼めばいいか分からない…</li></ul><span aria-hidden="true">🧑‍💻</span></article>
+                <article><h3>B. 運用・更新の課題…</h3><ul><li>作ったホームページが放置されている…</li><li>更新したいけど、時間がない…</li><li>更新の仕方が分からない…</li></ul><span aria-hidden="true">🤔</span></article>
+                <article><h3>C. 集客の課題…</h3><ul><li>ホームページからの問い合わせがゼロ…</li><li>検索で見つけてもらえない…</li><li>SNSとホームページがつながっていない…</li></ul><span aria-hidden="true">🔎📱</span></article>
+                <article><h3>D. 印刷物・撮影の課題…</h3><ul><li>チラシ、名刺をバラバラに発注している…</li><li>デザインの統一感がない…</li><li>撮影も別業者で、費用がかさむ…</li></ul><span aria-hidden="true">📸</span></article>
+            </div>
+            <div class="dnk_about_home_worry">
+                <span class="dnk_about_home_icon" aria-hidden="true">🏠</span>
+                <div><h3>おうちのデジタルの課題…</h3><ul><li>スマホの調子が悪いけど、誰に聞けばいいか分からない…</li><li>子どもや孫に聞くのは、なんとなく気がひける…</li><li>「詳しい人」に頼んでも、もっと困りごとを聞いてほしい…</li></ul></div>
+                <span class="dnk_about_people_icon" aria-hidden="true">👵👴</span>
+            </div>
+            <div class="dnk_about_down" aria-hidden="true">⌄</div>
+        </div>
+    </section>
+
+    <section class="dnk_about_section dnk_about_solutions" aria-labelledby="about-solutions-title">
+        <div class="dnk_about_inner">
+            <header class="dnk_about_section_header is_inverse">
+                <span>Solution</span>
+                <h2 id="about-solutions-title">デザネコなら解決できること</h2>
+                <p>ひとりで全部やっているからこそ、まとめて引き受けられます。</p>
+            </header>
+            <div class="dnk_about_solution_grid">
+                <article><h3>A. ホームページ面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/website.png" alt="ホームページ制作のイメージ" loading="lazy"><ul><li>初期費用0円ではじめられます</li><li>月額1万円以内から続けやすい</li><li>更新しやすい設計にします</li></ul></article>
+                <article><h3>B. 運用・更新面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/updates.png" alt="継続的な更新のイメージ" loading="lazy"><ul><li>更新の回数に制限はありません</li><li>AIを使った記事づくりもお手伝い</li><li>LINEで24時間以内にお返事します</li></ul></article>
+                <article><h3>C. 集客面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/analytics.png" alt="集客改善を表すグラフのイメージ" loading="lazy"><ul><li>検索を意識したつくりに設計します</li><li>公開後の数字を一緒に見ながら改善</li><li>SNS用の画像づくりもまとめて</li></ul></article>
+                <article><h3>D. 印刷物・撮影面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/photo-print.png" alt="写真撮影と印刷物のイメージ" loading="lazy"><ul><li>チラシ、名刺、メニューを一括で</li><li>ホームページとデザインを統一</li><li>撮影も僕がやるので、窓口はひとつ</li></ul></article>
+            </div>
+            <div class="dnk_about_digital_solution">
+                <img class="dnk_about_digital_icon" src="images/about-renewal/icons/home-support.png" alt="おうちのデジタルサポートのイメージ" loading="lazy">
+                <div><h3>おうちのデジタル面</h3><ul><li>月額制で、何度でも相談できます</li><li>毎回おなじ人がうかがいます</li><li>むずかしい言葉は使いません</li></ul></div>
+                <img class="dnk_about_digital_cat" src="images/about-renewal/moja.png" alt="黒猫のもじゃ" loading="lazy">
+                <img class="dnk_about_digital_cat" src="images/about-renewal/kururu.png" alt="白猫のくるる" loading="lazy">
             </div>
         </div>
     </section>
 
-    <section>
-        <div class="bg_white">
-            <div class="single03">
-                <div class="mbox bg_white bc_base radius">
-                    <h2 class="line_height_14 tcenter">
-                        <span class="eng base_color fs_40 act inup">
-                            Question
-                        </span><br>
-                        <span class="fs_40 fs_sp30 act txt_split type_lineup">
-                            よくあるご質問
-                        </span>
-                    </h2>
-                    <div class='space_3 space_sp1'></div>
-
-                    <div class="sbox">
-                        <dl class='accordion'>
-                            <dt class='open'>なんでデザネコという屋号なんですか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>デザネコという屋号の由来は、ネコが持つ優雅さや遊び心をデザインに反映させることで、見る人の心を惹きつけ、心地よさと驚きを同時に届けたいと考えているから名付けました。でも、単純にデザインとネコが好きという理由が一番かもしれません。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>なんでネコが好きなんですか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>幼いころにネコを13匹飼っていたくらい、ネコが好きです。いまでも会話できるくらいネコのことを理解できます。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>ワンちゃんは嫌いなんですか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>ワンちゃんも好きですよ。ネコアレルギーだけどイヌアレルギーではないので、ワンちゃんならいっぱい抱っこできます。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>デザインにどのくらいの期間がかかりますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>お客さまのご要望や制作内容によりますが、通常は初回の打ち合わせから納品まで1～2週間程度です。お急ぎの場合も柔軟に対応いたしますので、ご相談ください。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>デザイン以外の作業（写真撮影など）もお願いできますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>はい、対応可能です。写真撮影・動画制作から、LINE構築まで幅広く対応いたします。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>印刷物の追加注文はできますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>はい、可能です。名刺やチラシなど、LINEやお電話でご依頼いただければ、迅速に追加印刷の手配をいたします。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>小ロットの印刷もお願いできますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>もちろん対応可能です。名刺やチラシなど、小ロットの印刷も承っておりますので、お気軽にお問い合わせください。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>制作費用の目安を教えてください。</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>制作内容やボリュームによって異なります。まずはお客さまのご要望をヒアリングし、その後にお見積りをお出しいたしますので、お気軽にご相談ください。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>初めての依頼ですが、どのように進めればいいですか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>まずは、お客さまのイメージやご希望をお聞かせください。その後、ヒアリングをもとにデザインのご提案を行い、内容を確認いただきながら進めていきます。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>遠方からの依頼でも対応できますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>はい、可能です。オンラインでの打ち合わせやデータ共有にも対応しておりますので、遠方の方でも安心してご依頼いただけます。</p>
-                                </div>
-                            </dd>
-                            <dt class='open'>デザインの修正は何回までできますか？</dt>
-                            <dd class='panel'>
-                                <div class='inner'>
-                                    <p>基本的な修正は2～3回まで無料で対応いたします。それ以降の修正や大幅な変更が必要な場合は、追加料金が発生することがありますので、事前にご案内いたします。</p>
-                                </div>
-                            </dd>
-                        </dl>
-                    </div>
-
-                </div>
+    <section class="dnk_about_section dnk_about_experience" aria-labelledby="about-experience-title">
+        <div class="dnk_about_inner dnk_about_experience_inner">
+            <figure><img src="images/about-renewal/about-experience.png" alt="沖縄の風景の中に立つデザネコ代表と2匹の猫" loading="lazy"></figure>
+            <div>
+                <h2 id="about-experience-title">現場を<span>20年</span>やってきたから、できること</h2>
+                <p>デザネコ代表のガーヒー（比嘉一茂）は、</p>
+                <ul><li>沖縄のデザイン・Web業界で20年</li><li>制作担当として1,000件以上の実績</li><li>取材・撮影・デザイン・コーディング・ライティング</li><li>すべての工程をひとりで一貫して担当</li></ul>
+                <p>小さなお店の「リアルな困りごと」を知っているからこそ、机上だけの提案ではなく、実際に手が動く提案ができます。</p>
+                <a class="dnk_about_button" href="profile.php">くわしいプロフィールを見る <b>→</b></a>
             </div>
         </div>
     </section>
 
-    <section>
-        <div class="single">
-            <div class="mbox bg_white radius">
-                <div class="width_6 width_sp10">
-                    <h2 class="line_height_14 tcenter">
-                        <span class="eng base_color fs_40">
-                            About us
-                        </span><br>
-                        <span class="fs_40 fs_sp30 font_kiwi">
-                            デザネコについて
-                        </span>
-                    </h2>
-                    <div class='space_3 space_sp1'></div>
-
-                    <table class="tbl_simple b-m30">
-                        <tbody>
-                            <tr>
-                                <th>屋号</th>
-                                <td>デザネコ</td>
-                            </tr>
-                            <tr>
-                                <th>設立日</th>
-                                <td>2015年</td>
-                            </tr>
-                            <tr>
-                                <th>事業内容</th>
-                                <td>
-                                    <ul class="list_disc check">
-                                        <li>印刷物デザイン</li>
-                                        <li>ロゴデザイン</li>
-                                        <li>ブログデザイン</li>
-                                        <li>写真撮影</li>
-                                        <li>動画撮影制作</li>
-                                        <li>AI画像生成</li>
-                                        <li>SNS運用代行</li>
-                                    </ul>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>取引銀行</th>
-                                <td>琉球銀行 / 沖縄銀行 / 楽天銀行</td>
-                            </tr>
-                            <tr>
-                                <th>お支払い方法</th>
-                                <td>PayPalにて（JCB / VISA / MasterCard / American Express）<br>
-                                    銀行振込、PayPay など対応可能です。</td>
-                            </tr>
-                            <tr>
-                                <th>料金について</th>
-                                <td>
-                                    <p>デザネコでは、お客さまとWin-Winの関係を築くため、<br class="pc">
-                                        ご相談の内容をお聞かせいただいた後に正式にお見積りを提出しています。</p>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    <!-- 
-                    <div class='space_3 space_sp2'></div>
-                    <h2 class="line_height_14 tcenter_sp">
-                        <span class="eng base_color fs_40">
-                            Special thanks
-                        </span>
-                    </h2>
-                    <div class='space_1 space_sp1'></div>
- -->
-
-                    <!-- <div class="bg_f2 mbox radius">
-                        <ul class="list_disc link">
-                            <li><a href="https://naturaltone-okinawa.jp/" target="_blank">沖縄のヴィーガンカフェ NATURAL TONE</a></li>
-                            <li><a href="https://ogawahkn.com/" target="_blank">有限会社 小川保険事務所</a></li>
-                            <li><a href="https://www.d-labo.okinawa/" target="_blank">株式会社 d-laboプランニング</a></li>
-                            <li><a href="https://bd-studio-truth.com/" target="_blank">Body Decoration Studio TRUTH</a></li>
-                        </ul>
-                    </div> -->
-
-                </div>
+    <section class="dnk_about_section dnk_about_company" aria-labelledby="about-company-title">
+        <div class="dnk_about_inner">
+            <header class="dnk_about_section_header is_compact"><span>About us</span><h2 id="about-company-title"><em>デザネコ</em>について</h2></header>
+            <div class="dnk_about_company_grid">
+                <dl><div><dt>屋号</dt><dd>デザネコ</dd></div><div><dt>代表者</dt><dd>比嘉 一茂（ひが かずしげ）</dd></div><div><dt>設立</dt><dd>2015年</dd></div><div><dt>所在地</dt><dd>〒901-2226 沖縄県宜野湾市嘉数2-8-2</dd></div><div><dt>電話番号</dt><dd>090-2964-1664</dd></div><div><dt>メール</dt><dd>info@d-neko.com</dd></div></dl>
+                <dl><div><dt>事業内容</dt><dd>ホームページ制作・運用／印刷物デザイン／ロゴ・撮影／AI活用コンサルティング／ご家庭向けデジタルサポート</dd></div><div><dt>対応エリア</dt><dd>沖縄県全域（オンラインで全国対応）</dd></div><div><dt>お支払い方法</dt><dd>銀行振込／クレジットカード／PayPal／PayPay</dd></div><div><dt>取引銀行</dt><dd>琉球銀行／沖縄銀行／楽天銀行</dd></div></dl>
             </div>
+            <p class="dnk_about_estimate">ご相談の内容をお聞かせいただいたあとに、正式なお見積りをお出ししています。<br>ホームページ制作は初期費用0円・月額1万円以内のプランからご案内できます。</p>
         </div>
     </section>
 
-</div>
-<!-- デザネコについて -->
+    <section class="dnk_about_section dnk_about_faq" aria-labelledby="about-faq-title">
+        <div class="dnk_about_inner">
+            <header class="dnk_about_section_header is_compact"><h2 id="about-faq-title">よくあるご質問</h2></header>
+            <div class="dnk_about_faq_list">
+                <details open><summary><b>Q1.</b> なんでデザネコという屋号なんですか？</summary><p>デザネコという屋号は、ネコが持つ優雅さや遊び心をデザインに反映させることで、見る人の心を惹きつけたいという思いから名付けました。でも、単純にデザインとネコが好きという理由がいちばんかもしれません。</p></details>
+                <details><summary><b>Q2.</b> なんでネコが好きなんですか？</summary><p>幼いころにネコを13匹飼っていたくらい、ネコが好きです。いまでも会話できるくらいネコのことを理解しているつもりです。</p></details>
+                <details><summary><b>Q3.</b> ワンちゃんは嫌いなんですか？</summary><p>ワンちゃんも好きです。ネコアレルギーですが、イヌアレルギーではないので、ワンちゃんならいっぱい抱っこできます。</p></details>
+            </div>
+            <p class="dnk_about_faq_link">料金や制作の進め方など、そのほかのご質問は「よくあるご質問」ページにまとめています。<br><a href="faq.php">→ faq.php</a></p>
+            <img class="dnk_about_faq_cats" src="images/about-renewal/faq-cats-v2.png" alt="質問マークと一緒にのぞく黒猫のもじゃと白猫のくるる" loading="lazy">
+        </div>
+    </section>
 
+</main>
 
 <?php include_once './footer.php'; ?>

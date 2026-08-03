@@ -1,0 +1,196 @@
+:root {
+  --dnk-orange: #f47b20;
+  --dnk-yellow: #f8ad18;
+  --dnk-green: #76b82a;
+  --dnk-green-dark: #4d991f;
+  --dnk-ink: #332f2b;
+  --dnk-cream: #fffaf0;
+  --dnk-line: #f1dec3;
+}
+
+.dnk_about_page {
+  overflow: hidden;
+  color: var(--dnk-ink);
+  background: #fffdf8;
+  font-family: "Kiwi Maru", "Hiragino Maru Gothic ProN", "Yu Gothic", sans-serif;
+  font-size: 18px;
+  line-height: 1.8;
+}
+
+.dnk_about_page *, .dnk_about_page *::before, .dnk_about_page *::after { box-sizing: border-box; }
+.dnk_about_page img { display: block; max-width: 100%; }
+.dnk_about_page h1, .dnk_about_page h2, .dnk_about_page h3, .dnk_about_page p, .dnk_about_page ul, .dnk_about_page ol, .dnk_about_page dl, .dnk_about_page figure { margin: 0; }
+.dnk_about_page ul, .dnk_about_page ol { padding: 0; }
+.dnk_about_page a { text-decoration: none; }
+.dnk_about_inner { width: min(1120px, calc(100% - 48px)); margin-inline: auto; position: relative; }
+.dnk_about_section { position: relative; padding: 70px 0; }
+
+.dnk_about_hero {
+  position: relative;
+  min-height: 680px;
+  overflow: hidden;
+  background: #fff8d8;
+}
+.dnk_about_hero_image {
+  position: absolute;
+  inset: 0;
+  background: url("../images/about-renewal/about-hero.png") center / cover no-repeat;
+}
+.dnk_about_hero_inner { min-height: 680px; display: flex; align-items: center; }
+.dnk_about_hero_copy { position: relative; z-index: 2; width: 58%; padding: 52px 0 34px; }
+.dnk_about_kicker { margin-bottom: 8px !important; color: var(--dnk-orange); font-size: 16px; font-weight: 800; letter-spacing: .13em; }
+.dnk_about_hero h1 { margin-bottom: 22px; font-size: clamp(34px, 4.2vw, 48px); font-weight: 900; letter-spacing: .03em; line-height: 1.45; }
+.dnk_about_hero h1 span, .dnk_about_orange { color: var(--dnk-orange); }
+.dnk_about_hero_copy > p:not(.dnk_about_kicker) { max-width: 650px; margin-bottom: 9px; font-size: 17px; font-weight: 700; line-height: 1.9; }
+.dnk_about_stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 650px; margin-top: 28px !important; list-style: none; }
+.dnk_about_stats li { position: relative; min-height: 118px; padding: 18px 12px 12px 58px; border: 1px solid #f5cc8d; border-radius: 15px; background: rgba(255,255,255,.94); box-shadow: 0 7px 15px rgba(137,95,35,.13); }
+.dnk_about_stat_icon { position: absolute; top: 21px; left: 16px; font-size: 28px; }
+.dnk_about_stats strong { display: block; color: var(--dnk-orange); font-size: 24px; font-style: normal; font-weight: 900; line-height: 1.2; white-space: nowrap; }
+.dnk_about_stats small { font-size: 12px; }
+.dnk_about_stats em { display: block; margin-top: 8px; font-size: 12px; font-style: normal; font-weight: 800; line-height: 1.55; }
+
+.dnk_about_services { background: #fffdf9; }
+.dnk_about_services::before, .dnk_about_worries::before, .dnk_about_experience::before, .dnk_about_company::before, .dnk_about_faq::before { position: absolute; inset: 0; pointer-events: none; background-image: radial-gradient(circle, rgba(245,166,54,.25) 0 3px, transparent 3.5px); background-size: 68px 68px; content: ""; opacity: .28; }
+.dnk_about_section_header { position: relative; z-index: 2; margin: 0 auto 38px; text-align: center; }
+.dnk_about_section_header > span { display: block; margin-bottom: -4px; color: var(--dnk-orange); font-family: "Courgette", cursive; font-size: 22px; font-weight: 700; line-height: 1.2; }
+.dnk_about_section_header h2 { font-size: clamp(28px, 3.5vw, 42px); font-weight: 900; line-height: 1.45; }
+.dnk_about_section_header h2 em { color: var(--dnk-orange); font-style: normal; }
+.dnk_about_section_header p { margin-top: 8px; font-size: 16px; font-weight: 700; }
+.dnk_about_section_header.is_compact { margin-bottom: 20px; }
+.dnk_about_mascot { position: absolute; z-index: 1; top: -20px; width: 185px; height: 180px; object-fit: contain; }
+.dnk_about_mascot_left { left: 0; }
+.dnk_about_mascot_right { right: 0; }
+.dnk_about_service_grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; list-style: none; }
+.dnk_about_service_grid li { position: relative; display: grid; grid-template-columns: auto 1fr auto; gap: 15px; align-items: start; min-height: 185px; padding: 24px 22px; border: 1px solid var(--dnk-line); border-radius: 16px; background: rgba(255,255,255,.96); box-shadow: 0 7px 16px rgba(108,78,39,.09); }
+.dnk_about_number { display: grid; width: 35px; height: 35px; border-radius: 50%; color: #fff; font-size: 18px; font-weight: 900; place-items: center; }
+.dnk_about_number.is_orange { background: var(--dnk-yellow); }
+.dnk_about_number.is_green { background: var(--dnk-green); }
+.dnk_about_service_grid h3 { margin: 2px 0 7px; color: var(--dnk-orange); font-size: 23px; line-height: 1.4; }
+.dnk_about_service_grid li:nth-child(2) h3, .dnk_about_service_grid li:nth-child(3) h3 { color: var(--dnk-green-dark); }
+.dnk_about_service_grid p { font-size: 15px; font-weight: 700; line-height: 1.85; }
+.dnk_about_service_grid a { display: inline-block; margin-top: 6px; color: var(--dnk-orange); font-size: 14px; font-weight: 900; }
+.dnk_about_card_icon { align-self: end; width: 96px; height: 96px; object-fit: contain; filter: drop-shadow(0 4px 4px rgba(70,55,34,.1)); }
+
+.dnk_about_worries { padding-top: 0; background: #fffefb; }
+.dnk_about_worry_grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
+.dnk_about_worry_grid article { position: relative; min-height: 265px; padding: 18px 15px 74px; border: 1px solid #efd8b6; border-radius: 13px; background: rgba(255,255,255,.96); box-shadow: 0 4px 10px rgba(111,85,49,.07); }
+.dnk_about_worry_grid h3 { margin-bottom: 11px; color: var(--dnk-orange); font-size: 17px; }
+.dnk_about_worry_grid article:nth-child(even) h3 { color: var(--dnk-green-dark); }
+.dnk_about_worry_grid ul, .dnk_about_home_worry ul, .dnk_about_solution_grid ul, .dnk_about_digital_solution ul, .dnk_about_experience ul { padding-left: 1.25em; }
+.dnk_about_worry_grid li, .dnk_about_home_worry li { margin-bottom: 6px; font-size: 14px; font-weight: 700; line-height: 1.75; }
+.dnk_about_worry_grid article > span { position: absolute; right: 18px; bottom: 12px; font-size: 50px; }
+.dnk_about_home_worry { display: grid; grid-template-columns: 86px 1fr 130px; align-items: center; gap: 18px; margin-top: 9px; padding: 14px 30px; border: 1px solid #efd8b6; border-radius: 13px; background: rgba(255,255,255,.97); box-shadow: 0 5px 12px rgba(111,85,49,.08); }
+.dnk_about_home_worry h3 { color: var(--dnk-orange); font-size: 19px; }
+.dnk_about_home_icon { font-size: 58px; }
+.dnk_about_people_icon { font-size: 58px; white-space: nowrap; }
+.dnk_about_down { position: absolute; left: 50%; bottom: -25px; z-index: 5; display: grid; width: 50px; height: 50px; border: 4px solid #fff; border-radius: 50%; color: var(--dnk-green); background: #fff; box-shadow: 0 2px 8px rgba(56,95,20,.2); font-size: 42px; line-height: .8; transform: translateX(-50%); place-items: center; }
+
+.dnk_about_solutions { padding-block: 64px; color: #fff; background: linear-gradient(115deg, #ff7a00 0%, #ffb200 47%, #7fc329 100%); }
+.dnk_about_solutions::after { position: absolute; inset: 0; pointer-events: none; content: ""; opacity: .18; background-image: radial-gradient(circle, #fff 0 4px, transparent 4.5px); background-size: 90px 90px; }
+.dnk_about_section_header.is_inverse { z-index: 2; margin-bottom: 25px; }
+.dnk_about_section_header.is_inverse > span, .dnk_about_section_header.is_inverse h2, .dnk_about_section_header.is_inverse p { color: #fff; }
+.dnk_about_solution_grid { position: relative; z-index: 2; display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.dnk_about_solution_grid article { min-height: 245px; padding: 16px 14px; border-radius: 14px; color: var(--dnk-ink); background: rgba(255,255,255,.97); }
+.dnk_about_solution_grid h3 { color: var(--dnk-orange); font-size: 17px; text-align: center; }
+.dnk_about_solution_grid article:nth-child(even) h3 { color: var(--dnk-green-dark); }
+.dnk_about_solution_icon { width: 88px; height: 78px; margin: 8px auto 5px; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(70,55,34,.1)); }
+.dnk_about_solution_grid li { margin-bottom: 5px; font-size: 13px; font-weight: 700; line-height: 1.7; }
+.dnk_about_digital_solution { position: relative; z-index: 2; display: grid; grid-template-columns: 100px 1fr 75px 75px; align-items: center; gap: 15px; width: min(850px, 90%); min-height: 120px; margin: 12px auto 0; padding: 10px 25px; border-radius: 16px; color: var(--dnk-ink); background: #fff; }
+.dnk_about_digital_icon { width: 105px; height: 100px; object-fit: contain; filter: drop-shadow(0 3px 4px rgba(70,55,34,.1)); }
+.dnk_about_digital_solution h3 { color: var(--dnk-green-dark); font-size: 20px; }
+.dnk_about_digital_solution li { font-size: 14px; font-weight: 700; line-height: 1.7; }
+.dnk_about_digital_cat { width: 75px; height: 100px; object-fit: contain; mix-blend-mode: multiply; }
+
+.dnk_about_experience { background: #fffaf0; }
+.dnk_about_experience_inner { display: grid; grid-template-columns: 46% 1fr; align-items: center; gap: 42px; padding: 28px; border-radius: 18px; background: rgba(255,255,255,.82); box-shadow: 0 8px 22px rgba(118,80,33,.07); }
+.dnk_about_experience figure { overflow: hidden; border: 8px solid #fff; border-radius: 18px; transform: rotate(-1deg); box-shadow: 0 8px 20px rgba(89,67,39,.16); }
+.dnk_about_experience figure img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; }
+.dnk_about_experience h2 { margin-bottom: 12px; font-size: clamp(25px, 3vw, 37px); line-height: 1.45; }
+.dnk_about_experience h2 span { color: var(--dnk-orange); }
+.dnk_about_experience p, .dnk_about_experience li { font-size: 15px; font-weight: 700; line-height: 1.8; }
+.dnk_about_experience ul { margin: 8px 0 10px; }
+.dnk_about_button { display: inline-flex; align-items: center; justify-content: center; gap: 15px; min-width: 300px; margin-top: 18px; padding: 12px 24px; border-radius: 999px; color: #fff !important; background: linear-gradient(90deg, #f9a600, #f4761b); box-shadow: 0 7px 14px rgba(217,111,16,.2); font-size: 14px; font-weight: 900; }
+
+.dnk_about_company { padding-top: 56px; background: #fffdf8; }
+.dnk_about_company_grid { display: grid; grid-template-columns: 43% 57%; border: 1px solid #efce9d; border-radius: 8px; overflow: hidden; background: #fff; }
+.dnk_about_company dl + dl { border-left: 1px solid #efce9d; }
+.dnk_about_company dl > div { display: grid; grid-template-columns: 125px 1fr; min-height: 43px; border-bottom: 1px solid #f2dfc4; }
+.dnk_about_company dl > div:last-child { border-bottom: 0; }
+.dnk_about_company dt, .dnk_about_company dd { padding: 10px 12px; font-size: 14px; font-weight: 700; line-height: 1.65; }
+.dnk_about_company dt { background: #f3f6e9; }
+.dnk_about_company dd { margin: 0; }
+.dnk_about_estimate { margin-top: 10px !important; padding: 14px 20px; border: 1px solid #f0dfc6; border-radius: 10px; background: #fff8e8; font-size: 15px; font-weight: 700; line-height: 1.75; text-align: center; }
+
+.dnk_about_faq { padding-top: 35px; background: #fffefb; }
+.dnk_about_faq_list { position: relative; z-index: 2; display: grid; gap: 8px; }
+.dnk_about_faq details { overflow: hidden; border: 1px solid #efcf9b; border-radius: 10px; background: rgba(255,255,255,.97); box-shadow: 0 3px 8px rgba(112,78,33,.06); }
+.dnk_about_faq summary { position: relative; min-height: 58px; padding: 14px 62px 14px 20px; color: var(--dnk-orange); font-size: 17px; font-weight: 900; line-height: 1.75; cursor: pointer; list-style: none; }
+.dnk_about_faq summary::-webkit-details-marker { display: none; }
+.dnk_about_faq summary::after { position: absolute; right: 16px; top: 50%; display: flex; width: 34px; height: 34px; align-items: center; justify-content: center; padding: 0 0 2px; border-radius: 50%; color: #fff; background: var(--dnk-orange); content: "+"; font-family: Arial, sans-serif; font-size: 24px; font-weight: 700; line-height: 1; transform: translateY(-50%); }
+.dnk_about_faq details[open] summary::after { content: "−"; }
+.dnk_about_faq details:nth-child(2) summary::after { background: var(--dnk-green); }
+.dnk_about_faq details p { padding: 2px 20px 17px; font-size: 15px; font-weight: 700; line-height: 1.85; }
+.dnk_about_faq_link { position: relative; z-index: 2; width: 75%; margin-top: 14px !important; font-size: 15px; line-height: 1.8; }
+.dnk_about_faq_link a { color: var(--dnk-green-dark); font-weight: 900; }
+.dnk_about_faq_cats { position: relative; z-index: 1; right: auto; bottom: auto; display: block; width: 390px; height: 260px; margin: -32px 0 -22px auto; border-radius: 22px; object-fit: cover; object-position: right bottom; }
+
+@media (max-width: 900px) {
+  .dnk_about_hero, .dnk_about_hero_inner { min-height: 760px; }
+  .dnk_about_hero_image { background-position: 58% center; }
+  .dnk_about_hero_image::after { position: absolute; inset: 0; background: linear-gradient(90deg, rgba(255,251,224,.84) 0%, rgba(255,251,224,.62) 53%, rgba(255,251,224,.05) 100%); content: ""; }
+  .dnk_about_hero_copy { width: 72%; }
+  .dnk_about_mascot { width: 135px; opacity: .8; }
+  .dnk_about_worry_grid, .dnk_about_solution_grid { grid-template-columns: repeat(2, 1fr); }
+  .dnk_about_experience_inner { grid-template-columns: 1fr 1.1fr; gap: 24px; }
+  .dnk_about_company_grid { grid-template-columns: 1fr; }
+  .dnk_about_company dl + dl { border-top: 1px solid #efce9d; border-left: 0; }
+}
+
+@media (max-width: 640px) {
+  .dnk_about_page { font-size: 16px; }
+  .dnk_about_inner { width: min(100% - 28px, 560px); }
+  .dnk_about_section { padding: 50px 0; }
+  .dnk_about_hero { min-height: 890px; }
+  .dnk_about_hero_inner { min-height: 890px; align-items: flex-start; }
+  .dnk_about_hero_image { background-position: 64% bottom; background-size: auto 62%; background-repeat: no-repeat; }
+  .dnk_about_hero_image::after { background: linear-gradient(180deg, rgba(255,251,224,.98) 0%, rgba(255,251,224,.94) 52%, rgba(255,251,224,.12) 76%); }
+  .dnk_about_hero_copy { width: 100%; padding-top: 45px; }
+  .dnk_about_hero h1 { margin-bottom: 15px; font-size: 31px; }
+  .dnk_about_hero_copy > p:not(.dnk_about_kicker) { font-size: 14px; line-height: 1.8; }
+  .dnk_about_stats { gap: 6px; margin-top: 18px !important; }
+  .dnk_about_stats li { min-height: 95px; padding: 12px 5px 8px; text-align: center; }
+  .dnk_about_stat_icon { position: static; display: block; font-size: 19px; }
+  .dnk_about_stats strong { font-size: 17px; }
+  .dnk_about_stats em { margin-top: 4px; font-size: 11px; }
+  .dnk_about_section_header { margin-bottom: 25px; }
+  .dnk_about_section_header > span { font-size: 18px; }
+  .dnk_about_section_header h2 { font-size: 27px; }
+  .dnk_about_section_header p { font-size: 13px; line-height: 1.75; }
+  .dnk_about_mascot { display: none !important; }
+  .dnk_about_service_grid, .dnk_about_worry_grid, .dnk_about_solution_grid { grid-template-columns: 1fr; }
+  .dnk_about_service_grid li { min-height: 0; padding: 18px 14px; grid-template-columns: auto 1fr 66px; }
+  .dnk_about_card_icon { width: 66px; height: 66px; }
+  .dnk_about_service_grid h3 { font-size: 19px; }
+  .dnk_about_service_grid p { font-size: 14px; }
+  .dnk_about_worries { padding-top: 0; }
+  .dnk_about_worry_grid { gap: 7px; }
+  .dnk_about_worry_grid article { min-height: 190px; padding-bottom: 60px; }
+  .dnk_about_home_worry { grid-template-columns: 55px 1fr; padding: 14px; }
+  .dnk_about_home_icon { font-size: 38px; }
+  .dnk_about_people_icon { display: none; }
+  .dnk_about_solution_grid article { min-height: 215px; }
+  .dnk_about_solution_icon { width: 76px; height: 68px; }
+  .dnk_about_digital_solution { grid-template-columns: 60px 1fr; width: 100%; padding: 12px 15px; }
+  .dnk_about_digital_icon { width: 58px; height: 58px; }
+  .dnk_about_digital_cat { display: none; }
+  .dnk_about_experience_inner { grid-template-columns: 1fr; padding: 14px; }
+  .dnk_about_experience h2 { font-size: 24px; }
+  .dnk_about_button { min-width: 0; width: 100%; }
+  .dnk_about_company dl > div { grid-template-columns: 95px 1fr; }
+  .dnk_about_company dt, .dnk_about_company dd { padding: 9px; font-size: 13px; }
+  .dnk_about_estimate { font-size: 13px; }
+  .dnk_about_faq summary { min-height: 58px; padding-right: 58px; font-size: 16px; }
+  .dnk_about_faq details p { font-size: 14px; }
+  .dnk_about_faq_cats { position: relative; right: auto; bottom: auto; display: block; width: 100%; height: auto; margin: 16px auto -18px; border-radius: 18px; }
+  .dnk_about_faq_link { width: 100%; }
+}

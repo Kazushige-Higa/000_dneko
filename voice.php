@@ -71,7 +71,7 @@ voice.php -->
                                 </div>
                             </div>
                         </li>
-                        <li class="b_m20 radius">
+                        <!-- <li class="b_m20 radius">
                             <div class='mbox bg_white'>
                                 <div class='flexbox gap3'>
                                     <div class="width_3 width_sp10">
@@ -118,7 +118,7 @@ voice.php -->
                                     </div>
                                 </div>
                             </div>
-                        </li>
+                        </li> -->
                         <li class="b_m20 radius">
                             <div class='mbox bg_white'>
                                 <div class='flexbox gap3'>
