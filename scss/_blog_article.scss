@@ -219,8 +219,14 @@
 }
 
 #countPost {
+    strong {
+        color: #82ab36;
+    }
     p {
         line-height: 2;
+        a {
+            color: #2273b0;
+        }
         u {
             background: linear-gradient(transparent 70%, #fef36c 0%);
             z-index: 0;
@@ -247,9 +253,10 @@
         line-height: 1.2;
         margin: 1.5em 0;
         font-weight: bold;
-        color: $base_color;
+        color: #fff;
+        background: #82ab36;
         padding: 1em 0.5em;
-        border-left: 3px solid $base_color;
+        border-left: 3px solid #86ab36;
         // background-color: rgba($base_color, 0.1);
         strong {
             font-size: 150%;
@@ -282,9 +289,9 @@
         font-size: 120%;
         margin: 1.5em 0;
         font-weight: bold;
-        // color: $base_color;
+        color: #f9b104;
         padding: 0.3em 0.5em 0.3em 0.5em;
-        border-bottom: 1px solid $base_color;
+        border-bottom: 3px solid #f9b104;
     }
     h4 {
         font-size: 120%;
@@ -339,7 +346,7 @@
     ol {
         border: solid 2px #eee;
         border-radius: 3px;
-        margin-bottom: 2em;
+        margin: 2em;
         padding: 1em 1em 1em 1em;
     }
     ul {
@@ -352,7 +359,7 @@
             //border-bottom: 1px solid #aaa;
             &:before {
                 content: "●";
-                color: $base_color;
+                color: #82ab36;
                 position: absolute;
                 top: 0.5em;
                 left: 0;
@@ -376,8 +383,7 @@
             &:before {
                 counter-increment: number;
                 content: counter(number);
-                background: rgba($base_color, 0.6);
-                color: $base_color;
+                background: #82ab36;
                 position: absolute;
                 top: 0.5em;
                 left: 0;
@@ -396,6 +402,27 @@
                     font-size: 0.9em;
                 }
             }
+        }
+    }
+    @include for-size(phone-only) {
+        h2 {
+            font-size: 135%;
+            line-height: 1.45;
+        }
+
+        h3 {
+            font-size: 120%;
+            line-height: 1.5;
+        }
+
+        ul,
+        ol {
+            margin: 1.5em 0;
+            padding: 1em;
+        }
+
+        ol li span {
+            font-size: 1em;
         }
     }
     table {

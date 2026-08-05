@@ -40,8 +40,9 @@
     }
 
     @include for-size(phone-only) {
-      padding: 6px 14px;
-      font-size: 80%;
+      min-height: 44px;
+      padding: 8px 16px;
+      font-size: 16px;
     }
   }
 }

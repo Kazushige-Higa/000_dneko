@@ -184,7 +184,7 @@ $page_script = '';
           <?php
           $loop_posts = $sidebar_posts;
           $loop_type = 'works';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+          $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -197,7 +197,7 @@ $page_script = '';
           <?php
           $loop_posts = $works_by_category[$wcat];
           $loop_type = 'works';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+          $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -251,7 +251,7 @@ $page_script = '';
           <?php
           $loop_posts = $sidebar_posts;
           $loop_type = 'blog';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+          $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -264,7 +264,7 @@ $page_script = '';
           <?php
           $loop_posts = $blog_by_category[$bcat];
           $loop_type = 'blog';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+          $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -293,7 +293,7 @@ $page_script = '';
         <?php
         $loop_posts = $sidebar_posts;
         $loop_type = 'blog';
-        $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+        $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
         $loop_show_desc = true;
         $loop_empty_message = '該当する記事がありません。';
         include 'loop_post.php';
@@ -327,7 +327,7 @@ $page_script = '';
           <?php
           $loop_posts = $sidebar_posts;
           $loop_type = 'column';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+          $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -340,7 +340,7 @@ $page_script = '';
           <?php
           $loop_posts = $column_by_category[$ccat];
           $loop_type = 'column';
-          $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+          $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
           $loop_show_desc = true;
           $loop_empty_message = '';
           include 'loop_post.php';
@@ -369,7 +369,7 @@ $page_script = '';
         <?php
         $loop_posts = $sidebar_posts;
         $loop_type = 'column';
-        $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+        $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
         $loop_show_desc = true;
         $loop_empty_message = '該当するコラムがありません。';
         include 'loop_post.php';
@@ -380,7 +380,7 @@ $page_script = '';
         <?php
         $loop_posts = $sidebar_posts;
         $loop_type = $list_type;
-        $loop_ul_class = 'post_list_card grid set4 sp2 gap1';
+        $loop_ul_class = 'post_list_card grid set4 sp1 gap1';
         $loop_show_desc = true;
         if ($list_type === 'works') {
           $loop_empty_message = '該当する制作実績がありません。';

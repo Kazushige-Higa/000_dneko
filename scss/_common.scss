@@ -6,6 +6,22 @@ body {
 	min-height: 100vh;
 	position: relative;
 	@include font_base;
+	@include for-size(phone-only) {
+		font-size: clamp(17px, 4.6vw, 18px);
+		line-height: 1.8;
+		-webkit-text-size-adjust: 100%;
+		text-size-adjust: 100%;
+	}
+}
+
+@include for-size(phone-only) {
+	input,
+	select,
+	textarea,
+	button {
+		font-size: 16px;
+		line-height: 1.5;
+	}
 }
 a {
 	color: lighten($base_color, 5%);

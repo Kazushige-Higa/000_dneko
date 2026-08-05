@@ -895,6 +895,40 @@ footer .dr_footer_navigation .dr_nav_dropdown a:focus-visible {
 
   footer .dr_footer_navigation .dr_nav_dropdown a {
     min-height: 34px;
-    font-size: 13px;
+    font-size: 16px;
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Shared mobile readability
+   -------------------------------------------------------------------------- */
+@media (max-width: 520px) {
+  .dr_page_title_breadcrumb {
+    font-size: 14px;
+    line-height: 1.6;
+  }
+
+  .dr_menu_button b {
+    font-size: 14px;
+  }
+
+  .dr_global_nav .dr_nav_dropdown a {
+    font-size: 16px;
+  }
+
+  .dr_contact_inner p {
+    font-size: 16px;
+    line-height: 1.7;
+  }
+
+  .dr_contact_inner a {
+    min-height: 48px;
+    font-size: 16px;
+  }
+
+  footer .dr_footer_navigation .dr_nav_primary,
+  footer .dr_footer_navigation .dr_nav_dropdown a {
+    font-size: 16px;
+    line-height: 1.7;
   }
 }

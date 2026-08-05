@@ -45,9 +45,9 @@
   transition: background 0.2s, color 0.2s, border-color 0.2s;
 
   @include for-size(phone-only) {
-    min-width: 34px;
-    height: 34px;
-    font-size: 0.85em;
+    min-width: 44px;
+    height: 44px;
+    font-size: 16px;
   }
 
   &:hover:not(.is-disabled):not(.is-current) {
