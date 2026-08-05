@@ -77,6 +77,7 @@ $staticPages = [
     '/ai-consulting.php' => 'ai-consulting.php',
     '/service_digital.php' => 'service_digital.php',
     '/about.php' => 'about.php',
+    '/marutto-plan/' => 'service_marutto.php',
     '/moja-cat.php' => 'moja-cat.php',
     '/profile.php' => 'profile.php',
     '/voice.php' => 'voice.php',
