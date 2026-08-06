@@ -222,9 +222,7 @@ if (!function_exists('dneko_home_category')) {
           <a href="profile.php">ガーヒーのプロフィールを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="dr_creator_visual">
-          <img class="dr_creator_profile" src="images/profile.jpg" alt="デザネコ代表 比嘉一茂" loading="lazy">
-          <img class="dr_creator_moja" src="images/sticker/42.webp" alt="看板猫もじゃ" loading="lazy">
-          <img class="dr_creator_kururu" src="images/sticker/01.webp" alt="看板猫くるる" loading="lazy">
+          <img class="dr_creator_profile_hero" src="images/profile-renewal/profile-hero-gahie-v2.webp" alt="デザネコ代表の比嘉一茂と看板猫のもじゃ・くるる" width="1806" height="871" loading="lazy" decoding="async">
         </div>
       </div>
     </section>

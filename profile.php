@@ -31,6 +31,14 @@ $page_script = '';
         </div>
     </section>
 
+    <div class="pf_instagram_follow">
+        <a href="https://www.instagram.com/kazushige_higa/" target="_blank" rel="noopener noreferrer">
+            <i class="fa-brands fa-instagram" aria-hidden="true"></i>
+            <span><small>制作風景や日々の活動を発信中</small>Instagramを見る</span>
+            <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+        </a>
+    </div>
+
     <section class="pf_section is_white pf_ref_section" aria-labelledby="pf-work-title">
         <div class="pf_inner">
             <header class="pf_section_heading pf_ref_heading is_orange">

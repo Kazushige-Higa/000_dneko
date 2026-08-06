@@ -133,6 +133,43 @@
   padding: 66px 0;
 }
 
+.pf_instagram_follow {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  justify-content: center;
+  padding: 24px 20px;
+  background: #fff;
+}
+
+.pf_instagram_follow a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+  min-width: min(100%, 390px);
+  min-height: 64px;
+  padding: 11px 24px;
+  border-radius: 999px;
+  color: #fff;
+  background: linear-gradient(120deg, #833ab4, #e1306c 52%, #f77737);
+  font-size: 18px;
+  font-weight: 900;
+  line-height: 1.35;
+  box-shadow: 0 8px 0 #b72c63, 0 14px 24px rgba(183, 44, 99, .18);
+}
+
+.pf_instagram_follow a:hover,
+.pf_instagram_follow a:focus-visible {
+  transform: translateY(3px);
+  box-shadow: 0 5px 0 #b72c63, 0 10px 18px rgba(183, 44, 99, .18);
+}
+
+.pf_instagram_follow a > i:first-child { font-size: 29px; }
+.pf_instagram_follow a > i:last-child { font-size: 14px; }
+.pf_instagram_follow span { display: grid; text-align: center; }
+.pf_instagram_follow small { font-size: 12px; font-weight: 700; }
+
 .pf_hero_eyebrow {
   display: inline-flex;
   align-items: center;
@@ -1285,6 +1322,8 @@
   .pf_hero_subtitle { font-size: 24px; }
   .pf_hero_lead { font-size: 13px; line-height: 1.85; }
   .pf_hero_chips li { font-size: 11px; }
+  .pf_instagram_follow { padding: 20px 16px 26px; }
+  .pf_instagram_follow a { width: 100%; min-width: 0; min-height: 60px; padding-inline: 18px; font-size: 17px; }
 
   .pf_intro_copy h2 { font-size: 25px; }
   .pf_intro_copy p,

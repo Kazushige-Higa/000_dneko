@@ -8,9 +8,6 @@ body:has(.service_marutto) {
   background: #fff;
 }
 
-body:has(.service_marutto) > .dr_header,
-body:has(.service_marutto) > .dr_contact,
-body:has(.service_marutto) > footer,
 body:has(.service_marutto) > #pagetop {
   display: none !important;
 }

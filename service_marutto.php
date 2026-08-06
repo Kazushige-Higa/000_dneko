@@ -30,7 +30,7 @@ $page_script = <<<'HTML'
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var sticky = document.querySelector('.marutto_sticky');
-  var stickyHiddenAreas = document.querySelectorAll('.marutto_hero, .marutto_final, .marutto_contact_form_section');
+  var stickyHiddenAreas = document.querySelectorAll('.marutto_hero, .marutto_final, .marutto_contact_form_section, .dr_contact, footer');
   if (sticky && stickyHiddenAreas.length && 'IntersectionObserver' in window) {
     var stickyVisibility = new Map();
     var stickyObserver = new IntersectionObserver(function (entries) {
@@ -199,7 +199,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
           <div class="marutto_hero_action">
             <p class="marutto_plan_name">◆ デザインまるっとお任せプラン ◆</p>
             <p class="marutto_limited">★ 守成クラブの方 毎月2組限定 ★</p>
-            <a class="marutto_cta" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずはLINEで無料相談する<small>相談・お見積りは無料です</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+            <a class="marutto_cta" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>相談・お見積りは無料です</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
             <a class="marutto_anchor_link" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#plan"><i class="fa-regular fa-circle-play" aria-hidden="true"></i> 30秒で分かるプランの中身を見る</a>
           </div>
           </div>
