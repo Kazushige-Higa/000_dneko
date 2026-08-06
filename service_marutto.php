@@ -2,7 +2,7 @@
 $page_title = '沖縄のHP制作×チラシ｜月々9,800円まるっとお任せ｜デザネコ';
 $page_description = '沖縄のデザネコが、集客の「入口のチラシ」と「受け皿のホームページ」を月々9,800円のセットプランで提供。制作費0円・契約縛りなし・789社の実績。';
 $page_og_image = 'https://d-neko.com/images/marutto-plan-ogp.jpg';
-$page_canonical = 'https://d-neko.com/marutto-plan/';
+$page_canonical = 'https://d-neko.com/service_marutto.php';
 $marutto_request_host = $_SERVER['HTTP_HOST'] ?? '';
 $marutto_request_path = parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH);
 $marutto_is_local = preg_match('/^(?:localhost|127\.0\.0\.1|\[::1\])(?::[0-9]+)?$/i', $marutto_request_host) === 1;
@@ -15,7 +15,7 @@ if ($marutto_is_local && is_string($marutto_request_path)) {
     }
   }
 }
-$marutto_page_path = $page_base . 'marutto-plan/';
+$marutto_page_path = $page_base . 'service_marutto.php';
 $page_top_href = $marutto_page_path . '#top';
 $page_head = '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="preload" as="image" href="images/marutto-hero-characters-v1.jpg">';
 $page_style = '<link href="css/service-marutto.css?v=' . filemtime(__DIR__ . '/css/service-marutto.css') . '" rel="stylesheet">';

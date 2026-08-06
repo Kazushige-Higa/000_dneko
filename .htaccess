@@ -53,14 +53,9 @@ RewriteRule ^index\.(?:html|php)$ / [R=301,L]
 # 設定用FAQテンプレートの直アクセスは正規FAQページへ統一する
 RewriteRule ^microCMS_FAQ_customfield/faq\.php$ faq.php [R=301,L]
 
-# デザインまるっとお任せプランの推奨URL
-RewriteCond %{THE_REQUEST} \s/+service_marutto\.php(?:[?\s]) [NC]
-RewriteRule ^service_marutto\.php$ /marutto-plan/ [R=301,L]
-RewriteCond %{THE_REQUEST} \s/+marutto-plan\.php(?:[?\s]) [NC]
-RewriteRule ^marutto-plan\.php$ /marutto-plan/ [R=301,L]
-RewriteCond %{THE_REQUEST} \s/+marutto-plan(?:[?\s]) [NC]
-RewriteRule ^marutto-plan$ /marutto-plan/ [R=301,L]
-RewriteRule ^marutto-plan/?$ service_marutto.php [L]
+# 旧URLは service_marutto.php へ統一する
+RewriteCond %{REQUEST_URI} ^(.*/)marutto-plan(?:\.php|/?)$ [NC]
+RewriteRule ^marutto-plan(?:\.php|/?)$ %1service_marutto.php [R=301,L,NE]
 
 # 存在しないURLはトップへ転送せず、404ページを正しいステータスで返す
 RewriteCond %{REQUEST_FILENAME} !-f
