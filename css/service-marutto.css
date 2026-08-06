@@ -62,12 +62,6 @@ body:has(.service_marutto) > #pagetop {
   padding-top: 116px;
 }
 
-.service_marutto .marutto_hero_line {
-  color: #fff;
-  background: var(--service_cta_start);
-  box-shadow: 0 7px 18px rgba(36, 95, 26, .24);
-}
-
 .service_marutto .marutto_cta,
 .service_marutto .marutto_cta_compact {
   color: #fff;
@@ -154,10 +148,6 @@ body:has(.service_marutto) > #pagetop {
 }
 
 @media (max-width: 640px) {
-  body:has(.service_marutto) {
-    padding-bottom: calc(72px + env(safe-area-inset-bottom));
-  }
-
   .service_marutto.marutto_plan {
     padding-bottom: 0;
     font-size: 18px;
@@ -169,15 +159,6 @@ body:has(.service_marutto) > #pagetop {
     left: 12px;
     width: 142px;
     padding: 3px 5px;
-  }
-
-  .service_marutto .marutto_hero_line {
-    top: 11px;
-    right: 10px;
-    max-width: 150px;
-    min-height: 42px;
-    padding: 6px 9px;
-    font-size: 14px;
   }
 
   .service_marutto .marutto_hero_bg {
@@ -232,30 +213,6 @@ body:has(.service_marutto) > #pagetop {
     font-size: 19px;
   }
 
-  .service_marutto .marutto_sticky {
-    position: fixed;
-    z-index: 1000;
-    right: 10px;
-    bottom: calc(8px + env(safe-area-inset-bottom));
-    left: 10px;
-    display: block;
-    padding: 4px;
-    background: rgba(255, 255, 255, .94);
-    border-radius: 14px;
-    box-shadow: 0 8px 28px rgba(24, 72, 18, .25);
-  }
-
-  .service_marutto .marutto_sticky a {
-    min-height: 58px;
-    background: linear-gradient(135deg, var(--service_cta_start), var(--service_cta_end));
-    border-radius: 11px;
-  }
-
-  .service_marutto .marutto_sticky.is_hidden {
-    opacity: 0;
-    pointer-events: none;
-    transform: translateY(18px);
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -355,10 +312,6 @@ body:has(.service_marutto) > #pagetop {
   font-weight: 500;
   letter-spacing: .08em;
   line-height: 1.45;
-}
-
-.service_marutto .marutto_campaign_limit .marutto_hero_line {
-  display: none;
 }
 
 .service_marutto .marutto_campaign_stage {
@@ -907,13 +860,6 @@ body:has(.service_marutto) > #pagetop {
     margin: 0 auto 7px;
   }
 
-  .service_marutto .marutto_campaign_limit .marutto_hero_line {
-    position: static;
-    width: max-content;
-    margin: 10px auto 0;
-    transform: none;
-  }
-
   .service_marutto .marutto_campaign_stage_inner {
     min-height: 730px;
   }
@@ -1048,13 +994,6 @@ body:has(.service_marutto) > #pagetop {
     font-size: 16px;
     letter-spacing: .02em;
     line-height: 1.55;
-  }
-
-  .service_marutto .marutto_campaign_limit .marutto_hero_line {
-    display: inline-flex;
-    min-height: 48px;
-    padding: 7px 14px;
-    font-size: 16px;
   }
 
   .service_marutto .marutto_campaign_stage_inner {

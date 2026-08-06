@@ -29,21 +29,6 @@ $page_style = '<link href="css/service-marutto.css?v=' . filemtime(__DIR__ . '/c
 $page_script = <<<'HTML'
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-  var sticky = document.querySelector('.marutto_sticky');
-  var stickyHiddenAreas = document.querySelectorAll('.marutto_hero, .marutto_final, .marutto_contact_form_section, .dr_contact, footer');
-  if (sticky && stickyHiddenAreas.length && 'IntersectionObserver' in window) {
-    var stickyVisibility = new Map();
-    var stickyObserver = new IntersectionObserver(function (entries) {
-      entries.forEach(function (entry) {
-        stickyVisibility.set(entry.target, entry.isIntersecting);
-      });
-      sticky.classList.toggle('is_hidden', Array.from(stickyVisibility.values()).some(Boolean));
-    }, { threshold: 0.04 });
-    stickyHiddenAreas.forEach(function (area) {
-      stickyVisibility.set(area, false);
-      stickyObserver.observe(area);
-    });
-  }
   document.querySelectorAll('.marutto_plan a').forEach(function (link) {
     link.addEventListener('click', function () {
       if (typeof gtag !== 'function') return;
@@ -162,7 +147,6 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
               <span class="marutto_campaign_limit_title">守成クラブの方 <strong>毎月2組限定</strong></span>
             </h1>
             <p>一人で全工程を担当するため、月に2組までしかお引き受けできません。</p>
-            <a class="marutto_hero_line" href="<?php echo htmlspecialchars($line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i> LINEで無料相談</a>
           </div>
         </div>
 
@@ -586,7 +570,6 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
       </div>
     </section>
 
-    <div class="marutto_sticky"><a href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>LINEで無料相談する</span></a></div>
   </div>
 </main>
 <!-- デザインまるっとお任せプラン service_marutto.php -->
