@@ -174,18 +174,12 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
 
         <div class="marutto_campaign_follow">
           <div class="marutto_inner">
-          <ul class="marutto_trust_bar" aria-label="デザネコの実績とプランの特徴">
-            <li><span>デザイン歴</span><strong>20<small>年</small></strong></li>
-            <li><span>HP制作実績</span><strong>789<small>社</small></strong></li>
-            <li><span>制作費</span><strong>0<small>円</small></strong></li>
-            <li><span>契約</span><strong>縛りなし</strong></li>
-          </ul>
-          <div class="marutto_hero_action">
-            <p class="marutto_plan_name">◆ デザインまるっとお任せプラン ◆</p>
-            <p class="marutto_limited">★ 守成クラブの方 毎月2組限定 ★</p>
-            <a class="marutto_cta" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>相談・お見積りは無料です</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a>
-            <a class="marutto_anchor_link" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#plan"><i class="fa-regular fa-circle-play" aria-hidden="true"></i> 30秒で分かるプランの中身を見る</a>
-          </div>
+            <ul class="marutto_trust_bar" aria-label="デザネコの実績とプランの特徴">
+              <li><span>デザイン歴</span><strong>20<small>年</small></strong></li>
+              <li><span>HP制作実績</span><strong>789<small>社</small></strong></li>
+              <li><span>制作費</span><strong>0<small>円</small></strong></li>
+              <li><span>契約</span><strong>縛りなし</strong></li>
+            </ul>
           </div>
         </div>
       </div>
@@ -211,7 +205,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <img src="<?php echo $img; ?>/flyer-design/mascot-moja-wave.webp" alt="一緒に解決策を考える黒猫のもじゃ" width="539" height="693" loading="lazy" decoding="async">
           </div>
           <p class="marutto_turning">3つ以上あてはまったら、<br><strong>デザネコの“まるっとお任せプラン”がぴったりです。</strong></p>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>まとまっていないお悩みでも大丈夫です</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a><a class="marutto_anchor_link" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#plan">プランの詳細を見る</a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>まとまっていないお悩みでも大丈夫です</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a><a class="marutto_anchor_link" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#plan">プランの詳細を見る</a></div>
         </div>
       </div>
     </section>
@@ -235,7 +229,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <article><span>特徴 2</span><i class="fa-solid fa-chart-line" aria-hidden="true"></i><h3>HP制作後も、<br>数字で改善サポート</h3><p>閲覧数・男女比・検索キーワード等を数値化し、改善案をご提案。狙ったターゲットへの届け方や検索上位表示のご相談にも柔軟に対応します。</p></article>
             <article><span>特徴 3</span><i class="fa-solid fa-palette" aria-hidden="true"></i><h3>印刷物以外のデザインも<br>まとめてお任せ</h3><p>シールやオリジナルグッズなど、大手では高額だったデザインもご相談可能。ブランドの雰囲気を揃えながら、低価格でご提供します。</p></article>
           </div>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>チラシだけ、HPだけのご相談も歓迎です</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>チラシだけ、HPだけのご相談も歓迎です</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>
@@ -261,7 +255,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
                 <figure><img src="<?php echo $img; ?>/web_design/yukyu-okinawa.com.webp" alt="旅行会社のホームページ制作実績" width="480" height="360" loading="lazy" decoding="async"><figcaption>旅行・観光</figcaption></figure>
                 <figure><img src="<?php echo $img; ?>/web_design/arakaki-grow.co.jp.webp" alt="企業ホームページの制作実績" width="480" height="360" loading="lazy" decoding="async"><figcaption>企業サイト</figcaption></figure>
                 <figure><img src="<?php echo $img; ?>/web_design/churasakura.okinawa.webp" alt="沖縄県内事業者のホームページ制作実績" width="480" height="360" loading="lazy" decoding="async"><figcaption>地域サービス</figcaption></figure>
-                <figure><img src="<?php echo $img; ?>/web_design/hamagawa-nursery.com.webp" alt="保育園のホームページ制作実績" width="480" height="360" loading="lazy" decoding="async"><figcaption>保育園</figcaption></figure>
+                <figure><img src="<?php echo $img; ?>/web_design/tedakonurseryschool.com.webp" alt="てだこ保育園のホームページ制作実績" width="480" height="360" loading="lazy" decoding="async"><figcaption>保育園</figcaption></figure>
                 <figure><img src="<?php echo $img; ?>/web_design/ryukyu-urology.jp.webp" alt="医療機関のホームページ制作実績" width="480" height="360" loading="lazy" decoding="async"><figcaption>医療機関</figcaption></figure>
                 <figure><img src="<?php echo $img; ?>/web_design/24c.jp.webp" alt="制作実績 24c.jp" width="480" height="360" loading="lazy"><figcaption>店舗</figcaption></figure>
                 <figure><img src="<?php echo $img; ?>/web_design/higawa-parking.jp.webp" alt="制作実績 higawa-parking.jp" width="480" height="360" loading="lazy"><figcaption>駐車場</figcaption></figure>
@@ -297,7 +291,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
               </dl>
             </div>
           </div>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>同業種の事例もご案内できます</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>同業種の事例もご案内できます</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>
@@ -329,7 +323,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
               <div class="marutto_voice_stats"><span>5年で<strong>10</strong>倍</span><span><strong>10</strong>年以上</span></div>
             </article>
           </div>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>成果につながる組み合わせをご提案します</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>成果につながる組み合わせをご提案します</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>
@@ -362,7 +356,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             </div>
             <aside><h3>オプション</h3><ul><li>予約システム</li><li>クレジットカード決済機能</li><li>カート決済システム</li></ul><p>必要な機能だけ、事前に分かりやすくお見積りします。</p></aside>
           </div>
-          <div class="marutto_section_action"><a class="marutto_cta" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>料金や契約についても丁寧にご説明します</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>料金や契約についても丁寧にご説明します</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>
@@ -392,7 +386,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             </ol>
           </div>
           <div class="marutto_cats"><div><img src="<?php echo $img; ?>/about-renewal/moja-laptop.png" alt="パソコンを使う黒猫のもじゃ" width="370" height="320" loading="lazy"><img src="<?php echo $img; ?>/about-renewal/kururu-laptop.png" alt="タブレットを使う白猫のくるる" width="370" height="320" loading="lazy"></div><p>相棒の看板猫「もじゃ」と「くるる」が、<br>あなたの商売のネコの手になれたら嬉しいです<i class="fa-solid fa-paw" aria-hidden="true"></i></p></div>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>最初から最後まで比嘉本人が対応します</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>最初から最後まで比嘉本人が対応します</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>
@@ -414,7 +408,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <details><summary><span>Q7.</span> 遠方からの依頼でも対応できますか？<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>はい、可能です。オンラインでの打ち合わせやデータ共有にも対応しております。</p></details>
             <details><summary><span>Q8.</span> デザインの修正は何回までできますか？<i class="fa-solid fa-plus" aria-hidden="true"></i></summary><p>基本的な修正は2〜3回まで無料で対応。それ以降の修正や大幅な変更が必要な場合は、事前にご案内いたします。</p></details>
           </div>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>小さな疑問にも丁寧にお答えします</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>小さな疑問にも丁寧にお答えします</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>
@@ -441,7 +435,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             </table>
             <img src="<?php echo $img; ?>/about-renewal/moja-laptop.png" alt="パソコンで制作する黒猫のもじゃ" width="370" height="320" loading="lazy">
           </div>
-          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずは無料相談する<small>沖縄・宜野湾から丁寧に対応します</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a></div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>沖縄・宜野湾から丁寧に対応します</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
         </div>
       </div>
     </section>

@@ -53,7 +53,7 @@ if (!isset($dr_navigation_items)) {
 
                 </div>
                 <div class='width_6 width_sp10'>
-                    <nav class="nav_icon dr_footer_navigation tcenter set4 bold" aria-label="フッターナビゲーション">
+                    <nav class="dr_footer_navigation tcenter bold" aria-label="フッターナビゲーション">
                         <?php dneko_render_navigation($dr_navigation_items, 'dr_global_nav_list dr_footer_nav_list'); ?>
                     </nav>
                 </div>

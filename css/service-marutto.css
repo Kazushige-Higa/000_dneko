@@ -507,30 +507,57 @@ body:has(.service_marutto) > #pagetop {
 }
 
 .service_marutto .marutto_campaign_follow {
-  padding: 30px 24px 46px;
-  background: linear-gradient(180deg, #fff, #fff9f1);
+  padding: 34px 24px 38px;
+  background: linear-gradient(135deg, #2f8428, var(--marutto_green));
 }
 
 .service_marutto .marutto_campaign_follow .marutto_inner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 28px;
+  display: block;
 }
 
 .service_marutto .marutto_campaign_follow .marutto_trust_bar {
-  width: min(100%, 560px);
-  margin: 0;
-  flex: 1 1 560px;
+  width: min(100%, 960px);
+  margin: 0 auto;
+  overflow: hidden;
+  background: rgba(255, 255, 255, .1);
+  border: 2px solid rgba(255, 255, 255, .72);
+  box-shadow: 0 12px 28px rgba(20, 76, 18, .22);
 }
 
-.service_marutto .marutto_campaign_follow .marutto_hero_action {
-  width: min(100%, 500px);
-  flex: 1 1 500px;
+.service_marutto .marutto_campaign_follow .marutto_trust_bar li {
+  padding: 17px 8px 19px;
+  border-color: rgba(255, 255, 255, .32);
 }
 
-.service_marutto .marutto_campaign_follow .marutto_plan_name {
-  font-size: 17px;
+.service_marutto .marutto_campaign_follow .marutto_trust_bar span {
+  color: #efffe9;
+  font-size: clamp(17px, 1.7vw, 21px);
+}
+
+.service_marutto .marutto_campaign_follow .marutto_trust_bar strong {
+  color: #fff;
+  font-size: clamp(38px, 4.2vw, 54px);
+  line-height: 1.15;
+  text-shadow: 0 3px 0 rgba(20, 76, 18, .22);
+}
+
+.service_marutto .marutto_campaign_follow .marutto_trust_bar small {
+  color: #fff;
+  font-size: .46em;
+}
+
+@media (min-width: 641px) and (max-width: 767px) {
+  .service_marutto .marutto_campaign_follow .marutto_trust_bar {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .service_marutto .marutto_campaign_follow .marutto_trust_bar li:nth-child(2) {
+    border-right: 0;
+  }
+
+  .service_marutto .marutto_campaign_follow .marutto_trust_bar li:nth-child(-n+2) {
+    border-bottom: 1px solid rgba(255, 255, 255, .32);
+  }
 }
 
 /* Embedded consultation form */
@@ -878,14 +905,6 @@ body:has(.service_marutto) > #pagetop {
     left: 20px;
   }
 
-  .service_marutto .marutto_campaign_follow .marutto_inner {
-    flex-direction: column;
-  }
-
-  .service_marutto .marutto_campaign_follow .marutto_trust_bar,
-  .service_marutto .marutto_campaign_follow .marutto_hero_action {
-    flex-basis: auto;
-  }
 }
 
 @media (min-width: 641px) and (max-width: 960px) {
@@ -1077,15 +1096,18 @@ body:has(.service_marutto) > #pagetop {
 
   .service_marutto .marutto_campaign_follow .marutto_inner {
     width: 100%;
-    gap: 22px;
   }
 
   .service_marutto .marutto_campaign_follow .marutto_trust_bar {
     margin-top: 0;
   }
 
-  .service_marutto .marutto_campaign_follow .marutto_plan_name {
-    font-size: 16px;
+  .service_marutto .marutto_campaign_follow .marutto_trust_bar li {
+    border-color: rgba(255, 255, 255, .32);
+  }
+
+  .service_marutto .marutto_campaign_follow .marutto_trust_bar strong {
+    font-size: clamp(32px, 9vw, 44px);
   }
 
   .service_marutto .marutto_contact_form_lead {
