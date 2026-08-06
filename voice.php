@@ -39,7 +39,7 @@ voice.php -->
 
                                         <dl class="dl_list radius b_m10">
                                             <dt>お名前</dt>
-                                            <dd>代表 宇良さま</dd>
+                                            <dd>代表 宇良宗智さま</dd>
                                             <dt>業種</dt>
                                             <dd>旅行代理店</dd>
                                             <dt>地域</dt>
@@ -71,7 +71,7 @@ voice.php -->
                                 </div>
                             </div>
                         </li>
-                        <!-- <li class="b_m20 radius">
+                        <li class="b_m20 radius">
                             <div class='mbox bg_white'>
                                 <div class='flexbox gap3'>
                                     <div class="width_3 width_sp10">
@@ -81,7 +81,7 @@ voice.php -->
                                     </div>
                                     <div class='width_7 width_sp10 act inup'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
-                                            <span class="base_color border_bottom">ニコリミュージック 代表 新垣里実さま</span><br>
+                                            <span class="base_color border_bottom">ニコリミュージック 代表 新垣さま</span><br>
                                         </p>
 
                                         <dl class="dl_list radius b_m10">
@@ -118,7 +118,7 @@ voice.php -->
                                     </div>
                                 </div>
                             </div>
-                        </li> -->
+                        </li>
                         <li class="b_m20 radius">
                             <div class='mbox bg_white'>
                                 <div class='flexbox gap3'>
@@ -129,7 +129,7 @@ voice.php -->
                                     </div>
                                     <div class='width_7 width_sp10 act inup'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
-                                            <span class="base_color border_bottom">髪を育てる専門店 Sun Room 中城店 様</span><br>
+                                            <span class="base_color border_bottom">髪を育てる専門店 Sun Room 中城店 みわさま</span><br>
                                         </p>
 
                                         <dl class="dl_list radius b_m10">
