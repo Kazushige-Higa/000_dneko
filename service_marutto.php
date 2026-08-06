@@ -1,4 +1,11 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+if (empty($_SESSION['marutto_form_token'])) {
+  $_SESSION['marutto_form_token'] = bin2hex(random_bytes(32));
+}
+$marutto_form_token = $_SESSION['marutto_form_token'];
 $page_title = '沖縄のHP制作×チラシ｜月々9,800円まるっとお任せ｜デザネコ';
 $page_description = '沖縄のデザネコが、集客の「入口のチラシ」と「受け皿のホームページ」を月々9,800円のセットプランで提供。制作費0円・契約縛りなし・789社の実績。';
 $page_og_image = 'https://d-neko.com/images/marutto-plan-ogp.jpg';
@@ -17,17 +24,25 @@ if ($marutto_is_local && is_string($marutto_request_path)) {
 }
 $marutto_page_path = $page_base . 'service_marutto.php';
 $page_top_href = $marutto_page_path . '#top';
-$page_head = '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="preload" as="image" href="images/marutto-hero-characters-v1.jpg">';
+$page_head = '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="preload" as="image" href="images/marutto-moja-surprise.webp">';
 $page_style = '<link href="css/service-marutto.css?v=' . filemtime(__DIR__ . '/css/service-marutto.css') . '" rel="stylesheet">';
 $page_script = <<<'HTML'
 <script>
 document.addEventListener('DOMContentLoaded', function () {
   var sticky = document.querySelector('.marutto_sticky');
-  var finalArea = document.querySelector('.marutto_final');
-  if (sticky && finalArea && 'IntersectionObserver' in window) {
-    new IntersectionObserver(function (entries) {
-      sticky.classList.toggle('is_hidden', entries[0].isIntersecting);
-    }, { threshold: 0.08 }).observe(finalArea);
+  var stickyHiddenAreas = document.querySelectorAll('.marutto_hero, .marutto_final, .marutto_contact_form_section');
+  if (sticky && stickyHiddenAreas.length && 'IntersectionObserver' in window) {
+    var stickyVisibility = new Map();
+    var stickyObserver = new IntersectionObserver(function (entries) {
+      entries.forEach(function (entry) {
+        stickyVisibility.set(entry.target, entry.isIntersecting);
+      });
+      sticky.classList.toggle('is_hidden', Array.from(stickyVisibility.values()).some(Boolean));
+    }, { threshold: 0.04 });
+    stickyHiddenAreas.forEach(function (area) {
+      stickyVisibility.set(area, false);
+      stickyObserver.observe(area);
+    });
   }
   document.querySelectorAll('.marutto_plan a').forEach(function (link) {
     link.addEventListener('click', function () {
@@ -35,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var href = link.getAttribute('href') || '';
       var label = href.indexOf('line.me') !== -1 ? 'line'
         : href.indexOf('tel:') === 0 ? 'phone'
-        : href.indexOf('contact.php') !== -1 ? 'form'
+        : href.indexOf('contact.php') !== -1 || href.indexOf('#contact_form') !== -1 ? 'form'
         : href.indexOf('works_archive.php') !== -1 ? 'works' : 'internal';
       gtag('event', 'marutto_plan_click', {
         event_category: 'contact',
@@ -44,9 +59,89 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   });
+
+  var form = document.getElementById('mailform');
+  if (!form) return;
+
+  var consultationChecks = form.querySelectorAll('input[name="ご相談内容(必須)[]"]');
+  var consultationError = form.querySelector('[data-error-for="consultation"]');
+  var requiredFields = form.querySelectorAll('[data-contact-required]');
+  var submitBtn = form.querySelector('.contact-submit-btn');
+
+  function setFieldError(field, hasError) {
+    field.classList.toggle('field-error', hasError);
+  }
+
+  function isFormReady() {
+    for (var i = 0; i < requiredFields.length; i++) {
+      if (!requiredFields[i].value.trim()) return false;
+    }
+    return Array.prototype.some.call(consultationChecks, function (checkbox) {
+      return checkbox.checked;
+    });
+  }
+
+  function updateSubmitState() {
+    if (submitBtn) submitBtn.disabled = !isFormReady();
+  }
+
+  function validateContactForm() {
+    var isValid = true;
+    requiredFields.forEach(function (field) {
+      var hasError = !field.value.trim();
+      setFieldError(field, hasError);
+      if (hasError) isValid = false;
+    });
+
+    var hasCheckedConsultation = Array.prototype.some.call(consultationChecks, function (checkbox) {
+      return checkbox.checked;
+    });
+    consultationChecks.forEach(function (checkbox) {
+      checkbox.required = !hasCheckedConsultation;
+    });
+    if (consultationError) consultationError.classList.toggle('is-show', !hasCheckedConsultation);
+    if (!hasCheckedConsultation) isValid = false;
+    return isValid;
+  }
+
+  requiredFields.forEach(function (field) {
+    field.addEventListener('input', function () {
+      setFieldError(field, !field.value.trim());
+      updateSubmitState();
+    });
+  });
+  consultationChecks.forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      validateContactForm();
+      updateSubmitState();
+    });
+  });
+  updateSubmitState();
+
+  form.addEventListener('submit', function (event) {
+    if (!validateContactForm()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      form.reportValidity();
+    }
+  }, true);
+
+  if (new URLSearchParams(location.search).get('thanks') === '1') {
+    if (typeof gtag === 'function') {
+      gtag('event', 'form_submit', {
+        event_category: 'contact',
+        event_label: 'marutto_contact_form'
+      });
+    }
+    if (window.history && history.replaceState) {
+      history.replaceState(null, '', location.pathname + location.hash);
+    }
+  }
 });
 </script>
 HTML;
+$marutto_is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
+$marutto_has_form_error = isset($_GET['form_error']) && $_GET['form_error'] === '1';
 ?>
 <?php include_once './header.php'; ?>
 <?php
@@ -59,17 +154,42 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
   <div class="overflow marutto_plan service_marutto">
     <section>
       <div id="marutto_top" class="marutto_hero">
-        <img class="marutto_hero_bg" src="<?php echo $img; ?>/marutto-hero-characters-v1.jpg" alt="ガーヒーと看板猫のもじゃ・くるる" width="1536" height="1024" fetchpriority="high" decoding="async">
-        <a class="service_marutto_logo" href="./" aria-label="デザネコ ホームへ">
-          <img src="<?php echo $img; ?>/logo.png" alt="デザインのネコの手 デザネコ" width="424" height="160">
-        </a>
-        <a class="marutto_hero_line" href="<?php echo htmlspecialchars($line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i> LINEで無料相談</a>
-        <div class="marutto_inner marutto_hero_inner">
-          <div class="marutto_hero_copy">
-            <p class="marutto_badge"><i class="fa-solid fa-paw" aria-hidden="true"></i> 沖縄・宜野湾のデザイン事務所</p>
-            <h1><span class="marutto_h1_line">集客の“入口のチラシ”と</span><span class="marutto_h1_line">“受け皿のホームページ”、</span><span class="marutto_h1_line">両方セットで月々 <span class="marutto_price_badge">9,800<small>円</small></span><span class="marutto_period">。</span></span></h1>
-            <p class="marutto_hero_lead">“作って終わり”じゃない。<br>育てて数字を伸ばす、沖縄のデザインパートナー。</p>
+        <div class="marutto_campaign_limit">
+          <div class="marutto_campaign_limit_inner">
+            <a class="marutto_campaign_brand" href="<?php echo htmlspecialchars($page_base, ENT_QUOTES, 'UTF-8'); ?>" aria-label="デザネコ ホームへ">デザネコ</a>
+            <h1>
+              <span class="marutto_campaign_service">チラシとホームページ<br>まるっとお任せプラン</span>
+              <span class="marutto_campaign_limit_title">守成クラブの方 <strong>毎月2組限定</strong></span>
+            </h1>
+            <p>一人で全工程を担当するため、月に2組までしかお引き受けできません。</p>
+            <a class="marutto_hero_line" href="<?php echo htmlspecialchars($line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i> LINEで無料相談</a>
           </div>
+        </div>
+
+        <div class="marutto_campaign_stage">
+          <div class="marutto_campaign_stage_inner">
+            <p class="marutto_campaign_word is_left"><strong>チラシ</strong><span>デザインが</span></p>
+            <p class="marutto_campaign_word is_right"><strong>タダ</strong><span>にゃんて!!</span></p>
+            <img class="marutto_campaign_cat" src="<?php echo $img; ?>/marutto-moja-surprise.webp" alt="料金を見て驚く看板猫のもじゃ" width="877" height="928" fetchpriority="high" decoding="async">
+
+            <div class="marutto_campaign_prices">
+              <div class="marutto_campaign_price is_flyer">
+                <p>守成クラブの方特別サービス</p>
+                <div><span>通常30,000円チラシデザインが</span><strong>制作費 <em>0</em>円</strong></div>
+              </div>
+              <span class="marutto_campaign_plus" aria-hidden="true">＋</span>
+              <div class="marutto_campaign_price is_web">
+                <p>守成クラブの方限定特別価格</p>
+                <div><span>通常月額9,800円のホームページが</span><strong><small>月々</small><em>8,800</em>円<sup>（税別）</sup></strong></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <p class="marutto_campaign_tagline">チラシとホームページまるっとお任せプラン、<strong>はじめました！</strong></p>
+
+        <div class="marutto_campaign_follow">
+          <div class="marutto_inner">
           <ul class="marutto_trust_bar" aria-label="デザネコの実績とプランの特徴">
             <li><span>デザイン歴</span><strong>20<small>年</small></strong></li>
             <li><span>HP制作実績</span><strong>789<small>社</small></strong></li>
@@ -78,9 +198,10 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
           </ul>
           <div class="marutto_hero_action">
             <p class="marutto_plan_name">◆ デザインまるっとお任せプラン ◆</p>
-            <p class="marutto_limited">★ ご紹介限定 5組まで／10月末まで ★</p>
+            <p class="marutto_limited">★ 守成クラブの方 毎月2組限定 ★</p>
             <a class="marutto_cta" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><i class="fa-brands fa-line" aria-hidden="true"></i><span>まずはLINEで無料相談する<small>相談・お見積りは無料です</small></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
             <a class="marutto_anchor_link" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#plan"><i class="fa-regular fa-circle-play" aria-hidden="true"></i> 30秒で分かるプランの中身を見る</a>
+          </div>
           </div>
         </div>
       </div>
@@ -245,7 +366,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <div class="marutto_special_price">
               <p>★ ご紹介限定 特別価格 ★</p>
               <strong><small>月額</small> 8,800<em>円</em><small>（税別）</small></strong>
-              <span>毎月5組限定／10月末まで</span>
+              <span>守成クラブの方／毎月2組限定</span>
             </div>
           </div>
           <div class="marutto_package">
@@ -350,13 +471,117 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <h2>まずは無料相談から。</h2>
           </div>
           <p class="marutto_final_lead">チラシ・ホームページ・SNS…どんなご相談でも大丈夫。<br><strong>お気軽にLINEでご連絡ください（返信は24時間以内）</strong>。</p>
-          <p class="marutto_limited">★ ご紹介限定 5組まで／10月末まで ★</p>
+          <p class="marutto_limited">★ 守成クラブの方 毎月2組限定 ★</p>
           <div class="marutto_contact_grid">
             <a class="is_line" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><img src="<?php echo $img; ?>/marutto-plan-line-qr.png" alt="デザネコ公式LINEのQRコード" width="320" height="320" loading="lazy"><i class="fa-brands fa-line" aria-hidden="true"></i><span><small>LINEで気軽に相談</small><strong>まずは無料相談する</strong></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
             <a class="is_tel" href="tel:<?php echo $marutto_tel_link; ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i><span><small>今すぐ電話する／平日9:00〜18:00</small><strong><?php echo htmlspecialchars($telNo, ENT_QUOTES, 'UTF-8'); ?></strong></span></a>
-            <a class="is_mail" href="contact.php"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span><small>24時間受付</small><strong>フォームで送る</strong></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
+            <a class="is_mail" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span><small>24時間受付</small><strong>フォームで送る</strong></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
           </div>
           <p class="marutto_final_message">沖縄・宜野湾から、<br>あなたの商売の“ネコの手”になれたら嬉しいです<i class="fa-solid fa-paw" aria-hidden="true"></i><br><small>— <?php echo htmlspecialchars($company, ENT_QUOTES, 'UTF-8'); ?> <?php echo htmlspecialchars($name, ENT_QUOTES, 'UTF-8'); ?>（ガーヒー）</small></p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div id="contact_form" class="marutto_section marutto_contact_form_section">
+        <div class="marutto_inner">
+          <div class="marutto_heading">
+            <p>Contact Form</p>
+            <h2>お気軽に無料相談ください。</h2>
+          </div>
+          <p class="marutto_contact_form_lead">チラシやホームページの内容がまだ決まっていなくても大丈夫です。<br>現在のお悩みや気になることを、そのままお聞かせください。</p>
+
+          <?php if ($marutto_is_thanks): ?>
+            <div class="marutto_form_thanks" role="status">
+              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+              <h3>お問い合わせを受け付けました</h3>
+              <p>内容を確認のうえ、デザネコよりご連絡いたします。<br>万が一3日以内に返信がない場合は、公式LINEよりご連絡ください。</p>
+            </div>
+          <?php endif; ?>
+
+          <?php if ($marutto_has_form_error): ?>
+            <div class="marutto_form_error" role="alert">
+              <i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i>
+              <p>送信内容を確認できませんでした。お手数ですが、必須項目をご確認のうえ、もう一度送信してください。</p>
+            </div>
+          <?php endif; ?>
+
+          <div class="marutto_contact_form_wrap contact-form-wrap">
+            <p class="marutto_contact_form_note">通常3営業日以内に返信いたします。<br>※営業・勧誘目的の送信はご遠慮ください。</p>
+
+            <form id="mailform" class="form type_s" method="post" enctype="multipart/form-data" action="mailform/send.php">
+              <input type="hidden" name="form_type" value="marutto_contact">
+              <input type="hidden" name="form_started_at" value="<?php echo time(); ?>">
+              <input type="hidden" name="marutto_form_token" value="<?php echo htmlspecialchars($marutto_form_token, ENT_QUOTES, 'UTF-8'); ?>">
+              <div class="marutto_honeypot" aria-hidden="true">
+                <label>この欄は入力しないでください
+                  <input type="text" name="website_url" value="" tabindex="-1" autocomplete="off">
+                </label>
+              </div>
+
+              <dl>
+                <div>
+                  <dt id="marutto_consultation_label">ご相談内容<span>必須</span></dt>
+                  <dd role="group" aria-labelledby="marutto_consultation_label" aria-describedby="marutto_consultation_error">
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="チラシ・フライヤー制作">チラシ・フライヤー制作</label>
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="名刺・ショップカード制作">名刺・ショップカード制作</label>
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="シール・印刷物制作">シール・印刷物制作</label>
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="ブログ・ホームページ制作">ブログ・ホームページ制作</label>
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="更新・運用サポート">更新・運用サポート</label>
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="まずは相談したい">まずは相談したい</label>
+                    <p id="marutto_consultation_error" class="contact-error-message" data-error-for="consultation" role="alert">ご相談内容を1つ以上選択してください。</p>
+                  </dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_name">お名前<span>必須</span></label></dt>
+                  <dd><input id="marutto_name" type="text" class="textarea" name="お名前(必須)" size="70" maxlength="100" autocomplete="name" placeholder="例：山田太郎" required data-contact-required></dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_company">屋号・会社名<span class="nini">任意</span></label></dt>
+                  <dd><input id="marutto_company" type="text" class="textarea" name="屋号・会社名" size="70" maxlength="150" autocomplete="organization" placeholder="例：〇〇店"></dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_url">今お持ちのホームページURL<span class="nini">任意</span></label></dt>
+                  <dd><input id="marutto_url" type="url" class="textarea" name="今お持ちのホームページURL" size="70" maxlength="500" autocomplete="url" placeholder="例：https://example.com"></dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_email">メールアドレス<span>必須</span></label></dt>
+                  <dd><input id="marutto_email" type="email" class="textarea" name="email(必須)" size="70" maxlength="254" autocomplete="email" placeholder="例：info@example.com" required data-contact-required></dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_tel">電話番号<span class="nini">任意</span></label></dt>
+                  <dd><input id="marutto_tel" type="tel" class="textarea" name="電話番号" size="70" maxlength="30" autocomplete="tel" placeholder="例：090-0000-0000"></dd>
+                </div>
+                <div>
+                  <dt id="marutto_reply_label">ご希望の連絡方法<span class="nini">任意</span></dt>
+                  <dd class="marutto_inline_choices" role="radiogroup" aria-labelledby="marutto_reply_label">
+                    <label class="radio_text"><input type="radio" name="ご希望の連絡方法" value="メール" checked>メール</label>
+                    <label class="radio_text"><input type="radio" name="ご希望の連絡方法" value="電話">電話</label>
+                    <label class="radio_text"><input type="radio" name="ご希望の連絡方法" value="LINE">LINE</label>
+                  </dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_budget">ご予算感<span class="nini">任意</span></label></dt>
+                  <dd>
+                    <select id="marutto_budget" class="dropdown" name="ご予算感">
+                      <option value="">選択してください</option>
+                      <option value="まずは相談したい">まずは相談したい</option>
+                      <option value="3万円未満">3万円未満</option>
+                      <option value="3万円〜5万円">3万円〜5万円</option>
+                      <option value="5万円〜10万円">5万円〜10万円</option>
+                      <option value="10万円以上">10万円以上</option>
+                    </select>
+                  </dd>
+                </div>
+                <div>
+                  <dt><label for="marutto_message">お問い合わせ内容<span>必須</span></label></dt>
+                  <dd><textarea id="marutto_message" name="お問い合わせ内容(必須)" rows="10" cols="75" maxlength="5000" placeholder="ご相談内容、制作したいもの、現在困っていること、希望納期などをご自由にご記入ください。" required data-contact-required></textarea></dd>
+                </div>
+              </dl>
+
+              <button class="formbutton contact-submit-btn" type="submit" value="無料相談する">無料相談する</button>
+            </form>
+          </div>
         </div>
       </div>
     </section>
