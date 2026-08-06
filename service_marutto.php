@@ -16,6 +16,7 @@ if ($marutto_is_local && is_string($marutto_request_path)) {
   }
 }
 $marutto_page_path = $page_base . 'marutto-plan/';
+$page_top_href = $marutto_page_path . '#top';
 $page_head = '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="preload" as="image" href="images/marutto-hero-characters-v1.jpg">';
 $page_style = '<link href="css/service-marutto.css?v=' . filemtime(__DIR__ . '/css/service-marutto.css') . '" rel="stylesheet">';
 $page_script = <<<'HTML'

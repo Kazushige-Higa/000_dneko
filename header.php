@@ -10,6 +10,7 @@ $is_home_renewal = !empty($home_renewal);
 
 <head prefix="og:http://ogp.me/ns#">
   <meta charset="UTF-8">
+  <?php if (!empty($page_base)): ?><base href="<?php echo htmlspecialchars($page_base, ENT_QUOTES, 'UTF-8'); ?>"><?php endif; ?>
   <?php
   $site_name = !empty($company) ? $company : 'デザネコ';
   $is_home_page = ($url === 'index.php');

@@ -74,7 +74,7 @@ if (!isset($dr_navigation_items)) {
 </footer>
 
 <div id="pagetop" class="radius bottom dr_common_pagetop">
-    <a href="#top" aria-label="ページトップへ"><i class="fas fa-chevron-up" aria-hidden="true"></i><span>TOP</span></a>
+    <a href="<?php echo htmlspecialchars($page_top_href ?? '#top', ENT_QUOTES, 'UTF-8'); ?>" aria-label="ページトップへ"><i class="fas fa-chevron-up" aria-hidden="true"></i><span>TOP</span></a>
 </div>
 
 <script src="js/site-common.js?v=<?= filemtime(__DIR__ . '/js/site-common.js') ?>" defer></script>
