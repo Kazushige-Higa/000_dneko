@@ -35,7 +35,7 @@ $SC_SITE_URL     = 'https://d-neko.com/';                         // Search Cons
 // コンバージョン(CV)として数えるイベント名。
 // GA4管理画面のキーイベント設定に依存せず、ここで定義したイベントの
 // 発生数をCV・CVRとして集計する（GA4側でもキーイベント登録を推奨）。
-// CV = 実際の申込み導線（フォーム送信＋LINE相談クリック）。
+// CV = 実際の申込み導線（thanks.php到達時のフォーム送信＋LINE相談クリック）。
 // ※ contact_page_view（ページ到達のみ）はCVから除外し、送信率を正しく反映する。
 $KEY_EVENTS = ['form_submit', 'line_click'];
 
@@ -212,6 +212,20 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
     // コンバージョン対象イベントの絞り込み（除外パス上のイベントは数えない）
     $key_event_filter = ['andGroup' => ['expressions' => [
         ['filter' => ['fieldName' => 'eventName', 'inListFilter' => ['values' => $key_events]]],
+        $exclude_analytics_pages,
+    ]]];
+    // Referral の参照元ドメインを取得するための絞り込み。
+    $referral_channel_expression = ['filter' => [
+        'fieldName'    => 'sessionDefaultChannelGroup',
+        'stringFilter' => ['value' => 'Referral', 'matchType' => 'EXACT'],
+    ]];
+    $referral_channel_filter = ['andGroup' => ['expressions' => [
+        $referral_channel_expression,
+        $exclude_analytics_pages,
+    ]]];
+    $referral_key_event_filter = ['andGroup' => ['expressions' => [
+        ['filter' => ['fieldName' => 'eventName', 'inListFilter' => ['values' => $key_events]]],
+        $referral_channel_expression,
         $exclude_analytics_pages,
     ]]];
 
@@ -458,6 +472,25 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
             'metrics'    => [['name' => 'eventCount']],
             'dimensionFilter' => $key_event_filter,
         ],
+        // 3: 参照サイトの詳細（セッション参照元ドメイン）
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'sessionSource']],
+            'metrics'    => [['name' => 'sessions'], ['name' => 'totalUsers']],
+            'dimensionFilter' => $referral_channel_filter,
+            'orderBys' => [['metric' => ['metricName' => 'sessions'], 'desc' => true]],
+            'limit' => 20,
+        ],
+        // 4: 参照元ドメイン×キーイベント（CVR算出用）
+        [
+            'dateRanges' => $cur,
+            'dimensions' => [['name' => 'sessionSource']],
+            'metrics'    => [['name' => 'eventCount']],
+            'dimensionFilter' => $referral_key_event_filter,
+            'orderBys' => [['metric' => ['metricName' => 'eventCount'], 'desc' => true]],
+            // Data APIの1リクエスト上限まで取得し、セッション上位20件との突合漏れを防ぐ。
+            'limit' => 250000,
+        ],
     ]];
 
     /* ---- バッチ6: URL→ページタイトル対応表（Search Consoleのページ名解決用） ---- */
@@ -622,6 +655,27 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
         $raw = $row['dimensionValues'][0]['value'];
         $source['labels'][] = $channel_map[$raw] ?? $raw;
         $source['data'][]   = (int)($row['metricValues'][0]['value'] ?? 0);
+    }
+
+    /* ---- 参照サイトの詳細（ドメイン別） ---- */
+    $referral_cv_by_source = [];
+    foreach (($rep5[4]['rows'] ?? []) as $row) {
+        $referral_source = $row['dimensionValues'][0]['value'] ?? '';
+        $referral_cv_by_source[$referral_source] = (int)($row['metricValues'][0]['value'] ?? 0);
+    }
+    $referral_domains = [];
+    foreach (($rep5[3]['rows'] ?? []) as $row) {
+        $raw_source = $row['dimensionValues'][0]['value'] ?? '';
+        $sessions   = (int)($row['metricValues'][0]['value'] ?? 0);
+        $users      = (int)($row['metricValues'][1]['value'] ?? 0);
+        $conv       = $referral_cv_by_source[$raw_source] ?? 0;
+        $referral_domains[] = [
+            'source'      => ($raw_source === '' || $raw_source === '(not set)') ? '参照元不明' : $raw_source,
+            'sessions'    => $sessions,
+            'users'       => $users,
+            'conversions' => $conv,
+            'cvr'         => $sessions > 0 ? round($conv / $sessions * 100, 2) : 0,
+        ];
     }
 
     /* ---- デバイス ---- */
@@ -913,6 +967,7 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
         'weekly'           => $weekly,
         'monthly'          => $monthly,
         'source'           => $source,
+        'referral_domains' => $referral_domains,
         'device'           => $device,
         'gender'           => $gender,
         'age'              => $age,

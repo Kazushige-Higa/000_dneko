@@ -103,6 +103,23 @@ body {
 .source-dot { width: 9px; height: 9px; border-radius: 50%; flex-shrink: 0; }
 .source-val { font-weight: 600; color: #0f172a; }
 .source-pct { color: #94a3b8; font-weight: 400; font-size: 12px; }
+.referral-details { margin-top: 16px; padding-top: 14px; border-top: 1px solid #e2e8f0; }
+.referral-details summary {
+  display: flex; align-items: center; gap: 8px; cursor: pointer;
+  color: #334155; font-size: 13px; font-weight: 700; list-style: none;
+}
+.referral-details summary::-webkit-details-marker { display: none; }
+.referral-details summary::after { content: '＋'; margin-left: auto; color: #64748b; font-size: 16px; }
+.referral-details[open] summary::after { content: '−'; }
+.referral-count {
+  display: inline-flex; align-items: center; justify-content: center; min-width: 32px;
+  padding: 2px 7px; border-radius: 999px; background: #eef2ff; color: #4f46e5;
+  font-size: 11px; font-weight: 700;
+}
+.referral-note { margin: 10px 0 8px; color: #64748b; font-size: 11px; line-height: 1.6; }
+.referral-table-wrap { max-height: 320px; overflow: auto; border: 1px solid #e2e8f0; border-radius: 8px; }
+.referral-table-wrap th { position: sticky; top: 0; background: #f8fafc; z-index: 1; }
+.referral-domain { color: #334155; font-family: "SF Mono", Menlo, monospace; font-size: 11px; overflow-wrap: anywhere; }
 
 /* ── Tables ── */
 table { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -313,6 +330,18 @@ tr:hover td { background: #f8fafc; }
     <div class="panel-head"><h2>流入元</h2></div>
     <div class="chart-wrap sm"><canvas id="sourceChart"></canvas></div>
     <div class="source-list" id="sourceList"></div>
+    <details class="referral-details" id="referralDetails" hidden>
+      <summary>参照サイトの詳細（ドメイン）<span class="referral-count" id="referralCount"></span></summary>
+      <p class="referral-note">「参照サイト」に分類された訪問を、リンク元ドメイン別に表示しています。</p>
+      <div class="referral-table-wrap">
+        <table>
+          <thead>
+            <tr><th>参照元ドメイン</th><th>セッション</th><th>ユーザー</th><th>CV</th><th>CVR</th></tr>
+          </thead>
+          <tbody id="referralDomainBody"></tbody>
+        </table>
+      </div>
+    </details>
   </div>
 </div>
 
@@ -613,6 +642,7 @@ function render(d) {
   const srcLabels = (d.source.labels || []).map(jaChannel);
   drawDonut('sourceChart', srcLabels, d.source.data, PALETTE, '55%');
   drawSourceList({ labels: srcLabels, data: d.source.data });
+  drawReferralDomains(d.referral_domains || []);
 
   /* 男女比・年齢層（Googleシグナル／プライバシーしきい値対象） */
   const demographicPeriod = d.demographics?.period || '過去365日間';
@@ -783,6 +813,33 @@ function drawSourceList(source) {
       </span>
       <span class="source-val">${fmtInt(count)} <span class="source-pct">(${pct}%)</span></span>`;
     el.appendChild(item);
+  });
+}
+
+function drawReferralDomains(items) {
+  const details = document.getElementById('referralDetails');
+  const tbody   = document.getElementById('referralDomainBody');
+  const count   = document.getElementById('referralCount');
+  if (!details || !tbody || !count) return;
+
+  tbody.innerHTML = '';
+  if (!items.length) {
+    details.hidden = true;
+    details.open = false;
+    return;
+  }
+
+  details.hidden = false;
+  count.textContent = items.length + '件';
+  items.forEach(item => {
+    const tr = document.createElement('tr');
+    tr.innerHTML = `
+      <td class="referral-domain">${escapeHtml(item.source || '参照元不明')}</td>
+      <td class="num">${fmtInt(item.sessions)}</td>
+      <td class="num">${fmtInt(item.users)}</td>
+      <td class="num">${fmtInt(item.conversions)}</td>
+      <td class="num">${Number(item.cvr || 0).toFixed(2)}%</td>`;
+    tbody.appendChild(tr);
   });
 }
 
