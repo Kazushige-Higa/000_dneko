@@ -1,4 +1,12 @@
 <?php
+if (session_status() !== PHP_SESSION_ACTIVE) {
+  session_start();
+}
+if (empty($_SESSION['contact_form_token'])) {
+  $_SESSION['contact_form_token'] = bin2hex(random_bytes(32));
+}
+$contact_form_token = $_SESSION['contact_form_token'];
+
 $page_title = 'お問い合わせ';
 $page_title_eng = 'Contact';
 $page_seo_title = 'デザイン制作のご相談・お問い合わせ';
@@ -15,7 +23,6 @@ $page_style = "
 }
 .contact-card__icon { display: grid; place-items: center; width: 54px; height: 54px; margin: 0 auto 1em; border-radius: 50%; background: #fff7df; color: #f9b104; font-size: 1.5em; }
 .contact-note { border-left: 4px solid #f9b104; }
-.contact-thanks { border: 2px solid #8ecc6f; }
 .contact-form-wrap .form dl {
   display: grid;
   grid-template-columns: minmax(220px, 300px) 1fr;
@@ -179,19 +186,6 @@ window.addEventListener('load', function () {
       event_label: 'contact_page'
     });
 
-    // フォーム送信完了の計測（send.php が /contact.php?thanks=1 へリダイレクト）
-    // → コンバージョン(CV)としてカウント
-    var params = new URLSearchParams(location.search);
-    if (params.get('thanks') === '1') {
-      gtag('event', 'form_submit', {
-        event_category: 'contact',
-        event_label: 'contact_form'
-      });
-      // リロードによる二重計測を防ぐため URL から thanks を除去
-      if (window.history && history.replaceState) {
-        history.replaceState(null, '', location.pathname);
-      }
-    }
   }
 
   var form = document.getElementById('mailform');
@@ -273,7 +267,6 @@ window.addEventListener('load', function () {
 });
 </script>
 ";
-$is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
 ?>
 <?php include 'header.php'; ?>
 <?php include 'page_title.php'; ?>
@@ -385,20 +378,6 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
   <section>
     <div>
       <div class='single03'>
-        <?php if ($is_thanks): ?>
-          <div class='mbox bg_white radius shadow contact-thanks tcenter'>
-            <h2 class='line_height_14 b_m2'>
-              <span class='eng base_color fs_40'>Thanks</span><br>
-              <span class='bold fs_32 fs_sp24'>お問い合わせを受け付けました</span>
-            </h2>
-            <p>
-              内容を確認のうえ、デザネコよりご連絡いたします。<br>
-              万が一3日以内に返信がない場合は、メールアドレスの入力間違いなどの可能性がありますので、お手数ですが再度お問い合わせください。
-            </p>
-          </div>
-          <div class='space_3 space_sp2'></div>
-        <?php endif; ?>
-
         <div class='mbox bg_white shadow radius contact-form-wrap'>
           <h2 class='line_height_14 tcenter'>
             <span class='eng base_color fs_40 act inup'>Mail Form</span><br>
@@ -419,6 +398,7 @@ $is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
           <form id='mailform' class='form type_s' method='post' enctype='multipart/form-data' action='mailform/send.php' onsubmit='return sendmail(this);'>
             <input type='hidden' name='form_type' value='contact'>
             <input type='hidden' name='form_started_at' value='<?php echo time(); ?>'>
+            <input type='hidden' name='contact_form_token' value='<?php echo htmlspecialchars($contact_form_token, ENT_QUOTES, 'UTF-8'); ?>'>
             <div style='position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;' aria-hidden='true'>
               <label>この欄は入力しないでください
                 <input type='text' name='website_url' value='' tabindex='-1' autocomplete='off'>

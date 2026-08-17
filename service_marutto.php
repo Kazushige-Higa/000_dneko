@@ -111,21 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }, true);
 
-  if (new URLSearchParams(location.search).get('thanks') === '1') {
-    if (typeof gtag === 'function') {
-      gtag('event', 'form_submit', {
-        event_category: 'contact',
-        event_label: 'marutto_contact_form'
-      });
-    }
-    if (window.history && history.replaceState) {
-      history.replaceState(null, '', location.pathname + location.hash);
-    }
-  }
 });
 </script>
 HTML;
-$marutto_is_thanks = isset($_GET['thanks']) && $_GET['thanks'] === '1';
 $marutto_has_form_error = isset($_GET['form_error']) && $_GET['form_error'] === '1';
 ?>
 <?php include_once './header.php'; ?>
@@ -642,14 +630,6 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <h2 class="fs_sp25">お気軽に無料相談ください</h2>
           </div>
           <p class="marutto_contact_form_lead">チラシやホームページの内容が<br class="sponly">まだ決まっていなくても大丈夫です。<br>現在のお悩みや気になることを、<br class="sponly">そのままお聞かせください。</p>
-
-          <?php if ($marutto_is_thanks): ?>
-            <div class="marutto_form_thanks" role="status">
-              <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-              <h3>お問い合わせを受け付けました</h3>
-              <p>内容を確認のうえ、デザネコよりご連絡いたします。<br>万が一3日以内に返信がない場合は、公式LINEよりご連絡ください。</p>
-            </div>
-          <?php endif; ?>
 
           <?php if ($marutto_has_form_error): ?>
             <div class="marutto_form_error" role="alert">

@@ -7,8 +7,12 @@ $conf['started_at_field'] = 'form_started_at';
 $conf['min_submit_seconds'] = 3;
 $conf['max_submit_seconds'] = 7200;
 
-$is_marutto_contact_request = isset($_POST['form_type']) && 'marutto_contact' === $_POST['form_type'];
-if ($is_marutto_contact_request && session_status() !== PHP_SESSION_ACTIVE) {
+$form_type = isset($_POST['form_type']) && is_string($_POST['form_type'])
+    ? $_POST['form_type']
+    : '';
+$is_contact_request = in_array($form_type, ['contact', 'marutto_contact'], true);
+$is_marutto_contact_request = 'marutto_contact' === $form_type;
+if ($is_contact_request && session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
 
@@ -28,7 +32,8 @@ $conf['name'] = 'デザネコ';
 $conf['mailto'] = 'info@d-neko.com';
 
 #送信完了時にリダイレクトするサンクスページ
-$conf['thanks'] = '/contact.php?thanks=1';
+#フォーム種別ごとに下の分岐で設定する。未設定時は送信元へ戻す。
+$conf['thanks'] = '';
 
 #設置者に届くメールの件名
 $conf['subject'] = 'デザネコお問い合わせフォームよりご連絡';
@@ -57,8 +62,8 @@ Mail	info@d-neko.com
 EOM;
 
 if (isset($_POST['form_type']) && in_array($_POST['form_type'], ['contact', 'marutto_contact'], true)) {
+    $conf['thanks'] = '/thanks.php';
     if ('marutto_contact' === $_POST['form_type']) {
-        $conf['thanks'] = '/service_marutto.php?thanks=1#contact_form';
         $conf['subject'] = 'まるっとお任せプラン無料相談フォームよりご連絡';
     } else {
         $conf['subject'] = 'デザネコお問い合わせフォームよりご連絡';
@@ -5938,7 +5943,7 @@ function mail_from_check() {
  * 問合せフォームからの内容をメール送信する。(ファイル添付可能)
  */
 function send_mail() {
-	global $conf,$err,$is_marutto_contact_request;
+	global $conf,$err,$form_type,$is_contact_request,$is_marutto_contact_request;
 
 	//ini_set( "display_errors", "On");
 	mb_language('uni');
@@ -5949,11 +5954,17 @@ function send_mail() {
         //-----------------------------------メール本文処理開始----------------------------------
 		$http_referer = isset($_SERVER['HTTP_REFERER']) ? (string)$_SERVER['HTTP_REFERER'] : '';
 		$marutto_invalid_redirect = '/service_marutto.php?form_error=1#contact_form';
+		$contact_invalid_redirect = '/contact.php#mailform';
 		$referer_path = parse_url($http_referer, PHP_URL_PATH);
 		if ($is_marutto_contact_request && is_string($referer_path) && preg_match('#/service_marutto\.php$#', $referer_path)) {
 			$marutto_invalid_redirect = $referer_path . '?form_error=1#contact_form';
 		}
-		$safe_failure_redirect = $is_marutto_contact_request ? $marutto_invalid_redirect : $http_referer;
+		if ($is_contact_request && !$is_marutto_contact_request && is_string($referer_path) && preg_match('#/contact\.php$#', $referer_path)) {
+			$contact_invalid_redirect = $referer_path . '#mailform';
+		}
+		$safe_failure_redirect = $is_marutto_contact_request
+			? $marutto_invalid_redirect
+			: ($is_contact_request ? $contact_invalid_redirect : ($http_referer ?: '/'));
 
 		$honeypot_field = $conf['honeypot_field'];
 		$started_at_field = $conf['started_at_field'];
@@ -6080,6 +6091,125 @@ function send_mail() {
 
         }
 
+        if ($is_contact_request && !$is_marutto_contact_request) {
+            $invalid_redirect = $contact_invalid_redirect;
+            $allowed_consultations = [
+                'チラシ・フライヤー制作',
+                '名刺・ショップカード制作',
+                'シール・印刷物制作',
+                'ブログ・ホームページ制作',
+                '更新・運用サポート',
+                'まずは相談したい',
+            ];
+            $allowed_reply_methods = ['メール', '電話', 'LINE'];
+            $allowed_budgets = ['', 'まずは相談したい', '3万円未満', '3万円〜5万円', '5万円〜10万円', '10万円以上'];
+            $allowed_fields = [
+                'form_type',
+                'form_started_at',
+                'contact_form_token',
+                'website_url',
+                'ご相談内容',
+                'ご相談内容(必須)',
+                'お名前',
+                'お名前(必須)',
+                '屋号・会社名',
+                '今お持ちのホームページURL',
+                'email',
+                'email(必須)',
+                '電話番号',
+                'ご希望の連絡方法',
+                'ご予算感',
+                'お問い合わせ内容',
+                'お問い合わせ内容(必須)',
+            ];
+
+            $has_non_scalar_field = false;
+            foreach ($_POST as $key => $value) {
+                if (in_array($key, ['ご相談内容', 'ご相談内容(必須)'], true)) {
+                    if (!is_array($value)) {
+                        $has_non_scalar_field = true;
+                    }
+                    continue;
+                }
+                if (!is_string($value)) {
+                    $has_non_scalar_field = true;
+                }
+            }
+
+            $has_ambiguous_field = false;
+            $read_contact_value = static function ($plain_key, $required_key = null, $default = '') use (&$has_ambiguous_field) {
+                $candidate_keys = null === $required_key ? [$plain_key] : [$plain_key, $required_key];
+                $present_keys = array_values(array_filter($candidate_keys, static function ($key) {
+                    return array_key_exists($key, $_POST);
+                }));
+                if (count($present_keys) > 1) {
+                    $has_ambiguous_field = true;
+                }
+                if (count($present_keys) < 1 || !is_string($_POST[$present_keys[0]])) {
+                    return $default;
+                }
+                return trim($_POST[$present_keys[0]]);
+            };
+
+            $consultation_keys = array_values(array_filter(['ご相談内容', 'ご相談内容(必須)'], static function ($key) {
+                return array_key_exists($key, $_POST);
+            }));
+            if (count($consultation_keys) > 1) {
+                $has_ambiguous_field = true;
+            }
+            $consultations = count($consultation_keys) === 1 && is_array($_POST[$consultation_keys[0]])
+                ? array_values($_POST[$consultation_keys[0]])
+                : [];
+            $name = $read_contact_value('お名前', 'お名前(必須)');
+            $company = $read_contact_value('屋号・会社名');
+            $email = $read_contact_value('email', 'email(必須)');
+            $message = $read_contact_value('お問い合わせ内容', 'お問い合わせ内容(必須)');
+            $website = $read_contact_value('今お持ちのホームページURL');
+            $phone = $read_contact_value('電話番号');
+            $reply_method = $read_contact_value('ご希望の連絡方法', null, 'メール');
+            $budget = $read_contact_value('ご予算感');
+            $posted_contact_token = $read_contact_value('contact_form_token');
+            $session_contact_token = isset($_SESSION['contact_form_token'])
+                ? (string)$_SESSION['contact_form_token']
+                : '';
+            $has_unknown_field = count(array_diff(array_keys($_POST), $allowed_fields)) > 0;
+            $has_invalid_consultation = count($consultations) < 1 || count($consultations) > count($allowed_consultations);
+            foreach ($consultations as $consultation) {
+                if (!is_string($consultation) || !in_array($consultation, $allowed_consultations, true)) {
+                    $has_invalid_consultation = true;
+                    break;
+                }
+            }
+            $has_invalid_required_value = '' === $name
+                || mb_strlen($name) > 100
+                || false === filter_var($email, FILTER_VALIDATE_EMAIL)
+                || mb_strlen($email) > 254
+                || '' === $message
+                || mb_strlen($message) > 5000;
+            $has_invalid_optional_value = mb_strlen($company) > 150
+                || mb_strlen($phone) > 30
+                || mb_strlen($website) > 500
+                || ('' !== $website && false === filter_var($website, FILTER_VALIDATE_URL))
+                || !in_array($reply_method, $allowed_reply_methods, true)
+                || !in_array($budget, $allowed_budgets, true);
+            $has_invalid_token = '' === $posted_contact_token
+                || '' === $session_contact_token
+                || !hash_equals($session_contact_token, $posted_contact_token);
+
+            if (
+                $has_unknown_field
+                || $has_non_scalar_field
+                || $has_ambiguous_field
+                || $has_invalid_consultation
+                || $has_invalid_required_value
+                || $has_invalid_optional_value
+                || $has_invalid_token
+            ) {
+                header('Location: ' . $invalid_redirect, true, 303);
+                exit;
+            }
+        }
+
 		$resbody = date("Y/m/d H:i:s")."\n\n";
 
 		foreach($_POST as $key =>  $val) {
@@ -6090,6 +6220,7 @@ function send_mail() {
 					!preg_match("|confirm_.*?|s", $key) &&
 					$honeypot_field != $key &&
 					$started_at_field != $key &&
+					'contact_form_token' != $key &&
 					'marutto_form_token' != $key &&
                     'form_type' != $key
 				) {
@@ -6279,12 +6410,44 @@ function send_mail() {
 			$_SESSION['marutto_last_submit_at'] = time();
 			unset($_SESSION['marutto_form_token']);
 		}
+		if ($is_contact_request && !$is_marutto_contact_request) {
+			unset($_SESSION['contact_form_token']);
+		}
+
+		// 送信ごとのチケットで thanks.php の表示とCV計測を紐づける。
+		if ($is_contact_request && session_status() === PHP_SESSION_ACTIVE) {
+			$ticket = bin2hex(random_bytes(24));
+			$now = time();
+			$tickets = isset($_SESSION['dneko_form_tickets']) && is_array($_SESSION['dneko_form_tickets'])
+				? $_SESSION['dneko_form_tickets']
+				: [];
+			foreach ($tickets as $stored_ticket => $stored_payload) {
+				$stored_at = is_array($stored_payload) && isset($stored_payload['created_at'])
+					? (int)$stored_payload['created_at']
+					: 0;
+				if ($stored_at <= 0 || ($now - $stored_at) > 600) {
+					unset($tickets[$stored_ticket]);
+				}
+			}
+			$tickets[$ticket] = [
+				'source' => $form_type,
+				'created_at' => $now,
+				'tracked' => false,
+			];
+			if (count($tickets) > 20) {
+				$tickets = array_slice($tickets, -20, null, true);
+			}
+			$_SESSION['dneko_form_tickets'] = $tickets;
+			$conf['thanks'] = '/thanks.php?ticket=' . rawurlencode($ticket);
+			session_write_close();
+		}
 
 		if("" == $conf['thanks']) {
 			header("Location: ".$_SERVER["HTTP_REFERER"]);
 		}else{
-			header("Location: ".$conf['thanks']);
+			header("Location: ".$conf['thanks'], true, 303);
 		}
+		exit;
 	}
 }
 

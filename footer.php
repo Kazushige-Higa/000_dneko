@@ -1,4 +1,4 @@
-<?php include __DIR__ . '/footer-contact.php'; ?>
+<?php if (empty($hide_footer_contact)) include __DIR__ . '/footer-contact.php'; ?>
 <?php require_once __DIR__ . '/site-navigation.php'; ?>
 <?php
 $dr_line_url = isset($line) ? $line : 'contact.php';
