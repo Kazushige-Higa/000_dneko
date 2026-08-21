@@ -68,18 +68,22 @@ try {
     );
     $data = ga4_build_dashboard($GA4_PROPERTY_ID, $token, $KEY_EVENTS, $EXCLUDE_PATH_PREFIXES);
 
-    // Search Console キーワード・ページ別取得（失敗してもダッシュボードは返す）
+    // URL→タイトル対応表（Search Console 各種のページ名解決に使う）
+    $title_map = $data['_title_map'] ?? [];
+
+    // Search Console キーワード・ページ別・機会分析取得（失敗してもダッシュボードは返す）
     try {
         $data['sc_keywords'] = sc_get_keywords($SC_SITE_URL, $sc_token);
         $data['sc_pages']    = sc_get_pages($SC_SITE_URL, $sc_token);
+        $data['sc_kw']       = sc_keyword_analysis($SC_SITE_URL, $sc_token, $title_map);
     } catch (Exception $e) {
         $data['sc_keywords'] = $data['sc_keywords'] ?? [];
         $data['sc_pages']    = $data['sc_pages'] ?? [];
+        $data['sc_kw']       = $data['sc_kw'] ?? null;
         $data['sc_error']    = $e->getMessage();
     }
 
     // Search Console のURLに、GA4のページタイトルを付与（ぱっと見で識別しやすく）
-    $title_map = $data['_title_map'] ?? [];
     foreach ($data['sc_pages'] as &$sp) {
         $sp['title'] = sc_resolve_title($sp['path'] ?? '', $title_map);
     }
@@ -1125,6 +1129,167 @@ function sc_resolve_title($path, array $map)
         if (isset($map[$alt])) return $map[$alt];
     }
     return '';
+}
+
+
+/* ==================================================================
+ * Search Console: キーワード機会分析（数値ベースのキーワード選定用）
+ * ================================================================== */
+
+/**
+ * 検索順位ごとの期待CTR(%)。業界平均カーブの概算値。
+ * 実CTRとの差から「タイトル改善の取りこぼし」を推定するために使う。
+ */
+function sc_expected_ctr($pos)
+{
+    static $curve = [1 => 28.0, 2 => 15.5, 3 => 11.0, 4 => 8.0, 5 => 7.2,
+                     6 => 5.1,  7 => 4.1,  8 => 3.5,  9 => 3.0, 10 => 2.5];
+    if ($pos <= 1)  return $curve[1];
+    if ($pos >= 11) return 1.6;                      // 2ページ目以降
+    $lo = (int)floor($pos);
+    $hi = min(10, $lo + 1);
+    return round($curve[$lo] + ($curve[$hi] - $curve[$lo]) * ($pos - $lo), 2);
+}
+
+/**
+ * キーワード機会分析。
+ *  - opportunities: 11〜20位（あと一歩で1ページ目）。1ページ目到達時の見込みクリック増を概算。
+ *  - ctr_gap:       10位以内なのにCTRが期待値の半分以下（タイトル・説明文の改善候補）。
+ *  - rising/falling: 過去28日 vs その前28日でクリック・表示・順位がどう動いたか。
+ * 各項目には最も表示された対象ページ（GA4タイトル解決済み）を付ける。
+ */
+function sc_keyword_analysis($site_url, $token, array $title_map = [])
+{
+    $encoded = urlencode($site_url);
+    $url  = 'https://searchconsole.googleapis.com/webmasters/v3/sites/' . $encoded . '/searchAnalytics/query';
+    $auth = ['Authorization: Bearer ' . $token, 'Content-Type: application/json'];
+
+    $fetch = function ($start_ago, $end_ago, $dims, $limit) use ($url, $auth) {
+        $body = json_encode([
+            'startDate'  => date('Y-m-d', strtotime("-{$start_ago} days")),
+            'endDate'    => date('Y-m-d', strtotime("-{$end_ago} days")),
+            'dimensions' => $dims,
+            'rowLimit'   => $limit,
+            'type'       => 'web',
+        ]);
+        $res = ga4_http_post($url, $body, $auth);
+        $d   = json_decode($res, true);
+        if (json_last_error() !== JSON_ERROR_NONE || !is_array($d)) {
+            throw new Exception('Search Console(機会分析) JSON解析失敗: ' . substr($res, 0, 300));
+        }
+        if (isset($d['error'])) {
+            $msg = $d['error']['message'] ?? json_encode($d['error'], JSON_UNESCAPED_UNICODE);
+            throw new Exception('Search Console(機会分析) APIエラー: ' . $msg);
+        }
+        return $d['rows'] ?? [];
+    };
+
+    // 当期28日 / 前期28日 / 当期のクエリ×ページ
+    $cur_rows  = $fetch(28, 1, ['query'], 250);
+    $prev_rows = $fetch(56, 29, ['query'], 250);
+    $qp_rows   = $fetch(28, 1, ['query', 'page'], 500);
+
+    $row_metrics = function ($row) {
+        return [
+            'clicks'      => (int)$row['clicks'],
+            'impressions' => (int)$row['impressions'],
+            'ctr'         => $row['impressions'] > 0 ? round($row['clicks'] / $row['impressions'] * 100, 1) : 0,
+            'position'    => round((float)$row['position'], 1),
+        ];
+    };
+
+    $cur = [];
+    foreach ($cur_rows as $row)  { $cur[$row['keys'][0]]  = $row_metrics($row); }
+    $prev = [];
+    foreach ($prev_rows as $row) { $prev[$row['keys'][0]] = $row_metrics($row); }
+
+    // クエリごとの主要ページ（最も表示されたページ）
+    $top_page = [];
+    foreach ($qp_rows as $row) {
+        $q    = $row['keys'][0];
+        $path = preg_replace('#^https?://[^/]+#', '', $row['keys'][1]) ?: '/';
+        $imp  = (int)$row['impressions'];
+        if (!isset($top_page[$q]) || $imp > $top_page[$q]['imp']) {
+            $top_page[$q] = ['path' => $path, 'imp' => $imp];
+        }
+    }
+    $page_of = function ($q) use ($top_page, $title_map) {
+        $path  = $top_page[$q]['path'] ?? '';
+        return [
+            'page_path'  => $path,
+            'page_title' => $path !== '' ? sc_resolve_title($path, $title_map) : '',
+        ];
+    };
+
+    /* ---- バケット分類 ---- */
+    $opportunities = [];   // 11〜20位: 1ページ目まであと一歩
+    $ctr_gap       = [];   // 10位以内: CTRが期待値の半分以下（タイトル改善候補）
+
+    foreach ($cur as $q => $m) {
+        if ($m['position'] > 10 && $m['position'] <= 20 && $m['impressions'] >= 5) {
+            // 1ページ目中位(7位相当)に入った場合の見込みクリック(28日あたり)
+            $potential = max(0, (int)round($m['impressions'] * sc_expected_ctr(7) / 100) - $m['clicks']);
+            $opportunities[] = array_merge([
+                'query' => $q, 'potential' => $potential,
+                'action' => '本文へのキーワード追記・関連記事からの内部リンクで1ページ目入りを狙う',
+            ], $m, $page_of($q));
+        } elseif ($m['position'] <= 10 && $m['impressions'] >= 10) {
+            $exp = sc_expected_ctr($m['position']);
+            if ($m['ctr'] < $exp * 0.5) {
+                $potential = max(0, (int)round($m['impressions'] * ($exp - $m['ctr']) / 100));
+                if ($potential >= 1) {
+                    $ctr_gap[] = array_merge([
+                        'query' => $q, 'expected_ctr' => $exp, 'potential' => $potential,
+                        'action' => 'タイトル・説明文にこのキーワードを入れて訴求を改善',
+                    ], $m, $page_of($q));
+                }
+            }
+        }
+    }
+    usort($opportunities, fn($a, $b) => $b['potential'] <=> $a['potential']);
+    usort($ctr_gap,       fn($a, $b) => $b['potential'] <=> $a['potential']);
+    $opportunities = array_slice($opportunities, 0, 10);
+    $ctr_gap       = array_slice($ctr_gap, 0, 10);
+
+    /* ---- 前期比トレンド ---- */
+    $movers = [];
+    $all_queries = array_unique(array_merge(array_keys($cur), array_keys($prev)));
+    foreach ($all_queries as $q) {
+        $c = $cur[$q]  ?? ['clicks' => 0, 'impressions' => 0, 'ctr' => 0, 'position' => 0];
+        $p = $prev[$q] ?? null;
+        $imp_delta   = $c['impressions'] - ($p['impressions'] ?? 0);
+        $click_delta = $c['clicks'] - ($p['clicks'] ?? 0);
+        // 動きの小さいクエリはノイズなので除外
+        if (abs($imp_delta) < 5 && $click_delta === 0) continue;
+        $movers[] = [
+            'query'       => $q,
+            'clicks'      => $c['clicks'],
+            'click_delta' => $click_delta,
+            'impressions' => $c['impressions'],
+            'imp_delta'   => $imp_delta,
+            'position'    => $c['position'],
+            // 順位差: プラス = 改善（数値が小さくなった）。前期に無いクエリはnull(新規)
+            'pos_delta'   => ($p && $p['position'] > 0 && $c['position'] > 0)
+                             ? round($p['position'] - $c['position'], 1) : null,
+            'is_new'      => $p === null,
+        ];
+    }
+    $score = fn($m) => $m['click_delta'] * 10 + $m['imp_delta'];   // クリックの動きを重視
+    $rising  = array_values(array_filter($movers, fn($m) => $score($m) > 0));
+    $falling = array_values(array_filter($movers, fn($m) => $score($m) < 0));
+    usort($rising,  fn($a, $b) => $score($b) <=> $score($a));
+    usort($falling, fn($a, $b) => $score($a) <=> $score($b));
+    $rising  = array_slice($rising, 0, 8);
+    $falling = array_slice($falling, 0, 8);
+
+    return [
+        'opportunities'   => $opportunities,
+        'ctr_gap'         => $ctr_gap,
+        'rising'          => $rising,
+        'falling'         => $falling,
+        'potential_total' => array_sum(array_column($opportunities, 'potential'))
+                           + array_sum(array_column($ctr_gap, 'potential')),
+    ];
 }
 
 

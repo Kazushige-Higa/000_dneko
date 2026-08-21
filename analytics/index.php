@@ -207,6 +207,15 @@ tr:hover td { background: #f8fafc; }
 .hot-pages { font-size: 11px; color: #94a3b8; margin-top: 3px;
              overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
+/* ── キーワード機会分析 ── */
+.kw-subhead { font-size: 13px; font-weight: 700; color: #334155; margin: 18px 0 8px; }
+.kw-block:first-of-type .kw-subhead { margin-top: 4px; }
+.kw-potential { font-weight: 700; color: #10b981; }
+.kw-new-badge { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 6px;
+                border-radius: 999px; background: #eef2ff; color: #4f46e5; margin-left: 6px; vertical-align: 1px; }
+.kw-page-mini { font-size: 11px; color: #64748b; overflow: hidden; text-overflow: ellipsis;
+                white-space: nowrap; max-width: 260px; }
+
 /* ── Core Web Vitals ── */
 .cwv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .cwv-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
@@ -502,6 +511,82 @@ tr:hover td { background: #f8fafc; }
   <p class="note">※ 主要クエリ = そのページがGoogle検索で最も表示されたキーワード。順位が11位以下のページはタイトル・コンテンツ改善で1ページ目入りを狙えます。</p>
 </div>
 
+<!-- ── キーワード選定（SEO機会分析） ── -->
+<div class="panel mb16">
+  <div class="panel-head">
+    <h2>キーワード選定 — 数値でわかるSEO機会（過去28日）</h2>
+    <span id="kwPotential" style="font-size:11px;color:#94a3b8"></span>
+  </div>
+
+  <div class="kw-block" id="kwBlockOpp">
+    <h3 class="kw-subhead">🎯 あと一歩で1ページ目（現在11〜20位）</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>キーワード</th>
+          <th>対象ページ</th>
+          <th style="text-align:right;width:60px">順位</th>
+          <th style="text-align:right;width:80px">表示回数</th>
+          <th style="text-align:right;width:70px">クリック</th>
+          <th style="text-align:right;width:110px">1P到達で見込み</th>
+        </tr>
+      </thead>
+      <tbody id="kwOppBody"></tbody>
+    </table>
+    </div>
+    <p class="note">※ 見込み = このキーワードが1ページ目中位（7位前後）に入った場合の追加クリック数の概算（28日あたり）。数値が大きい順＝優先的に対策すべきキーワードです。対策: 対象ページ本文へのキーワード追記・見出し化・関連記事からの内部リンク。</p>
+  </div>
+
+  <div class="kw-block" id="kwBlockCtr">
+    <h3 class="kw-subhead">✍️ クリックの取りこぼし（1ページ目なのにCTRが期待の半分以下）</h3>
+    <div class="table-scroll">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:28px"></th>
+          <th>キーワード</th>
+          <th>対象ページ</th>
+          <th style="text-align:right;width:60px">順位</th>
+          <th style="text-align:right;width:80px">表示回数</th>
+          <th style="width:130px">CTR 実績/期待</th>
+          <th style="text-align:right;width:110px">取りこぼし</th>
+        </tr>
+      </thead>
+      <tbody id="kwCtrBody"></tbody>
+    </table>
+    </div>
+    <p class="note">※ 期待CTR = その順位で平均的に得られるクリック率（業界平均カーブ）。実績が大きく下回る場合、検索結果でタイトル・説明文が魅力不足の可能性大。対策: 対象ページの&lt;title&gt;・meta descriptionにこのキーワードと具体的なベネフィットを入れる。</p>
+  </div>
+
+  <div class="grid-2-equal">
+    <div class="kw-block" id="kwBlockRising">
+      <h3 class="kw-subhead">📈 伸びているキーワード（前28日比）</h3>
+      <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>キーワード</th><th style="text-align:right">クリック</th><th style="text-align:right">表示</th><th style="text-align:right">順位変動</th></tr>
+        </thead>
+        <tbody id="kwRisingBody"></tbody>
+      </table>
+      </div>
+    </div>
+    <div class="kw-block" id="kwBlockFalling">
+      <h3 class="kw-subhead">📉 下がっているキーワード（前28日比）</h3>
+      <div class="table-scroll">
+      <table>
+        <thead>
+          <tr><th>キーワード</th><th style="text-align:right">クリック</th><th style="text-align:right">表示</th><th style="text-align:right">順位変動</th></tr>
+        </thead>
+        <tbody id="kwFallingBody"></tbody>
+      </table>
+      </div>
+    </div>
+  </div>
+  <p class="note">※ 伸びているキーワードは「勝ちテーマ」＝同じ切り口の記事・実績を増やすと効果的。下がっているキーワードは競合に抜かれている可能性があるため、該当ページの情報更新（リライト）を検討してください。NEW = 前期に検索表示が無かった新規キーワード。</p>
+</div>
+
 <!-- ── Core Web Vitals ── -->
 <div class="panel mb16">
   <div class="panel-head">
@@ -688,6 +773,9 @@ function render(d) {
 
   /* Search Console ページ別 */
   drawScPages(d.sc_pages || []);
+
+  /* キーワード機会分析 */
+  drawKwAnalysis(d.sc_kw || null);
 
   /* オーガニックランディング */
   drawOrganicLanding(d.organic_landing || []);
@@ -984,6 +1072,85 @@ function drawScPages(items) {
       <td class="num" style="font-weight:600;color:${posColor}">${p.position}位</td>`;
     tbody.appendChild(tr);
   });
+}
+
+/* ===== キーワード機会分析 ===== */
+function kwPageCell(item) {
+  const t = item.page_title || '';
+  const p = item.page_path || '';
+  if (!t && !p) return '<span style="color:#94a3b8">—</span>';
+  return `<div class="kw-page-mini" title="${escapeHtml(p)}">${escapeHtml(t || p)}</div>`;
+}
+function kwPosDelta(item) {
+  if (item.is_new) return '<span style="color:#94a3b8">—</span>';   // NEWバッジはクエリ名の横に表示
+  const d = item.pos_delta;
+  if (d === null || d === undefined) return '<span style="color:#94a3b8">—</span>';
+  if (d > 0)  return `<span style="color:#10b981;font-weight:600">▲${d}</span>`;   // 順位改善
+  if (d < 0)  return `<span style="color:#ef4444;font-weight:600">▼${Math.abs(d)}</span>`;
+  return '<span style="color:#94a3b8">→</span>';
+}
+
+function drawKwAnalysis(kw) {
+  const oppBody = document.getElementById('kwOppBody');
+  if (!oppBody) return;
+
+  const opp     = (kw && kw.opportunities) || [];
+  const ctrGap  = (kw && kw.ctr_gap)       || [];
+  const rising  = (kw && kw.rising)        || [];
+  const falling = (kw && kw.falling)       || [];
+
+  /* 全カテゴリ空ならパネルごと非表示（データが入れば自動再表示） */
+  const hasAny = opp.length + ctrGap.length + rising.length + falling.length > 0;
+  togglePanel('kwOppBody', hasAny);
+  if (!hasAny) return;
+
+  /* 見込みクリック合計（ヘッダー右） */
+  const total = (kw && kw.potential_total) || 0;
+  document.getElementById('kwPotential').innerHTML = total > 0
+    ? `改善で見込める追加クリック <span class="kw-potential">約${fmtInt(total)}回/月</span>`
+    : '';
+
+  /* サブブロックごとに空なら非表示 */
+  document.getElementById('kwBlockOpp').style.display     = opp.length     ? '' : 'none';
+  document.getElementById('kwBlockCtr').style.display     = ctrGap.length  ? '' : 'none';
+  document.getElementById('kwBlockRising').style.display  = rising.length  ? '' : 'none';
+  document.getElementById('kwBlockFalling').style.display = falling.length ? '' : 'none';
+
+  /* 🎯 あと一歩で1ページ目 */
+  oppBody.innerHTML = opp.map((k, i) => `
+    <tr>
+      <td class="rank">${i + 1}</td>
+      <td style="font-weight:500">${escapeHtml(k.query)}</td>
+      <td>${kwPageCell(k)}</td>
+      <td class="num" style="font-weight:600;color:#f59e0b">${k.position}位</td>
+      <td class="num">${fmtInt(k.impressions)}</td>
+      <td class="num">${fmtInt(k.clicks)}</td>
+      <td class="num"><span class="kw-potential">${k.potential > 0 ? '+' + fmtInt(k.potential) + '回/月' : '+1回未満'}</span></td>
+    </tr>`).join('');
+
+  /* ✍️ CTR取りこぼし */
+  document.getElementById('kwCtrBody').innerHTML = ctrGap.map((k, i) => `
+    <tr>
+      <td class="rank">${i + 1}</td>
+      <td style="font-weight:500">${escapeHtml(k.query)}</td>
+      <td>${kwPageCell(k)}</td>
+      <td class="num" style="font-weight:600;color:#10b981">${k.position}位</td>
+      <td class="num">${fmtInt(k.impressions)}</td>
+      <td><span style="color:#ef4444;font-weight:600">${k.ctr}%</span>
+          <span style="color:#94a3b8;font-size:11px"> / 期待${k.expected_ctr}%</span></td>
+      <td class="num"><span class="kw-potential">+${fmtInt(k.potential)}回/月</span></td>
+    </tr>`).join('');
+
+  /* 📈📉 トレンド */
+  const trendRow = (k) => `
+    <tr>
+      <td style="font-weight:500">${escapeHtml(k.query)}${k.is_new ? '<span class="kw-new-badge">NEW</span>' : ''}</td>
+      <td class="num">${fmtInt(k.clicks)} <span style="font-size:11px">(${k.click_delta >= 0 ? '+' : ''}${k.click_delta})</span></td>
+      <td class="num">${fmtInt(k.impressions)} <span style="font-size:11px">(${k.imp_delta >= 0 ? '+' : ''}${k.imp_delta})</span></td>
+      <td class="num">${kwPosDelta(k)}</td>
+    </tr>`;
+  document.getElementById('kwRisingBody').innerHTML  = rising.map(trendRow).join('');
+  document.getElementById('kwFallingBody').innerHTML = falling.map(trendRow).join('');
 }
 
 /* ===== Core Web Vitals ===== */
