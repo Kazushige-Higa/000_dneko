@@ -118,7 +118,6 @@
   position: absolute;
   inset: 0;
   z-index: -1;
-  background: linear-gradient(90deg, rgba(255, 250, 240, .98) 0%, rgba(255, 250, 240, .94) 31%, rgba(255, 250, 240, .34) 52%, rgba(255, 250, 240, 0) 70%);
   content: "";
 }
 
@@ -1315,9 +1314,14 @@
   .pf_section_heading h2::before,
   .pf_section_heading h2::after { font-size: .55em; }
 
-  .pf_hero { min-height: 700px; background-size: auto 58%; background-position: 65% top; }
-  .pf_hero_inner { min-height: 700px; }
-  .pf_hero_copy { padding-top: 330px; }
+  .pf_hero {
+    min-height: 700px;
+    background-image: url("../images/profile-renewal/profile-hero-gahie-v2-mobile.webp");
+    background-position: center top;
+    background-size: 100% auto;
+  }
+  .pf_hero_inner { min-height: inherit; }
+  .pf_hero_copy { padding-top: clamp(350px, 95vw, 500px); }
   .pf_hero_eyebrow { font-size: 12px; }
   .pf_hero_subtitle { font-size: 24px; }
   .pf_hero_lead { font-size: 13px; line-height: 1.85; }

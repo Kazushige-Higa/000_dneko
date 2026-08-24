@@ -274,7 +274,7 @@ window.addEventListener('load', function () {
 <div class='overflow'>
 
   <section>
-    <div class='bg_base'>
+    <div>
       <div class='single03'>
         <div class='contact-lead tcenter'>
           <div class='tcenter b_m3'>

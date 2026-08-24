@@ -44,13 +44,13 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
 ?>
 
 <?php if ($post && $draft_key !== ''): ?>
-<!-- microCMSプレビューモード：管理者用の目印バー -->
-<div style="background:#F6921E;color:#fff;padding:12px 20px;text-align:center;font-weight:bold;font-size:14px;position:sticky;top:0;z-index:9999;">
-  🔍 プレビューモード（下書きを表示中）｜このバーは公開ページでは表示されません
-</div>
+  <!-- microCMSプレビューモード：管理者用の目印バー -->
+  <div style="background:#F6921E;color:#fff;padding:12px 20px;text-align:center;font-weight:bold;font-size:14px;position:sticky;top:0;z-index:9999;">
+    🔍 プレビューモード（下書きを表示中）｜このバーは公開ページでは表示されません
+  </div>
 <?php endif; ?>
 
-<div class='space_10 space_sp8'></div>
+<div class='space_1 space_sp1'></div>
 <div class="blog_wrap">
   <div class="column">
     <main class="mainwrap">
@@ -229,42 +229,42 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
           // ==========================================
           if (isset($post->speech) && is_array($post->speech) && count($post->speech) > 0):
           ?>
-          <div class="speech-lead-section">
-            <?php foreach ($post->speech as $speech_item):
-              // microCMSのセレクトフィールドは文字列・配列・オブジェクトで返る場合がある
-              $sp_direction_raw = isset($speech_item->direction) ? $speech_item->direction : 'left';
-              if (is_array($sp_direction_raw)) {
-                $sp_direction_raw = !empty($sp_direction_raw) ? $sp_direction_raw[0] : 'left';
-              } elseif (is_object($sp_direction_raw)) {
-                // オブジェクト形式の場合（例: {value: "right"} など）
-                $sp_direction_raw = isset($sp_direction_raw->value) ? $sp_direction_raw->value : (string)$sp_direction_raw;
-              }
-              $sp_direction_str = strtolower(trim((string)$sp_direction_raw));
-              $sp_direction = ($sp_direction_str === 'right') ? 'right' : 'left';
-              $sp_name = isset($speech_item->name) ? trim((string)$speech_item->name) : '';
-              $sp_text = isset($speech_item->text) ? trim((string)$speech_item->text) : '';
-              $sp_has_icon = isset($speech_item->icon->url) && $speech_item->icon->url !== '';
-            ?>
-            <div class="speech_bubble <?php echo $sp_direction; ?>">
-              <div class="speaker_avatar">
-                <div class="speaker_icon">
-                  <?php if ($sp_has_icon): ?>
-                    <img src="<?php echo htmlspecialchars($speech_item->icon->url, ENT_QUOTES, 'UTF-8'); ?>?w=160" alt="<?php echo htmlspecialchars($sp_name, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-                  <?php else: ?>
-                    <span class="speaker_icon__initial"><?php echo mb_substr($sp_name, 0, 1, 'UTF-8'); ?></span>
-                  <?php endif; ?>
+            <div class="speech-lead-section">
+              <?php foreach ($post->speech as $speech_item):
+                // microCMSのセレクトフィールドは文字列・配列・オブジェクトで返る場合がある
+                $sp_direction_raw = isset($speech_item->direction) ? $speech_item->direction : 'left';
+                if (is_array($sp_direction_raw)) {
+                  $sp_direction_raw = !empty($sp_direction_raw) ? $sp_direction_raw[0] : 'left';
+                } elseif (is_object($sp_direction_raw)) {
+                  // オブジェクト形式の場合（例: {value: "right"} など）
+                  $sp_direction_raw = isset($sp_direction_raw->value) ? $sp_direction_raw->value : (string)$sp_direction_raw;
+                }
+                $sp_direction_str = strtolower(trim((string)$sp_direction_raw));
+                $sp_direction = ($sp_direction_str === 'right') ? 'right' : 'left';
+                $sp_name = isset($speech_item->name) ? trim((string)$speech_item->name) : '';
+                $sp_text = isset($speech_item->text) ? trim((string)$speech_item->text) : '';
+                $sp_has_icon = isset($speech_item->icon->url) && $speech_item->icon->url !== '';
+              ?>
+                <div class="speech_bubble <?php echo $sp_direction; ?>">
+                  <div class="speaker_avatar">
+                    <div class="speaker_icon">
+                      <?php if ($sp_has_icon): ?>
+                        <img src="<?php echo htmlspecialchars($speech_item->icon->url, ENT_QUOTES, 'UTF-8'); ?>?w=160" alt="<?php echo htmlspecialchars($sp_name, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                      <?php else: ?>
+                        <span class="speaker_icon__initial"><?php echo mb_substr($sp_name, 0, 1, 'UTF-8'); ?></span>
+                      <?php endif; ?>
+                    </div>
+                    <?php if ($sp_name !== ''): ?>
+                      <div class="speaker_name"><?php echo htmlspecialchars($sp_name, ENT_QUOTES, 'UTF-8'); ?></div>
+                    <?php endif; ?>
+                  </div>
+                  <div class="bubble_content">
+                    <p><?php echo nl2br(htmlspecialchars($sp_text, ENT_QUOTES, 'UTF-8')); ?></p>
+                  </div>
                 </div>
-                <?php if ($sp_name !== ''): ?>
-                <div class="speaker_name"><?php echo htmlspecialchars($sp_name, ENT_QUOTES, 'UTF-8'); ?></div>
-                <?php endif; ?>
-              </div>
-              <div class="bubble_content">
-                <p><?php echo nl2br(htmlspecialchars($sp_text, ENT_QUOTES, 'UTF-8')); ?></p>
-              </div>
+              <?php endforeach; ?>
             </div>
-            <?php endforeach; ?>
-          </div>
-          <div class="space_2 space_sp1"></div>
+            <div class="space_2 space_sp1"></div>
           <?php endif; ?>
 
           <div id="countPost">
@@ -279,22 +279,22 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
           // ==========================================
           if (isset($post->faq) && is_array($post->faq) && count($post->faq) > 0):
           ?>
-          <div class="space_5 space_sp2"></div>
-          <div class="sbox">
-            <h2 class="line_height_14 tcenter b_m3">
-              <span class="fs_30 fs_sp25 font_kiwi">よくあるご質問</span>
-            </h2>
-            <dl class="accordion">
-              <?php foreach ($post->faq as $faq_item): ?>
-              <dt class="open"><?php echo htmlspecialchars($faq_item->question, ENT_QUOTES, 'UTF-8'); ?></dt>
-              <dd class="panel">
-                <div class="inner">
-                  <p><?php echo nl2br(htmlspecialchars($faq_item->answer, ENT_QUOTES, 'UTF-8')); ?></p>
-                </div>
-              </dd>
-              <?php endforeach; ?>
-            </dl>
-          </div>
+            <div class="space_5 space_sp2"></div>
+            <div class="sbox">
+              <h2 class="line_height_14 tcenter b_m3">
+                <span class="fs_30 fs_sp25 font_kiwi">よくあるご質問</span>
+              </h2>
+              <dl class="accordion">
+                <?php foreach ($post->faq as $faq_item): ?>
+                  <dt class="open"><?php echo htmlspecialchars($faq_item->question, ENT_QUOTES, 'UTF-8'); ?></dt>
+                  <dd class="panel">
+                    <div class="inner">
+                      <p><?php echo nl2br(htmlspecialchars($faq_item->answer, ENT_QUOTES, 'UTF-8')); ?></p>
+                    </div>
+                  </dd>
+                <?php endforeach; ?>
+              </dl>
+            </div>
           <?php endif; ?>
 
           <?php
@@ -305,75 +305,75 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
           // ==========================================
           if (isset($post->cta) && is_array($post->cta) && count($post->cta) > 0):
           ?>
-          <div class="space_5 space_sp2"></div>
-          <div class="cta-box-section">
-            <?php foreach ($post->cta as $cta_index => $cta_item):
-              $rank_num = $cta_index + 1;
-              $rank_class = ($rank_num <= 3) ? 'rank-' . $rank_num : 'rank-other';
-              $has_image = isset($cta_item->image->url) && $cta_item->image->url !== '';
-              $has_price = isset($cta_item->price) && trim((string)$cta_item->price) !== '';
-              $has_amazon = isset($cta_item->url_amazon) && trim((string)$cta_item->url_amazon) !== '';
-              $has_rakuten = isset($cta_item->url_rakuten) && trim((string)$cta_item->url_rakuten) !== '';
-              $has_other = isset($cta_item->url_other) && trim((string)$cta_item->url_other) !== '';
-              $other_label = isset($cta_item->url_other_label) && trim((string)$cta_item->url_other_label) !== '' ? trim((string)$cta_item->url_other_label) : '詳細はこちら';
-              $rating = isset($cta_item->rating) ? floatval($cta_item->rating) : 0;
-              $recommend = isset($cta_item->recommend) && trim((string)$cta_item->recommend) !== '' ? trim((string)$cta_item->recommend) : '';
-            ?>
-            <div class="cta-box">
-              <span class="cta-rank <?php echo $rank_class; ?>"><?php echo $rank_num; ?></span>
+            <div class="space_5 space_sp2"></div>
+            <div class="cta-box-section">
+              <?php foreach ($post->cta as $cta_index => $cta_item):
+                $rank_num = $cta_index + 1;
+                $rank_class = ($rank_num <= 3) ? 'rank-' . $rank_num : 'rank-other';
+                $has_image = isset($cta_item->image->url) && $cta_item->image->url !== '';
+                $has_price = isset($cta_item->price) && trim((string)$cta_item->price) !== '';
+                $has_amazon = isset($cta_item->url_amazon) && trim((string)$cta_item->url_amazon) !== '';
+                $has_rakuten = isset($cta_item->url_rakuten) && trim((string)$cta_item->url_rakuten) !== '';
+                $has_other = isset($cta_item->url_other) && trim((string)$cta_item->url_other) !== '';
+                $other_label = isset($cta_item->url_other_label) && trim((string)$cta_item->url_other_label) !== '' ? trim((string)$cta_item->url_other_label) : '詳細はこちら';
+                $rating = isset($cta_item->rating) ? floatval($cta_item->rating) : 0;
+                $recommend = isset($cta_item->recommend) && trim((string)$cta_item->recommend) !== '' ? trim((string)$cta_item->recommend) : '';
+              ?>
+                <div class="cta-box">
+                  <span class="cta-rank <?php echo $rank_class; ?>"><?php echo $rank_num; ?></span>
 
-              <?php if ($has_image): ?>
-              <div class="cta-image">
-                <img src="<?php echo htmlspecialchars($cta_item->image->url, ENT_QUOTES, 'UTF-8'); ?>?w=360" alt="<?php echo htmlspecialchars($cta_item->name ?? '', ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-              </div>
-              <?php endif; ?>
-
-              <div class="cta-content">
-                <?php if ($recommend !== ''): ?>
-                  <span class="cta-recommend"><?php echo htmlspecialchars($recommend, ENT_QUOTES, 'UTF-8'); ?></span>
-                <?php endif; ?>
-
-                <div class="cta-name"><?php echo htmlspecialchars($cta_item->name ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
-
-                <?php if ($rating > 0): ?>
-                <div class="cta-rating">
-                  <span class="cta-stars"><?php
-                    $full = floor($rating);
-                    $half = ($rating - $full >= 0.5) ? 1 : 0;
-                    $empty = 5 - $full - $half;
-                    for ($s = 0; $s < $full; $s++) echo '&#9733;';
-                    if ($half) echo '&#9733;';
-                    for ($s = 0; $s < $empty; $s++) echo '&#9734;';
-                  ?></span>
-                  <span class="cta-rating-num"><?php echo number_format($rating, 1); ?></span>
-                </div>
-                <?php endif; ?>
-
-                <?php if (isset($cta_item->description) && trim((string)$cta_item->description) !== ''): ?>
-                <div class="cta-description"><?php echo nl2br(htmlspecialchars($cta_item->description, ENT_QUOTES, 'UTF-8')); ?></div>
-                <?php endif; ?>
-
-                <?php if ($has_price): ?>
-                <div class="cta-price">
-                  <span class="cta-price-label">価格</span><?php echo htmlspecialchars($cta_item->price, ENT_QUOTES, 'UTF-8'); ?>
-                </div>
-                <?php endif; ?>
-
-                <div class="cta-buttons">
-                  <?php if ($has_amazon): ?>
-                  <a href="<?php echo htmlspecialchars($cta_item->url_amazon, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-amazon" target="_blank" rel="nofollow noopener">Amazon</a>
+                  <?php if ($has_image): ?>
+                    <div class="cta-image">
+                      <img src="<?php echo htmlspecialchars($cta_item->image->url, ENT_QUOTES, 'UTF-8'); ?>?w=360" alt="<?php echo htmlspecialchars($cta_item->name ?? '', ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                    </div>
                   <?php endif; ?>
-                  <?php if ($has_rakuten): ?>
-                  <a href="<?php echo htmlspecialchars($cta_item->url_rakuten, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-rakuten" target="_blank" rel="nofollow noopener">楽天市場</a>
-                  <?php endif; ?>
-                  <?php if ($has_other): ?>
-                  <a href="<?php echo htmlspecialchars($cta_item->url_other, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-other" target="_blank" rel="nofollow noopener"><?php echo htmlspecialchars($other_label, ENT_QUOTES, 'UTF-8'); ?></a>
-                  <?php endif; ?>
+
+                  <div class="cta-content">
+                    <?php if ($recommend !== ''): ?>
+                      <span class="cta-recommend"><?php echo htmlspecialchars($recommend, ENT_QUOTES, 'UTF-8'); ?></span>
+                    <?php endif; ?>
+
+                    <div class="cta-name"><?php echo htmlspecialchars($cta_item->name ?? '', ENT_QUOTES, 'UTF-8'); ?></div>
+
+                    <?php if ($rating > 0): ?>
+                      <div class="cta-rating">
+                        <span class="cta-stars"><?php
+                                                $full = floor($rating);
+                                                $half = ($rating - $full >= 0.5) ? 1 : 0;
+                                                $empty = 5 - $full - $half;
+                                                for ($s = 0; $s < $full; $s++) echo '&#9733;';
+                                                if ($half) echo '&#9733;';
+                                                for ($s = 0; $s < $empty; $s++) echo '&#9734;';
+                                                ?></span>
+                        <span class="cta-rating-num"><?php echo number_format($rating, 1); ?></span>
+                      </div>
+                    <?php endif; ?>
+
+                    <?php if (isset($cta_item->description) && trim((string)$cta_item->description) !== ''): ?>
+                      <div class="cta-description"><?php echo nl2br(htmlspecialchars($cta_item->description, ENT_QUOTES, 'UTF-8')); ?></div>
+                    <?php endif; ?>
+
+                    <?php if ($has_price): ?>
+                      <div class="cta-price">
+                        <span class="cta-price-label">価格</span><?php echo htmlspecialchars($cta_item->price, ENT_QUOTES, 'UTF-8'); ?>
+                      </div>
+                    <?php endif; ?>
+
+                    <div class="cta-buttons">
+                      <?php if ($has_amazon): ?>
+                        <a href="<?php echo htmlspecialchars($cta_item->url_amazon, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-amazon" target="_blank" rel="nofollow noopener">Amazon</a>
+                      <?php endif; ?>
+                      <?php if ($has_rakuten): ?>
+                        <a href="<?php echo htmlspecialchars($cta_item->url_rakuten, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-rakuten" target="_blank" rel="nofollow noopener">楽天市場</a>
+                      <?php endif; ?>
+                      <?php if ($has_other): ?>
+                        <a href="<?php echo htmlspecialchars($cta_item->url_other, ENT_QUOTES, 'UTF-8'); ?>" class="cta-btn cta-btn-other" target="_blank" rel="nofollow noopener"><?php echo htmlspecialchars($other_label, ENT_QUOTES, 'UTF-8'); ?></a>
+                      <?php endif; ?>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              <?php endforeach; ?>
             </div>
-            <?php endforeach; ?>
-          </div>
           <?php endif; ?>
 
           <?php
@@ -384,101 +384,101 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
           // ==========================================
           if (isset($post->clients) && is_array($post->clients) && count($post->clients) > 0):
           ?>
-          <div class="space_5 space_sp2"></div>
-          <div class="client-intro-section">
-            <h2 class="client-intro-heading">
-              <span class="client-intro-heading__text">クライアント様のご紹介</span>
-            </h2>
+            <div class="space_5 space_sp2"></div>
+            <div class="client-intro-section">
+              <h2 class="client-intro-heading">
+                <span class="client-intro-heading__text">クライアント様のご紹介</span>
+              </h2>
 
-            <?php foreach ($post->clients as $client_item):
-              $cl_name      = isset($client_item->name) ? trim((string)$client_item->name) : '';
-              $cl_address   = isset($client_item->address) ? trim((string)$client_item->address) : '';
-              $cl_image_url = (isset($client_item->image->url) && $client_item->image->url !== '') ? $client_item->image->url : '';
-              $cl_desc      = isset($client_item->description) ? trim((string)$client_item->description) : '';
-              $cl_freetext  = isset($client_item->freetext) ? trim((string)$client_item->freetext) : '';
+              <?php foreach ($post->clients as $client_item):
+                $cl_name      = isset($client_item->name) ? trim((string)$client_item->name) : '';
+                $cl_address   = isset($client_item->address) ? trim((string)$client_item->address) : '';
+                $cl_image_url = (isset($client_item->image->url) && $client_item->image->url !== '') ? $client_item->image->url : '';
+                $cl_desc      = isset($client_item->description) ? trim((string)$client_item->description) : '';
+                $cl_freetext  = isset($client_item->freetext) ? trim((string)$client_item->freetext) : '';
 
-              // 詳しくみるボタン（自由URL）
-              $cl_detail_url   = isset($client_item->detail_url) ? trim((string)$client_item->detail_url) : '';
-              $cl_detail_label = isset($client_item->detail_label) ? trim((string)$client_item->detail_label) : '詳しくみる';
+                // 詳しくみるボタン（自由URL）
+                $cl_detail_url   = isset($client_item->detail_url) ? trim((string)$client_item->detail_url) : '';
+                $cl_detail_label = isset($client_item->detail_label) ? trim((string)$client_item->detail_label) : '詳しくみる';
 
-              // 各種URL
-              $cl_website   = isset($client_item->url_website) ? trim((string)$client_item->url_website) : '';
-              $cl_instagram = isset($client_item->url_instagram) ? trim((string)$client_item->url_instagram) : '';
-              $cl_line      = isset($client_item->url_line) ? trim((string)$client_item->url_line) : '';
-              $cl_x         = isset($client_item->url_x) ? trim((string)$client_item->url_x) : '';
-              $cl_facebook  = isset($client_item->url_facebook) ? trim((string)$client_item->url_facebook) : '';
-              $cl_youtube   = isset($client_item->url_youtube) ? trim((string)$client_item->url_youtube) : '';
-              $cl_tiktok    = isset($client_item->url_tiktok) ? trim((string)$client_item->url_tiktok) : '';
-              $cl_other_url = isset($client_item->url_other) ? trim((string)$client_item->url_other) : '';
-              $cl_other_lbl = isset($client_item->url_other_label) ? trim((string)$client_item->url_other_label) : 'その他リンク';
+                // 各種URL
+                $cl_website   = isset($client_item->url_website) ? trim((string)$client_item->url_website) : '';
+                $cl_instagram = isset($client_item->url_instagram) ? trim((string)$client_item->url_instagram) : '';
+                $cl_line      = isset($client_item->url_line) ? trim((string)$client_item->url_line) : '';
+                $cl_x         = isset($client_item->url_x) ? trim((string)$client_item->url_x) : '';
+                $cl_facebook  = isset($client_item->url_facebook) ? trim((string)$client_item->url_facebook) : '';
+                $cl_youtube   = isset($client_item->url_youtube) ? trim((string)$client_item->url_youtube) : '';
+                $cl_tiktok    = isset($client_item->url_tiktok) ? trim((string)$client_item->url_tiktok) : '';
+                $cl_other_url = isset($client_item->url_other) ? trim((string)$client_item->url_other) : '';
+                $cl_other_lbl = isset($client_item->url_other_label) ? trim((string)$client_item->url_other_label) : 'その他リンク';
 
-              $has_sns = ($cl_website !== '' || $cl_instagram !== '' || $cl_line !== '' || $cl_x !== '' || $cl_facebook !== '' || $cl_youtube !== '' || $cl_tiktok !== '' || $cl_other_url !== '');
-            ?>
-            <div class="client-card">
-              <?php if ($cl_image_url !== ''): ?>
-              <div class="client-card__image">
-                <img src="<?php echo htmlspecialchars($cl_image_url, ENT_QUOTES, 'UTF-8'); ?>?w=400" alt="<?php echo htmlspecialchars($cl_name, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
-              </div>
-              <?php endif; ?>
-
-              <div class="client-card__body">
-                <?php if ($cl_name !== ''): ?>
-                <h3 class="client-card__name"><?php echo htmlspecialchars($cl_name, ENT_QUOTES, 'UTF-8'); ?></h3>
-                <?php endif; ?>
-
-                <?php if ($cl_address !== ''): ?>
-                <p class="client-card__address">
-                  <i class="fa-solid fa-location-dot"></i>
-                  <?php echo htmlspecialchars($cl_address, ENT_QUOTES, 'UTF-8'); ?>
-                </p>
-                <?php endif; ?>
-
-                <?php if ($cl_desc !== ''): ?>
-                <p class="client-card__desc"><?php echo nl2br(htmlspecialchars($cl_desc, ENT_QUOTES, 'UTF-8')); ?></p>
-                <?php endif; ?>
-
-                <?php if ($cl_freetext !== ''): ?>
-                <div class="client-card__freetext"><?php echo nl2br(htmlspecialchars($cl_freetext, ENT_QUOTES, 'UTF-8')); ?></div>
-                <?php endif; ?>
-
-                <?php if ($has_sns): ?>
-                <ul class="client-card__links">
-                  <?php if ($cl_website !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_website, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Webサイト"><i class="fa-solid fa-globe"></i></a></li>
+                $has_sns = ($cl_website !== '' || $cl_instagram !== '' || $cl_line !== '' || $cl_x !== '' || $cl_facebook !== '' || $cl_youtube !== '' || $cl_tiktok !== '' || $cl_other_url !== '');
+              ?>
+                <div class="client-card">
+                  <?php if ($cl_image_url !== ''): ?>
+                    <div class="client-card__image">
+                      <img src="<?php echo htmlspecialchars($cl_image_url, ENT_QUOTES, 'UTF-8'); ?>?w=400" alt="<?php echo htmlspecialchars($cl_name, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                    </div>
                   <?php endif; ?>
-                  <?php if ($cl_instagram !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_instagram, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
-                  <?php endif; ?>
-                  <?php if ($cl_line !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="LINE"><i class="fa-brands fa-line"></i></a></li>
-                  <?php endif; ?>
-                  <?php if ($cl_x !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_x, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="X (Twitter)"><i class="fa-brands fa-twitter"></i></a></li>
-                  <?php endif; ?>
-                  <?php if ($cl_facebook !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_facebook, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Facebook"><i class="fa-brands fa-facebook"></i></a></li>
-                  <?php endif; ?>
-                  <?php if ($cl_youtube !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_youtube, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="YouTube"><i class="fa-brands fa-youtube"></i></a></li>
-                  <?php endif; ?>
-                  <?php if ($cl_tiktok !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_tiktok, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="TikTok"><i class="fa-brands fa-tiktok"></i></a></li>
-                  <?php endif; ?>
-                  <?php if ($cl_other_url !== ''): ?>
-                  <li><a href="<?php echo htmlspecialchars($cl_other_url, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="<?php echo htmlspecialchars($cl_other_lbl, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-solid fa-up-right-from-square"></i></a></li>
-                  <?php endif; ?>
-                </ul>
-                <?php endif; ?>
 
-                <?php if ($cl_detail_url !== ''): ?>
-                <a href="<?php echo htmlspecialchars($cl_detail_url, ENT_QUOTES, 'UTF-8'); ?>" class="client-card__detail-btn" target="_blank" rel="noopener">
-                  <i class="fa-solid fa-arrow-right"></i> <?php echo htmlspecialchars($cl_detail_label, ENT_QUOTES, 'UTF-8'); ?>
-                </a>
-                <?php endif; ?>
-              </div>
+                  <div class="client-card__body">
+                    <?php if ($cl_name !== ''): ?>
+                      <h3 class="client-card__name"><?php echo htmlspecialchars($cl_name, ENT_QUOTES, 'UTF-8'); ?></h3>
+                    <?php endif; ?>
+
+                    <?php if ($cl_address !== ''): ?>
+                      <p class="client-card__address">
+                        <i class="fa-solid fa-location-dot"></i>
+                        <?php echo htmlspecialchars($cl_address, ENT_QUOTES, 'UTF-8'); ?>
+                      </p>
+                    <?php endif; ?>
+
+                    <?php if ($cl_desc !== ''): ?>
+                      <p class="client-card__desc"><?php echo nl2br(htmlspecialchars($cl_desc, ENT_QUOTES, 'UTF-8')); ?></p>
+                    <?php endif; ?>
+
+                    <?php if ($cl_freetext !== ''): ?>
+                      <div class="client-card__freetext"><?php echo nl2br(htmlspecialchars($cl_freetext, ENT_QUOTES, 'UTF-8')); ?></div>
+                    <?php endif; ?>
+
+                    <?php if ($has_sns): ?>
+                      <ul class="client-card__links">
+                        <?php if ($cl_website !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_website, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Webサイト"><i class="fa-solid fa-globe"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_instagram !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_instagram, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Instagram"><i class="fa-brands fa-instagram"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_line !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="LINE"><i class="fa-brands fa-line"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_x !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_x, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="X (Twitter)"><i class="fa-brands fa-twitter"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_facebook !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_facebook, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="Facebook"><i class="fa-brands fa-facebook"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_youtube !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_youtube, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="YouTube"><i class="fa-brands fa-youtube"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_tiktok !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_tiktok, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="TikTok"><i class="fa-brands fa-tiktok"></i></a></li>
+                        <?php endif; ?>
+                        <?php if ($cl_other_url !== ''): ?>
+                          <li><a href="<?php echo htmlspecialchars($cl_other_url, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" title="<?php echo htmlspecialchars($cl_other_lbl, ENT_QUOTES, 'UTF-8'); ?>"><i class="fa-solid fa-up-right-from-square"></i></a></li>
+                        <?php endif; ?>
+                      </ul>
+                    <?php endif; ?>
+
+                    <?php if ($cl_detail_url !== ''): ?>
+                      <a href="<?php echo htmlspecialchars($cl_detail_url, ENT_QUOTES, 'UTF-8'); ?>" class="client-card__detail-btn" target="_blank" rel="noopener">
+                        <i class="fa-solid fa-arrow-right"></i> <?php echo htmlspecialchars($cl_detail_label, ENT_QUOTES, 'UTF-8'); ?>
+                      </a>
+                    <?php endif; ?>
+                  </div>
+                </div>
+              <?php endforeach; ?>
             </div>
-            <?php endforeach; ?>
-          </div>
           <?php endif; ?>
 
           <div class='space_5 space_sp2'></div>
@@ -517,9 +517,9 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
                 <span class="prevnext-body">
                   <span class="prevnext-thumb">
                     <?php if ($prev_thumb !== ''): ?>
-                    <img src="<?php echo htmlspecialchars($prev_thumb, ENT_QUOTES, 'UTF-8'); ?>?w=200" alt="<?php echo htmlspecialchars((string)$prev_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                      <img src="<?php echo htmlspecialchars($prev_thumb, ENT_QUOTES, 'UTF-8'); ?>?w=200" alt="<?php echo htmlspecialchars((string)$prev_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                     <?php else: ?>
-                    <img src="<?php echo $img; ?>/no-img.webp" alt="<?php echo htmlspecialchars((string)$prev_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                      <img src="<?php echo $img; ?>/no-img.webp" alt="<?php echo htmlspecialchars((string)$prev_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                     <?php endif; ?>
                   </span>
                   <span class="prevnext-title"><?php echo htmlspecialchars((string)$prev_post->title, ENT_QUOTES, 'UTF-8'); ?></span>
@@ -538,9 +538,9 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
                   <span class="prevnext-title"><?php echo htmlspecialchars((string)$next_post->title, ENT_QUOTES, 'UTF-8'); ?></span>
                   <span class="prevnext-thumb">
                     <?php if ($next_thumb !== ''): ?>
-                    <img src="<?php echo htmlspecialchars($next_thumb, ENT_QUOTES, 'UTF-8'); ?>?w=200" alt="<?php echo htmlspecialchars((string)$next_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                      <img src="<?php echo htmlspecialchars($next_thumb, ENT_QUOTES, 'UTF-8'); ?>?w=200" alt="<?php echo htmlspecialchars((string)$next_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                     <?php else: ?>
-                    <img src="<?php echo $img; ?>/no-img.webp" alt="<?php echo htmlspecialchars((string)$next_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                      <img src="<?php echo $img; ?>/no-img.webp" alt="<?php echo htmlspecialchars((string)$next_post->title, ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                     <?php endif; ?>
                   </span>
                 </span>
@@ -592,78 +592,102 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
 <script src="js/blog_cms.js" defer></script>
 
 <?php if ($post): ?>
-<script>
-(function () {
-  var eid = <?php echo json_encode($post->id, JSON_HEX_TAG | JSON_HEX_AMP); ?>;
-  var el  = document.getElementById('access-count');
-  if (!eid || !el) return;
+  <script>
+    (function() {
+      var eid = <?php echo json_encode($post->id, JSON_HEX_TAG | JSON_HEX_AMP); ?>;
+      var el = document.getElementById('access-count');
+      if (!eid || !el) return;
 
-  // セッション内で同じ記事を重複カウントしない
-  var storageKey = 'pv_counted_' + eid;
-  var alreadyCounted = false;
-  try { alreadyCounted = !!sessionStorage.getItem(storageKey); } catch (e) {}
+      // セッション内で同じ記事を重複カウントしない
+      var storageKey = 'pv_counted_' + eid;
+      var alreadyCounted = false;
+      try {
+        alreadyCounted = !!sessionStorage.getItem(storageKey);
+      } catch (e) {}
 
-  if (alreadyCounted) {
-    // 既にカウント済み → 現在値だけ取得
-    fetch('pv_counter.php?action=get&eid=' + encodeURIComponent(eid))
-      .then(function (r) { return r.json(); })
-      .then(function (d) { el.textContent = d.count; })
-      .catch(function () {});
-  } else {
-    // 初回アクセス → カウントアップ
-    fetch('pv_counter.php?action=count&eid=' + encodeURIComponent(eid), { method: 'POST' })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        el.textContent = d.count;
-        try { sessionStorage.setItem(storageKey, '1'); } catch (e) {}
-      })
-      .catch(function () {});
-  }
-})();
+      if (alreadyCounted) {
+        // 既にカウント済み → 現在値だけ取得
+        fetch('pv_counter.php?action=get&eid=' + encodeURIComponent(eid))
+          .then(function(r) {
+            return r.json();
+          })
+          .then(function(d) {
+            el.textContent = d.count;
+          })
+          .catch(function() {});
+      } else {
+        // 初回アクセス → カウントアップ
+        fetch('pv_counter.php?action=count&eid=' + encodeURIComponent(eid), {
+            method: 'POST'
+          })
+          .then(function(r) {
+            return r.json();
+          })
+          .then(function(d) {
+            el.textContent = d.count;
+            try {
+              sessionStorage.setItem(storageKey, '1');
+            } catch (e) {}
+          })
+          .catch(function() {});
+      }
+    })();
 
-// いいねボタン
-(function () {
-  var eid    = <?php echo json_encode($post->id, JSON_HEX_TAG | JSON_HEX_AMP); ?>;
-  var btn    = document.getElementById('like-button');
-  var countEl = document.getElementById('like-count');
-  if (!eid || !btn || !countEl) return;
+    // いいねボタン
+    (function() {
+      var eid = <?php echo json_encode($post->id, JSON_HEX_TAG | JSON_HEX_AMP); ?>;
+      var btn = document.getElementById('like-button');
+      var countEl = document.getElementById('like-count');
+      if (!eid || !btn || !countEl) return;
 
-  var likeKey = 'liked_' + eid;
-  var liked   = false;
-  try { liked = localStorage.getItem(likeKey) === '1'; } catch (e) {}
+      var likeKey = 'liked_' + eid;
+      var liked = false;
+      try {
+        liked = localStorage.getItem(likeKey) === '1';
+      } catch (e) {}
 
-  // 現在のいいね数を取得して表示
-  fetch('like_counter.php?action=get&eid=' + encodeURIComponent(eid))
-    .then(function (r) { return r.json(); })
-    .then(function (d) { countEl.textContent = d.count; })
-    .catch(function () {});
+      // 現在のいいね数を取得して表示
+      fetch('like_counter.php?action=get&eid=' + encodeURIComponent(eid))
+        .then(function(r) {
+          return r.json();
+        })
+        .then(function(d) {
+          countEl.textContent = d.count;
+        })
+        .catch(function() {});
 
-  // 既にいいね済みなら押せない状態にする
-  if (liked) {
-    btn.classList.add('liked');
-    btn.disabled = true;
-  }
+      // 既にいいね済みなら押せない状態にする
+      if (liked) {
+        btn.classList.add('liked');
+        btn.disabled = true;
+      }
 
-  btn.addEventListener('click', function () {
-    if (btn.classList.contains('liked')) return;
+      btn.addEventListener('click', function() {
+        if (btn.classList.contains('liked')) return;
 
-    btn.disabled = true;
-    btn.classList.add('liked');
+        btn.disabled = true;
+        btn.classList.add('liked');
 
-    fetch('like_counter.php?action=like&eid=' + encodeURIComponent(eid), { method: 'POST' })
-      .then(function (r) { return r.json(); })
-      .then(function (d) {
-        countEl.textContent = d.count;
-        try { localStorage.setItem(likeKey, '1'); } catch (e) {}
-      })
-      .catch(function () {
-        // 失敗時は元に戻す
-        btn.classList.remove('liked');
-        btn.disabled = false;
+        fetch('like_counter.php?action=like&eid=' + encodeURIComponent(eid), {
+            method: 'POST'
+          })
+          .then(function(r) {
+            return r.json();
+          })
+          .then(function(d) {
+            countEl.textContent = d.count;
+            try {
+              localStorage.setItem(likeKey, '1');
+            } catch (e) {}
+          })
+          .catch(function() {
+            // 失敗時は元に戻す
+            btn.classList.remove('liked');
+            btn.disabled = false;
+          });
       });
-  });
-})();
-</script>
+    })();
+  </script>
 <?php endif; ?>
 
 <?php include_once './footer.php'; ?>

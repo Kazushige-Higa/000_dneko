@@ -40,6 +40,9 @@ data/ga4/token.json
 data/ga4/sc_token.json
 data/ga4/cache.json
 
+# 制作中のモックアップ・検証用ファイル（本番サーバーへ公開しない）
+mockups/
+
 # Build artifacts
 dist/
 build/

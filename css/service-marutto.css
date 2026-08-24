@@ -271,12 +271,15 @@ body:has(.service_marutto) > #pagetop {
 }
 
 .service_marutto .marutto_campaign_limit h1 {
+  width: 100%;
+  max-width: none;
   margin: 0;
   color: #fff;
   font-size: clamp(40px, 5vw, 64px);
   font-weight: 900;
   letter-spacing: .08em;
   line-height: 1.18;
+  text-align: center;
   text-shadow: 0 3px 0 rgba(99, 4, 9, .24);
 }
 
