@@ -39,6 +39,22 @@ $SC_SITE_URL     = 'https://d-neko.com/';                         // Search Cons
 // ※ contact_page_view（ページ到達のみ）はCVから除外し、送信率を正しく反映する。
 $KEY_EVENTS = ['form_submit', 'line_click'];
 
+// 目標キーワード（順位トラッキング対象）。target_keywords.php で編集する。
+$TARGET_KEYWORDS = [];
+$_target_file = __DIR__ . '/target_keywords.php';
+if (file_exists($_target_file)) {
+    $TARGET_KEYWORDS = array_values(array_filter((array)require $_target_file, 'strlen'));
+}
+
+// 順位取得API（将来の拡張ポイント）。
+// Search Console は「自サイトが検索結果に表示された」キーワードしか順位を返さないため、
+// 圏外キーワードの実順位は取得できない。ここに外部の順位取得API(SerpApi/DataForSEO等)を
+// 設定すると、圏外キーワードも実順位を出せるようになる。空なら Search Console のみで動作する。
+$RANK_API = [
+    'provider' => '',   // 例: 'serpapi' / 'dataforseo'
+    'api_key'  => '',
+];
+
 // レポートから除外するページパスの接頭辞（自社ツール・プロトタイプ・テスト階層）
 $EXCLUDE_PATH_PREFIXES = ['/analytics', '/ga4_dashboard_prototype', '/000_dneko'];
 /* ================================================ */
@@ -76,12 +92,17 @@ try {
         $data['sc_keywords'] = sc_get_keywords($SC_SITE_URL, $sc_token);
         $data['sc_pages']    = sc_get_pages($SC_SITE_URL, $sc_token);
         $data['sc_kw']       = sc_keyword_analysis($SC_SITE_URL, $sc_token, $title_map);
+        // 目標キーワード照合用の検索クエリ索引（画面から追加したキーワードもこれで判定する）
+        $data['sc_query_index'] = sc_query_index($SC_SITE_URL, $sc_token, $title_map);
     } catch (Exception $e) {
         $data['sc_keywords'] = $data['sc_keywords'] ?? [];
         $data['sc_pages']    = $data['sc_pages'] ?? [];
         $data['sc_kw']       = $data['sc_kw'] ?? null;
+        $data['sc_query_index'] = $data['sc_query_index'] ?? null;
         $data['sc_error']    = $e->getMessage();
     }
+    $data['sc_targets']  = $TARGET_KEYWORDS;
+    $data['rank_api_on'] = ($RANK_API['provider'] ?? '') !== '' && ($RANK_API['api_key'] ?? '') !== '';
 
     // Search Console のURLに、GA4のページタイトルを付与（ぱっと見で識別しやすく）
     foreach ($data['sc_pages'] as &$sp) {
@@ -1129,6 +1150,76 @@ function sc_resolve_title($path, array $map)
         if (isset($map[$alt])) return $map[$alt];
     }
     return '';
+}
+
+
+/**
+ * 目標キーワード照合用の検索クエリ索引。
+ *
+ * 過去90日に「検索結果へ実際に表示された」クエリを、順位・表示回数・対象ページ付きで返す。
+ * 画面側はこの索引と目標キーワードを突き合わせ、
+ *   完全一致 → 実順位を表示 / 部分一致 → 関連クエリとして提示 / 一致なし → 圏外
+ * と判定する。索引に無い＝Googleが自サイトを一度も表示していない、という意味になる。
+ */
+function sc_query_index($site_url, $token, array $title_map = [], $days = 90, $limit = 400)
+{
+    $url  = 'https://searchconsole.googleapis.com/webmasters/v3/sites/' . urlencode($site_url) . '/searchAnalytics/query';
+    $auth = ['Authorization: Bearer ' . $token, 'Content-Type: application/json'];
+    $body = json_encode([
+        'startDate'  => date('Y-m-d', strtotime("-{$days} days")),
+        'endDate'    => date('Y-m-d', strtotime('-1 day')),
+        'dimensions' => ['query', 'page'],
+        'rowLimit'   => 1000,
+        'type'       => 'web',
+    ]);
+
+    $res = ga4_http_post($url, $body, $auth);
+    $d   = json_decode($res, true);
+    if (json_last_error() !== JSON_ERROR_NONE || !is_array($d)) {
+        throw new Exception('Search Console(クエリ索引) JSON解析失敗: ' . substr($res, 0, 300));
+    }
+    if (isset($d['error'])) {
+        $msg = $d['error']['message'] ?? json_encode($d['error'], JSON_UNESCAPED_UNICODE);
+        throw new Exception('Search Console(クエリ索引) APIエラー: ' . $msg);
+    }
+
+    // クエリ単位に集約（順位は表示回数による加重平均／代表ページは最多表示のページ）
+    $agg = [];
+    foreach ($d['rows'] ?? [] as $row) {
+        $q    = $row['keys'][0];
+        $path = preg_replace('#^https?://[^/]+#', '', $row['keys'][1]) ?: '/';
+        $imp  = (int)$row['impressions'];
+        if (!isset($agg[$q])) {
+            $agg[$q] = ['clicks' => 0, 'imp' => 0, 'pos_w' => 0.0, 'path' => $path, 'path_imp' => 0];
+        }
+        $agg[$q]['clicks'] += (int)$row['clicks'];
+        $agg[$q]['imp']    += $imp;
+        $agg[$q]['pos_w']  += (float)$row['position'] * $imp;
+        if ($imp > $agg[$q]['path_imp']) {
+            $agg[$q]['path']     = $path;
+            $agg[$q]['path_imp'] = $imp;
+        }
+    }
+
+    $items = [];
+    foreach ($agg as $q => $a) {
+        if ($a['imp'] <= 0) continue;
+        $items[] = [
+            'q'      => $q,
+            'pos'    => round($a['pos_w'] / $a['imp'], 1),
+            'imp'    => $a['imp'],
+            'clicks' => $a['clicks'],
+            'path'   => $a['path'],
+            'title'  => sc_resolve_title($a['path'], $title_map),
+        ];
+    }
+    usort($items, fn($x, $y) => $y['imp'] <=> $x['imp']);
+
+    return [
+        'days'    => $days,
+        'total'   => count($items),
+        'queries' => array_slice($items, 0, $limit),
+    ];
 }
 
 

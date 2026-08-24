@@ -216,6 +216,24 @@ tr:hover td { background: #f8fafc; }
 .kw-page-mini { font-size: 11px; color: #64748b; overflow: hidden; text-overflow: ellipsis;
                 white-space: nowrap; max-width: 260px; }
 
+/* ── 目標キーワード追跡 ── */
+.kwt-addbar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.kwt-input { flex: 1 1 260px; min-width: 0; padding: 9px 13px; border: 1px solid #cbd5e1;
+             border-radius: 8px; font-size: 13px; font-family: inherit; color: #0f172a; }
+.kwt-input:focus { outline: none; border-color: #4f46e5; box-shadow: 0 0 0 3px rgba(79,70,229,.12); }
+.kwt-add-btn { padding: 9px 20px; border: 0; border-radius: 8px; background: #4f46e5; color: #fff;
+               font-size: 13px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+.kwt-add-btn:hover { background: #4338ca; }
+.kwt-status { display: inline-block; font-size: 11px; font-weight: 700; padding: 3px 9px;
+              border-radius: 999px; white-space: nowrap; }
+.kwt-kw { font-weight: 600; font-size: 13px; }
+.kwt-src { display: inline-block; font-size: 9px; font-weight: 700; padding: 1px 6px; border-radius: 999px;
+           background: #f1f5f9; color: #94a3b8; margin-left: 6px; vertical-align: 1px; }
+.kwt-advice { font-size: 12px; color: #334155; line-height: 1.65; }
+.kwt-evidence { font-size: 11px; color: #94a3b8; margin-top: 3px; }
+.kwt-del { border: 0; background: none; color: #cbd5e1; cursor: pointer; font-size: 15px; line-height: 1; padding: 4px; }
+.kwt-del:hover { color: #ef4444; }
+
 /* ── Core Web Vitals ── */
 .cwv-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 12px; }
 .cwv-card { border: 1px solid #e2e8f0; border-radius: 10px; padding: 16px; }
@@ -587,6 +605,41 @@ tr:hover td { background: #f8fafc; }
   <p class="note">※ 伸びているキーワードは「勝ちテーマ」＝同じ切り口の記事・実績を増やすと効果的。下がっているキーワードは競合に抜かれている可能性があるため、該当ページの情報更新（リライト）を検討してください。NEW = 前期に検索表示が無かった新規キーワード。</p>
 </div>
 
+<!-- ── 目標キーワード追跡 ── -->
+<div class="panel mb16" id="kwTargetPanel">
+  <div class="panel-head">
+    <h2>目標キーワード追跡 — 今何位？次に何をする？</h2>
+    <span id="kwTargetPeriod" style="font-size:11px;color:#94a3b8"></span>
+  </div>
+
+  <div class="kwt-addbar">
+    <input type="text" id="kwTargetInput" class="kwt-input" maxlength="60"
+           placeholder="例: 沖縄 ホームページ制作　／　狙いたいキーワードを入力">
+    <button type="button" class="kwt-add-btn" onclick="addTargetKeyword()">＋ 追加</button>
+  </div>
+
+  <div class="table-scroll">
+  <table>
+    <thead>
+      <tr>
+        <th style="width:190px">キーワード</th>
+        <th style="width:110px">状態</th>
+        <th style="text-align:right;width:70px">順位</th>
+        <th style="text-align:right;width:80px">表示回数</th>
+        <th>次にやること／根拠</th>
+        <th style="width:34px"></th>
+      </tr>
+    </thead>
+    <tbody id="kwTargetBody"></tbody>
+  </table>
+  </div>
+  <p class="note">
+    ※ 順位は Google Search Console の実測値（過去90日の平均掲載順位）です。<br>
+    ※ <strong>「圏外」= まだ検索結果に表示されていない</strong>という意味です。Search Console は自サイトが表示された検索語しか記録しないため、圏外キーワードの正確な順位（例: 87位）は取得できません。順位取得APIを設定すると数値化できます。<br>
+    ※ 画面から追加したキーワードは、このブラウザにのみ保存されます。全員に表示する既定キーワードは <code>analytics/target_keywords.php</code> を編集してください。
+  </p>
+</div>
+
 <!-- ── Core Web Vitals ── -->
 <div class="panel mb16">
   <div class="panel-head">
@@ -776,6 +829,9 @@ function render(d) {
 
   /* キーワード機会分析 */
   drawKwAnalysis(d.sc_kw || null);
+
+  /* 目標キーワード追跡 */
+  drawTargetKeywords(d);
 
   /* オーガニックランディング */
   drawOrganicLanding(d.organic_landing || []);
@@ -1151,6 +1207,166 @@ function drawKwAnalysis(kw) {
     </tr>`;
   document.getElementById('kwRisingBody').innerHTML  = rising.map(trendRow).join('');
   document.getElementById('kwFallingBody').innerHTML = falling.map(trendRow).join('');
+}
+
+/* ===== 目標キーワード追跡 ===== */
+const KWT_STORE = 'dneko_target_keywords';
+let kwtIndex = { days: 90, queries: [] };   // Search Console のクエリ索引
+let kwtConfig = [];                          // target_keywords.php の既定リスト
+
+function kwtLoadUser() {
+  try { return JSON.parse(localStorage.getItem(KWT_STORE) || '[]'); } catch (e) { return []; }
+}
+function kwtSaveUser(list) {
+  try { localStorage.setItem(KWT_STORE, JSON.stringify(list)); } catch (e) {}
+}
+
+function addTargetKeyword() {
+  const input = document.getElementById('kwTargetInput');
+  const kw = (input.value || '').trim().replace(/\s+/g, ' ');
+  if (!kw) return;
+  const list = kwtLoadUser();
+  const exists = list.includes(kw) || kwtConfig.includes(kw);
+  if (!exists) { list.push(kw); kwtSaveUser(list); }
+  input.value = '';
+  renderTargetKeywords();
+}
+function removeTargetKeyword(kw) {
+  kwtSaveUser(kwtLoadUser().filter(k => k !== kw));
+  renderTargetKeywords();
+}
+
+/* 目標キーワードを Search Console 索引と照合 */
+function kwtMatch(kw) {
+  const norm = (s) => s.toLowerCase().replace(/[\s　]+/g, ' ').trim();
+  const target = norm(kw);
+  const exact = kwtIndex.queries.find(q => norm(q.q) === target);
+  if (exact) return { hit: exact, related: [] };
+
+  /* 完全一致なし → 関連クエリを拾う。
+     日本語は「チラシデザイン」のように語が繋がるため、単語一致だけだと
+     「レンタカー チラシ」を取りこぼす。文字2gramの重なりでも評価する。 */
+  const bigrams = (s) => {
+    const t = s.replace(/ /g, '');
+    const set = new Set();
+    for (let i = 0; i < t.length - 1; i++) set.add(t.slice(i, i + 2));
+    return set;
+  };
+  const words    = target.split(' ').filter(w => w.length >= 2);
+  const targetBg = bigrams(target);
+  const bgTotal  = Math.max(1, targetBg.size);
+
+  const related = kwtIndex.queries
+    .map(q => {
+      const nq = norm(q.q);
+      if (nq.length > 40) return null;                       // 異常に長いクエリはノイズ
+      let bgHit = 0;
+      bigrams(nq).forEach(b => { if (targetBg.has(b)) bgHit++; });
+      const wordHit = words.filter(w => nq.includes(w)).length;
+      if (bgHit < 2 && wordHit < 1) return null;             // かすっただけの語は除外
+      // 「沖縄」のような汎用語1つに引っ張られないよう、一致率を主軸にする
+      return { q, score: bgHit / bgTotal + wordHit * 0.1 };
+    })
+    .filter(Boolean)
+    .sort((a, b) => (b.score - a.score) || (a.q.pos - b.q.pos) || (b.q.imp - a.q.imp))
+    .slice(0, 3)
+    .map(r => r.q);
+  return { hit: null, related };
+}
+
+/* 順位から「状態」と「次の一手」を決める */
+function kwtAdvice(hit, related) {
+  if (!hit) {
+    const base = related.length
+      ? `このキーワード専用のページがまだ弱い状態です。まず「${escapeHtml(related[0].q)}」で拾えている実績ページを足がかりに、狙うキーワードをタイトル・見出し・本文に入れた専用ページ（サービス紹介／料金／地域名入り）を用意してください。`
+      : 'このキーワードで検索結果に一度も表示されていません。まずキーワードをタイトル・H1・本文に含む専用ページを新規作成するのが第一歩です。';
+    return { status: '圏外', color: '#94a3b8', bg: '#f1f5f9', advice: base };
+  }
+  const p = hit.pos;
+  if (p <= 3)  return { status: '🏆 上位表示', color: '#10b981', bg: '#ecfdf5',
+    advice: '獲得済み。この順位を維持しつつ、関連キーワード（地域名・サービス名の組み合わせ）へ横展開すると流入が増えます。' };
+  if (p <= 10) return { status: '✅ 1ページ目', color: '#10b981', bg: '#ecfdf5',
+    advice: '1ページ目に入っています。次はクリック率の改善が効きます。対象ページの&lt;title&gt;と説明文に、このキーワードと具体的な強み（実績数・地域・料金）を入れてください。' };
+  if (p <= 20) return { status: '🎯 あと一歩', color: '#f59e0b', bg: '#fffbeb',
+    advice: '1ページ目まであと少しです。対象ページの内容を厚くし（事例・料金・よくある質問を追加）、関連記事からこのページへ内部リンクを張ると押し上げられます。' };
+  if (p <= 50) return { status: '⚠️ 2〜5ページ目', color: '#f59e0b', bg: '#fffbeb',
+    advice: 'ページは認識されていますが評価が不足しています。このキーワードを見出しに使い、実績・写真・具体的な地域情報を追加して情報量を増やしてください。' };
+  return { status: '🔻 圏外に近い', color: '#ef4444', bg: '#fef2f2',
+    advice: '表示はされていますが、ほぼ見られない位置です。このキーワード専用のページを作るか、既存ページを大幅にリライトする判断が必要です。' };
+}
+
+function renderTargetKeywords() {
+  const tbody = document.getElementById('kwTargetBody');
+  if (!tbody) return;
+
+  const userList = kwtLoadUser();
+  const all = kwtConfig.map(k => ({ kw: k, own: false }))
+    .concat(userList.map(k => ({ kw: k, own: true })));
+
+  if (!all.length) {
+    tbody.innerHTML = '<tr><td colspan="6" class="no-data">上の入力欄から、狙いたいキーワードを追加してください</td></tr>';
+    return;
+  }
+
+  /* 順位が良い順 → 圏外は最後 */
+  const rows = all.map(t => {
+    const m = kwtMatch(t.kw);
+    return { ...t, hit: m.hit, related: m.related };
+  }).sort((a, b) => (a.hit ? a.hit.pos : 999) - (b.hit ? b.hit.pos : 999));
+
+  tbody.innerHTML = rows.map(r => {
+    const a = kwtAdvice(r.hit, r.related);
+    const posCell = r.hit
+      ? `<span style="font-weight:700;color:${a.color}">${r.hit.pos}位</span>`
+      : '<span style="color:#cbd5e1">—</span>';
+    const impCell = r.hit ? fmtInt(r.hit.imp) : '<span style="color:#cbd5e1">0</span>';
+
+    let evidence = '';
+    if (r.hit) {
+      const page = r.hit.title || r.hit.path;
+      evidence = `<div class="kwt-evidence">対象ページ: ${escapeHtml(page)}${r.hit.clicks ? ` ／ クリック${r.hit.clicks}回` : ' ／ クリック0回'}</div>`;
+    } else if (r.related.length) {
+      const rel = r.related.map(q => `${escapeHtml(q.q)}(${q.pos}位)`).join('、 ');
+      evidence = `<div class="kwt-evidence">近いキーワードでの実績: ${rel}</div>`;
+    }
+
+    return `<tr>
+      <td><span class="kwt-kw">${escapeHtml(r.kw)}</span>${r.own ? '' : '<span class="kwt-src">既定</span>'}</td>
+      <td><span class="kwt-status" style="background:${a.bg};color:${a.color}">${a.status}</span></td>
+      <td class="num">${posCell}</td>
+      <td class="num">${impCell}</td>
+      <td><div class="kwt-advice">${a.advice}</div>${evidence}</td>
+      <td>${r.own ? `<button class="kwt-del" title="削除" data-kw="${escapeHtml(r.kw)}">✕</button>` : ''}</td>
+    </tr>`;
+  }).join('');
+}
+
+/* Enterキーでの追加と、削除ボタン（イベント委譲） */
+document.addEventListener('DOMContentLoaded', function () {
+  const input = document.getElementById('kwTargetInput');
+  if (input) {
+    input.addEventListener('keydown', function (e) {
+      if (e.key === 'Enter') { e.preventDefault(); addTargetKeyword(); }
+    });
+  }
+  const tbody = document.getElementById('kwTargetBody');
+  if (tbody) {
+    tbody.addEventListener('click', function (e) {
+      const btn = e.target.closest('.kwt-del');
+      if (btn) removeTargetKeyword(btn.dataset.kw);
+    });
+  }
+});
+
+function drawTargetKeywords(d) {
+  kwtConfig = d.sc_targets || [];
+  kwtIndex  = d.sc_query_index || { days: 90, queries: [] };
+  const label = document.getElementById('kwTargetPeriod');
+  if (label) {
+    label.textContent = `過去${kwtIndex.days || 90}日の実測 / 検索表示された全${fmtInt(kwtIndex.total || 0)}キーワードと照合`
+      + (d.rank_api_on ? ' / 順位取得API有効' : '');
+  }
+  renderTargetKeywords();
 }
 
 /* ===== Core Web Vitals ===== */
