@@ -1402,3 +1402,108 @@
   .pf_faq_list p { padding: 0 16px 14px 52px; font-size: 11px; }
   .pf_cta { padding: 46px 0 130px; }
 }
+
+/* ===== ガーヒーのストーリー ===== */
+.pf_story_body {
+  width: min(760px, 100%);
+  margin-inline: auto;
+}
+
+.pf_story_body p {
+  margin: 0 0 1.15em;
+  font-size: 15px;
+  line-height: 2;
+}
+
+.pf_story_body p:last-child {
+  margin-bottom: 0;
+}
+
+.pf_story_body .pf_story_badge {
+  display: inline-block;
+  margin-bottom: 1.1em;
+  padding: .4em 1.3em;
+  border-radius: 999px;
+  background: var(--pf_orange);
+  color: #fff;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.6;
+  letter-spacing: .04em;
+}
+
+.pf_story_body .pf_story_lead {
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.pf_story_body .pf_story_turning {
+  margin: 1.8em 0;
+  padding: 1.4em 1.6em;
+  border-left: 5px solid var(--pf_orange);
+  border-radius: 0 12px 12px 0;
+  background: var(--pf_cream_deep);
+  color: var(--pf_orange_deep);
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 1.95;
+}
+
+.pf_story_quote {
+  position: relative;
+  margin: 1.8em 0;
+  padding: 2.3em 1.9em 1.7em;
+  border: 1px solid var(--pf_line);
+  border-radius: 14px;
+  background: var(--pf_cream);
+  box-shadow: 0 6px 18px rgba(53, 47, 41, .06);
+}
+
+.pf_story_quote::before {
+  content: "\201C";
+  position: absolute;
+  top: 6px;
+  left: 16px;
+  color: rgba(255, 139, 22, .35);
+  font-family: Georgia, serif;
+  font-size: 62px;
+  line-height: 1;
+}
+
+.pf_story_body .pf_story_quote p {
+  position: relative;
+  font-size: 14px;
+  line-height: 1.95;
+}
+
+.pf_story_quote cite {
+  display: block;
+  margin-top: 1.1em;
+  color: var(--pf_muted);
+  font-size: 13px;
+  font-style: normal;
+  text-align: right;
+}
+
+.pf_story_body b {
+  color: var(--pf_orange_deep);
+  font-weight: 700;
+}
+
+@media screen and (max-width: 760px) {
+  .pf_story_body p { font-size: 14px; }
+  .pf_story_body .pf_story_lead { font-size: 15px; }
+  .pf_story_body .pf_story_turning { padding: 1.2em; font-size: 15px; }
+  .pf_story_quote { padding: 2em 1.3em 1.4em; }
+  .pf_story_quote::before { font-size: 48px; }
+  .pf_story_body .pf_story_quote p { font-size: 13px; }
+}
+
+@media screen and (max-width: 520px) {
+  .pf_story_body p { font-size: 13px; }
+  .pf_story_body .pf_story_badge { font-size: 12px; }
+  .pf_story_body .pf_story_lead { font-size: 14px; }
+  .pf_story_body .pf_story_turning { font-size: 14px; }
+  .pf_story_body .pf_story_quote p { font-size: 12px; }
+  .pf_story_quote cite { font-size: 11px; }
+}

@@ -157,7 +157,33 @@ $page_script = '';
         </div>
     </section>
 
-    <section class="pf_section is_white pf_ref_section" aria-labelledby="pf-about-title">
+    <section class="pf_section is_white pf_ref_section pf_story_section" aria-labelledby="pf-story-title">
+        <div class="pf_inner">
+            <header class="pf_section_heading pf_ref_heading is_orange">
+                <h2 id="pf-story-title">ガーヒーのストーリー</h2>
+                <p>なぜ「初期費用0円」で始めたのか。デザネコが生まれたきっかけをお話しします。</p>
+            </header>
+            <div class="pf_story_body">
+                <p class="pf_story_badge">なぜこの仕事を始めたのか？</p>
+                <p class="pf_story_lead">僕自身も個人事業主として、「予算がない」「誰に頼めばいいかわからない」「制作会社の見積もりが高すぎる」という悩みを経験しました。</p>
+                <p>デザインの仕事を始めた当初、大手制作会社で働いていましたが、分業制のため「お客様の顔が見えない」「本当に喜んでもらえているのか分からない」という違和感を感じていました。</p>
+                <p>そんな時、友人の個人事業主から「ホームページを作りたいけど、予算がなくて困っている」と相談を受けたんです。</p>
+                <p class="pf_story_turning">「だったら、初期費用0円で作ろう。<br>その代わり、月々のサポートで一緒に育てていこう」</p>
+                <p>そう提案したところ、大変喜んでくれたことから始まりました。今では、こんな声もいただけるようになっています。</p>
+                <blockquote class="pf_story_quote">
+                    <p>ホームページとチラシを制作していただいてから、お問い合わせが毎年継続的に入るようになりました。</p>
+                    <p>以前は口コミ中心で教室周辺からのお問い合わせがほとんどでしたが、現在では少し離れた地域からもホームページをご覧になってご連絡をいただいています。</p>
+                    <p>昨年度は年間約60件、今年度も10月から現在までに45件のお問い合わせがあり、そのうち34名の方にご入会いただいています。</p>
+                    <p>教室の魅力が分かりやすく伝わるホームページとチラシのおかげで、毎年安定した集客につながっていると実感しています。</p>
+                    <cite>― 音楽教室 様</cite>
+                </blockquote>
+                <p>この経験から、<b>「個人事業主には、大手制作会社よりも寄り添ってくれるパートナーが必要なんだ」</b>と確信しました。</p>
+                <p>今では「デザネコのガーヒーさんがいてくれて助かる」と言ってもらえることが、何よりの喜びです。</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="pf_section is_cream pf_ref_section" aria-labelledby="pf-about-title">
         <div class="pf_inner">
             <header class="pf_section_heading pf_ref_heading">
                 <h2 id="pf-about-title">デザネコについて</h2>
@@ -179,7 +205,7 @@ $page_script = '';
         </div>
     </section>
 
-    <section class="pf_section is_cream pf_ref_section pf_faq_section" aria-labelledby="pf-faq-title">
+    <section class="pf_section is_white pf_ref_section pf_faq_section" aria-labelledby="pf-faq-title">
         <div class="pf_inner">
             <header class="pf_section_heading pf_ref_heading">
                 <h2 id="pf-faq-title">よくあるご質問</h2>
