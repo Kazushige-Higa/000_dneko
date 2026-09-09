@@ -5,6 +5,21 @@ $page_seo_title = "沖縄のホームページ制作｜個人事業主に寄り�
 $page_description = "沖縄の個人事業主・小さなお店向けホームページ制作。企画、撮影、文章、デザイン、スマホ対応から公開後の更新・改善まで、同じ担当者が一貫して支援します。";
 $page_style = "";
 $page_script = '';
+$footer_contact_variant = 'website_diagnosis';
+$page_structured_data = [
+    '@context' => 'https://schema.org',
+    '@type' => 'Service',
+    'name' => 'ホームページ制作・運用サポート',
+    'description' => $page_description,
+    'provider' => ['@type' => 'LocalBusiness', 'name' => 'デザネコ', 'url' => 'https://d-neko.com/'],
+    'areaServed' => ['@type' => 'AdministrativeArea', 'name' => '沖縄県'],
+    'offers' => [
+        '@type' => 'Offer',
+        'price' => '9800',
+        'priceCurrency' => 'JPY',
+        'description' => 'ホームページ制作費0円、月額9,800円、初回契約手数料5,000円のサポートプラン（税別）',
+    ],
+];
 ?>
 <?php include_once './header.php'; ?>
 
@@ -13,17 +28,17 @@ $page_script = '';
 
     <section>
         <div class="slider_fullslider_wrap curve">
-            <h2 class="puton tcenter center line_height_10 shadow">
+            <h1 class="puton tcenter center line_height_10 shadow">
                 <span class="act01 txt_split type_up fs_120 fs_sp50 line_height_14 tcenter white bold shadow font_kiwi">
                     はじめてでも安心の
                 </span>
                 <br>
                 <span class="act02 txt_split type_up fs_120 fs_sp50 line_height_14 tcenter white bold shadow font_kiwi">
-                    デザインサービス
+                    ホームページ制作
                 </span>
                 <br>
                 <span class="act03 blur fs_40 fs_sp20 line_height_14 tcenter white bold shadow font_kiwi">ずっと育てる、あなたのホームページにネコの手を</span>
-            </h2>
+            </h1>
             <ul class="slider_fullslider">
                 <li class="slide active"><img src='<?php echo $img; ?>/07.webp' alt='イメージ画像' loading='lazy'></li>
                 <li class="slide"><img src='<?php echo $img; ?>/10.webp' alt='イメージ画像' loading='lazy'></li>
@@ -70,6 +85,20 @@ $page_script = '';
         </div>
     </section>
 
+    <section aria-labelledby="service-diagnosis-title">
+        <div class="service_diagnosis_cta">
+            <div class="single">
+                <p class="service_diagnosis_cta_label">まずは、売り込みではなく状況整理から</p>
+                <h2 id="service-diagnosis-title">あなたのお店に必要なホームページを<br class="pconly">無料で一緒に整理します</h2>
+                <p>ホームページがある方は改善点を、まだない方は載せるべき内容を確認します。</p>
+                <div class="service_diagnosis_cta_actions">
+                    <a href="contact.php?consultation=website-diagnosis" data-ga-event="free_diagnosis_click" data-ga-location="service_top">無料ホームページ診断を相談する</a>
+                    <a href="<?php echo htmlspecialchars($line, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener noreferrer" data-ga-event="line_click" data-ga-location="service_top"><i class="fa-brands fa-line" aria-hidden="true"></i>LINEで相談する</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
     <section>
         <div class='bg_base11 reversal'>
             <div class='single02'>
@@ -88,7 +117,7 @@ $page_script = '';
 
                             <div class="tjustify bold">
                                 <p>
-                                    「デザネコ」は、WordPressを使ったオリジナルデザインのホームページ制作と、定期的なサポート・メンテナンスをセットでご提供しています。<br>
+                                    「デザネコ」は、案件の目的や更新方法に合わせてWordPressやmicroCMSなど適した仕組みを選び、オリジナルデザインのホームページ制作と定期的なサポート・メンテナンスをセットでご提供しています。<br>
                                     デザインにも中身にもこだわった、 <span class="base_color">【あなたらしいホームページ】</span> を一緒に育てていきます。
                                 </p>
                             </div>
@@ -247,7 +276,7 @@ $page_script = '';
                                     <span class='fs_30 fs_sp40 base_color font_notob'>サポートプラン</span>
                                 </h4>
                                 <p class="h_m5 tcenter">ホームページの管理をお任せ！<br>
-                                    追加費用なしのコミコミプラン！</p>
+                                    サーバー・ドメイン費込みの定額プラン</p>
 
                                 <p class="tcenter a_end line_height_10 base_color font_kiwi">
                                     <span class="fs_35 fs_sp20 bold font_notob">￥</span>
@@ -314,7 +343,7 @@ $page_script = '';
                 <div class='space_3 space_sp1'></div>
                 <div class="mbox bg_white radius">
                     <ul class='list_disc'>
-                        <li>※全てのプランは契約手数料として、初回5,000円費用が発生いたします。※価格は全て税抜き価格となります。</li>
+                        <li>※全てのプランで、初回契約手数料5,000円が別途発生します。価格は全て税別です。</li>
                         <li>※追加ページは別途費用が発生いたします。(月額1,000円～ 売切10,000円～)</li>
                     </ul>
                 </div>
@@ -546,8 +575,8 @@ $page_script = '';
                             <dd class='panel'>
                                 <div class='inner'>
                                     <p>はい、大丈夫です！<br>
-                                        WordPressはホームページやホームページを作るための仕組み（システム）です。<br>
-                                        「デザネコ」では、サーバー契約やドメイン取得のサポートから、初期設定・使い方のレクチャーまで丁寧に対応しますので、初心者の方でも安心してスタートできます。</p>
+                                        WordPressはホームページを更新・管理するための仕組み（システム）の一つです。デザネコではWordPressに限らず、更新頻度や運用体制に合わせて適した仕組みをご提案します。<br>
+                                        サーバー契約やドメイン取得のサポートから、初期設定・使い方のレクチャーまで丁寧に対応しますので、初心者の方でも安心してスタートできます。</p>
                                 </div>
                             </dd>
                             <dt class='open'>ホームページを作るのは初めてです。パソコンもあまり得意ではないのですが、大丈夫ですか？</dt>
@@ -680,7 +709,7 @@ $page_script = '';
                                 <dt class="act set">Step.5</dt>
                                 <dd class="act inright">
                                     <b class="base_color">公開の準備</b><br>
-                                    デザインにご納得いただけましたら、いよいよ公開の準備です。<br>WordPressの設置、ドメイン・サーバーの取得サポート、ホームページ構築の基本設定などを行います。
+                                    デザインにご納得いただけましたら、いよいよ公開の準備です。<br>案件に合う更新システムの設定、ドメイン・サーバーの取得サポート、ホームページ構築の基本設定などを行います。
                                 </dd>
                             </div>
                             <div class="inner">

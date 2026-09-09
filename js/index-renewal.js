@@ -2,12 +2,12 @@
   'use strict';
 
   function closestSlideIndex(viewport, slides) {
-    var viewportCenter = viewport.scrollLeft + viewport.clientWidth / 2;
+    var viewportCenter = viewport.getBoundingClientRect().left + viewport.clientWidth / 2;
     var closestIndex = 0;
     var closestDistance = Infinity;
 
     slides.forEach(function (slide, index) {
-      var slideCenter = slide.offsetLeft + slide.offsetWidth / 2;
+      var slideCenter = slide.getBoundingClientRect().left + slide.offsetWidth / 2;
       var distance = Math.abs(slideCenter - viewportCenter);
       if (distance < closestDistance) {
         closestDistance = distance;
@@ -18,7 +18,7 @@
     return closestIndex;
   }
 
-  function initSlider(slider) {
+  function initHeroSlider(slider) {
     var viewport = slider.querySelector('.dr_slider_viewport');
     var track = slider.querySelector('.dr_slider_track');
     var previous = slider.querySelector('.dr_slider_prev');
@@ -116,7 +116,7 @@
         return viewport.scrollLeft;
       }
 
-      var left = slide.offsetLeft - (viewport.clientWidth - slide.offsetWidth) / 2;
+      var left = viewport.scrollLeft + slide.getBoundingClientRect().left - viewport.getBoundingClientRect().left - (viewport.clientWidth - slide.offsetWidth) / 2;
       return Math.max(0, left);
     }
 
@@ -202,7 +202,8 @@
     }
 
     function resetAutoplay() {
-      if (!autoplayDelay || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      window.clearInterval(autoplayTimer);
+      if (!autoplayDelay || document.hidden || slider.matches(':hover') || slider.contains(document.activeElement) || window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
         return;
       }
 
@@ -252,7 +253,8 @@
     slider.addEventListener('focusin', function () {
       window.clearInterval(autoplayTimer);
     });
-    slider.addEventListener('focusout', resetAutoplay);
+    slider.addEventListener('focusout', function () { window.setTimeout(resetAutoplay, 0); });
+    document.addEventListener('visibilitychange', resetAutoplay);
 
     window.addEventListener('resize', function () {
       window.clearTimeout(resizeTimer);
@@ -266,6 +268,100 @@
     });
 
     resetAutoplay();
+  }
+
+  function initSlider(slider) {
+    if (slider.classList.contains('dr_slider_hero')) { initHeroSlider(slider); return; }
+    var viewport = slider.querySelector('.dr_slider_viewport');
+    var track = slider.querySelector('.dr_slider_track');
+    var previous = slider.querySelector('.dr_slider_prev');
+    var next = slider.querySelector('.dr_slider_next');
+    var dots = slider.querySelector('[data-slider-dots]');
+    var slides = track ? Array.prototype.slice.call(track.children) : [];
+    var delay = Number(slider.getAttribute('data-autoplay') || 0);
+    var timer, resizeTimer, scrollTimer;
+    var pageStarts = [], activePage = 0;
+    if (!viewport || !slides.length) return;
+
+    function pageLeft(index) {
+      var first = slides[0].getBoundingClientRect();
+      var target = slides[pageStarts[index]].getBoundingClientRect();
+      return Math.max(0, Math.min(target.left - first.left, viewport.scrollWidth - viewport.clientWidth));
+    }
+
+    function updateDots() {
+      if (!dots) return;
+      Array.prototype.forEach.call(dots.children, function (dot, index) {
+        dot.classList.toggle('is_active', index === activePage);
+        dot.setAttribute('aria-current', index === activePage ? 'true' : 'false');
+      });
+    }
+
+    function goTo(index, instant) {
+      if (!pageStarts.length) return;
+      activePage = (index + pageStarts.length) % pageStarts.length;
+      updateDots();
+      viewport.scrollTo({
+        left: pageLeft(activePage),
+        behavior: instant || window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'instant' : 'smooth'
+      });
+    }
+
+    function resetAutoplay() {
+      window.clearInterval(timer);
+      if (!delay || pageStarts.length < 2 || document.hidden ||
+          slider.matches(':hover') || slider.contains(document.activeElement) ||
+          window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+      timer = window.setInterval(function () { goTo(activePage + 1); }, delay);
+    }
+
+    function measure() {
+      var visible = Math.max(1, parseInt(getComputedStyle(slider).getPropertyValue('--dr_visible_slides'), 10) || 1);
+      var lastStart = Math.max(0, slides.length - visible);
+      pageStarts = [0];
+      for (var start = visible; start < lastStart; start += visible) pageStarts.push(start);
+      if (lastStart > 0) pageStarts.push(lastStart);
+      activePage = Math.min(activePage, pageStarts.length - 1);
+      slider.classList.toggle('is_static', pageStarts.length === 1);
+      if (previous) previous.hidden = pageStarts.length === 1;
+      if (next) next.hidden = pageStarts.length === 1;
+      if (dots) {
+        dots.replaceChildren();
+        pageStarts.forEach(function (_, index) {
+          var dot = document.createElement('button');
+          dot.type = 'button';
+          dot.setAttribute('aria-label', (index + 1) + '枚目のスライドを表示');
+          dot.addEventListener('click', function () { goTo(index); resetAutoplay(); });
+          dots.appendChild(dot);
+        });
+      }
+      goTo(activePage, true);
+      resetAutoplay();
+    }
+
+    if (previous) previous.addEventListener('click', function () { goTo(activePage - 1); resetAutoplay(); });
+    if (next) next.addEventListener('click', function () { goTo(activePage + 1); resetAutoplay(); });
+    viewport.addEventListener('scroll', function () {
+      window.clearTimeout(scrollTimer);
+      scrollTimer = window.setTimeout(function () {
+        var best = Infinity;
+        pageStarts.forEach(function (_, index) {
+          var distance = Math.abs(viewport.scrollLeft - pageLeft(index));
+          if (distance < best) { best = distance; activePage = index; }
+        });
+        updateDots();
+      }, 180);
+    }, { passive: true });
+    slider.addEventListener('mouseenter', function () { window.clearInterval(timer); });
+    slider.addEventListener('mouseleave', resetAutoplay);
+    slider.addEventListener('focusin', function () { window.clearInterval(timer); });
+    slider.addEventListener('focusout', function () { window.setTimeout(resetAutoplay, 0); });
+    document.addEventListener('visibilitychange', resetAutoplay);
+    window.addEventListener('resize', function () {
+      window.clearTimeout(resizeTimer);
+      resizeTimer = window.setTimeout(measure, 120);
+    });
+    measure();
   }
 
   function initVideoModal() {

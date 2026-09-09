@@ -1,12 +1,34 @@
 <?php
 $home_renewal = true;
-$page_title = "デザネコ｜沖縄のデザイン・Web制作・AI活用相談";
-$page_description = "沖縄のチラシ・ホームページ制作・AI活用相談ならデザネコへ。看板猫もじゃ・くるると一緒に、撮影からデザイン、公開後の改善まで伴走します。";
+$page_title = "沖縄のホームページ制作ならデザネコ｜制作費0円・月額9,800円";
+$page_description = "沖縄の小さなお店・個人事業主向けホームページ制作。ホームページ制作費0円、月額9,800円（税別）で、取材・撮影・文章・デザイン・公開後の更新まで同じ担当者が伴走します。別途、初回契約手数料5,000円。";
 $page_og_image = "https://d-neko.com/images/home-renewal/ogp-home.jpg";
-$page_style = '<link href="css/index-renewal.css?v=' . filemtime(__DIR__ . '/css/index-renewal.css') . '" rel="stylesheet">';
-$page_head = '<link rel="preload" as="image" href="images/home-renewal/hero-flyer-mobile.webp" type="image/webp" media="(max-width: 600px)" fetchpriority="high">'
-  . '<link rel="preload" as="image" href="images/home-renewal/hero-flyer.webp" type="image/webp" media="(min-width: 601px)" fetchpriority="high">';
+$page_style = '';
+$page_head = '<link rel="preload" as="image" href="images/home-renewal/hero-web-mobile.webp" type="image/webp" media="(max-width: 600px)" fetchpriority="high">'
+  . '<link rel="preload" as="image" href="images/home-renewal/hero-web.webp" type="image/webp" media="(min-width: 601px)" fetchpriority="high">';
 $page_script = '<script src="js/index-renewal.js?v=' . filemtime(__DIR__ . '/js/index-renewal.js') . '" defer></script>';
+$page_structured_data = [
+  '@context' => 'https://schema.org',
+  '@type' => 'Service',
+  'name' => 'ホームページ制作・運用サポート',
+  'description' => $page_description,
+  'provider' => [
+    '@type' => 'LocalBusiness',
+    'name' => 'デザネコ',
+    'url' => 'https://d-neko.com/',
+  ],
+  'areaServed' => [
+    '@type' => 'AdministrativeArea',
+    'name' => '沖縄県',
+  ],
+  'offers' => [
+    '@type' => 'Offer',
+    'price' => '9800',
+    'priceCurrency' => 'JPY',
+    'url' => 'https://d-neko.com/service_blog.php',
+    'description' => 'ホームページ制作費0円、月額9,800円、初回契約手数料5,000円のサポートプラン（税別）',
+  ],
+];
 include_once './header.php';
 
 $portfolio_response = microcms_get_list("/works", "limit=8&orders=-publishedAt");
@@ -16,12 +38,6 @@ $blog_posts = ($blog_response && !empty($blog_response->contents)) ? $blog_respo
 $column_response = microcms_get_list("/column", "limit=8&orders=-publishedAt");
 $column_posts = ($column_response && !empty($column_response->contents)) ? $column_response->contents : [];
 $home_notices = [
-  [
-    'date' => '2026-07-30',
-    'label' => '2026/07/30',
-    'title' => '沖縄のご家庭向け「デジタルのネコの手」を開始しました',
-    'href' => 'service_digital.php',
-  ],
   [
     'date' => '2026-07-23',
     'label' => '2026/07/23',
@@ -60,21 +76,37 @@ if (!function_exists('dneko_home_category')) {
 
 <div class="dr_page">
   <main>
-    <section class="dr_hero" aria-label="デザネコのサービス">
+    <section aria-label="デザネコのサービス">
+      <div class="dr_hero">
       <div class="dr_slider dr_slider_hero" data-renewal-slider data-autoplay="6500">
         <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のスライド">
           <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
         </button>
         <div class="dr_slider_viewport">
           <div class="dr_slider_track">
+            <article class="dr_hero_slide dr_hero_slide_mix dr_hero_slide_primary">
+              <picture class="dr_hero_media">
+                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-web-mobile.webp" width="1024" height="1536">
+                <img src="images/home-renewal/hero-web.webp" alt="" width="1672" height="941" loading="eager" fetchpriority="high" decoding="async">
+              </picture>
+              <div class="dr_hero_copy">
+                <p>沖縄の小さなお店・個人事業主向け</p>
+                <h1><span>作って終わらない。</span><strong>ホームページ制作</strong></h1>
+                <span>ホームページ制作費0円・月額9,800円（税別）。<br>取材・撮影・文章・公開後の更新まで伴走します。</span>
+                <div class="dr_hero_actions">
+                  <a href="service_blog.php" data-ga-event="web_service_click" data-ga-location="hero">制作内容と料金を見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
+                  <a class="dr_hero_cta_secondary" href="contact.php?consultation=website-diagnosis" data-ga-event="free_diagnosis_click" data-ga-location="hero">無料診断を相談する</a>
+                </div>
+              </div>
+            </article>
             <article class="dr_hero_slide dr_hero_slide_orange">
               <picture class="dr_hero_media">
                 <source media="(max-width: 600px)" srcset="images/home-renewal/hero-flyer-mobile.webp" width="1024" height="1536">
-                <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" loading="eager" fetchpriority="high" decoding="async">
+                <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" loading="lazy" fetchpriority="low" decoding="async">
               </picture>
               <div class="dr_hero_copy">
                 <p>沖縄のデザインを、もっと身近に。</p>
-                <h1>沖縄の<br><strong>チラシデザイン</strong>なら<br>デザネコへ</h1>
+                <h2><span>沖縄の<strong>チラシデザイン</strong>なら</span><br><span>デザネコへ</span></h2>
                 <a href="flyer-design.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </article>
@@ -90,20 +122,6 @@ if (!function_exists('dneko_home_category')) {
                 <a href="ai-consulting.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </article>
-            <?php if (false): // ホームページ制作バナーは一時非表示 ?>
-            <article class="dr_hero_slide dr_hero_slide_mix">
-              <picture class="dr_hero_media">
-                <source media="(max-width: 600px)" srcset="images/home-renewal/hero-web-mobile.webp" width="1024" height="1536">
-                <img src="images/home-renewal/hero-web.webp" alt="" width="1672" height="941" loading="lazy" fetchpriority="low" decoding="async">
-              </picture>
-              <div class="dr_hero_copy">
-                <p>想いが伝わる、育てていける。</p>
-                <h2>ホームページ<br><strong>制作サービス</strong></h2>
-                <span>写真・文章・デザインから公開後まで伴走します。</span>
-                <a href="service_blog.php">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-              </div>
-            </article>
-            <?php endif; ?>
             <article class="dr_hero_slide dr_hero_slide_digital">
               <picture class="dr_hero_media">
                 <source media="(max-width: 600px)" srcset="images/home-renewal/hero-digital-support-mobile.webp" width="1024" height="1536">
@@ -127,7 +145,35 @@ if (!function_exists('dneko_home_category')) {
         </button>
         <div class="dr_slider_dots" data-slider-dots aria-label="スライド位置"></div>
       </div>
+      </div>
     </section>
+
+    <!-- Temporarily hidden; retain the offer for future reuse. -->
+    <?php if (false): ?>
+    <section aria-labelledby="dr-offer-title">
+      <div class="dr_conversion_offer">
+        <div class="dr_conversion_offer_inner">
+          <div class="dr_conversion_offer_copy">
+            <p class="dr_conversion_eyebrow">ホームページ制作・運用サポート</p>
+            <h2 id="dr-offer-title">必要なものをまとめて、<br><span class="dr_offer_price_line">制作費<b>0円</b>・月額<strong>9,800円</strong></span></h2>
+            <p>サーバー・ドメイン、スマホ対応、取材・撮影、文章作成、公開後の修正まで。何を用意すればいいか分からない段階から相談できます。</p>
+          </div>
+          <ul class="dr_conversion_features" aria-label="料金に含まれる主な内容">
+            <li><i class="fa-solid fa-camera" aria-hidden="true"></i>取材・写真撮影</li>
+            <li><i class="fa-solid fa-pen-nib" aria-hidden="true"></i>文章・デザイン</li>
+            <li><i class="fa-solid fa-mobile-screen" aria-hidden="true"></i>スマホ対応</li>
+            <li><i class="fa-solid fa-rotate" aria-hidden="true"></i>公開後の修正対応</li>
+          </ul>
+          <div class="dr_conversion_actions">
+            <a class="dr_conversion_primary" href="contact.php?consultation=website-diagnosis" data-ga-event="free_diagnosis_click" data-ga-location="offer">無料ホームページ診断を相談する</a>
+            <a class="dr_conversion_line" href="<?php echo dneko_home_escape($line); ?>" target="_blank" rel="noopener noreferrer" data-ga-event="line_click" data-ga-location="offer"><i class="fa-brands fa-line" aria-hidden="true"></i>LINEで相談する</a>
+          </div>
+          <p class="dr_conversion_note">相談・診断は無料です。別途、初回契約手数料5,000円。表示価格は税別です。</p>
+        </div>
+      </div>
+    </section>
+
+    <?php endif; ?>
 
     <aside class="dr_notice" aria-labelledby="dr-notice-title">
       <div class="dr_notice_inner">
@@ -148,7 +194,8 @@ if (!function_exists('dneko_home_category')) {
       </div>
     </aside>
 
-    <section id="service-banner" class="dr_service_banner">
+    <section>
+      <div id="service-banner" class="dr_service_banner">
       <div class="dr_service_banner_inner">
         <div class="dr_service_text">
           <p class="dr_kicker">想いを、伝わるデザインへ。</p>
@@ -171,6 +218,7 @@ if (!function_exists('dneko_home_category')) {
           <img src="images/home-renewal/hero-flyer.webp" alt="" width="1672" height="941" loading="lazy" decoding="async">
         </div>
       </div>
+      </div>
     </section>
 
     <section class="dr_section dr_portfolio">
@@ -178,6 +226,7 @@ if (!function_exists('dneko_home_category')) {
         <h2>Portfolio</h2>
         <p>制作実績</p>
       </div>
+      <p class="dr_section_lead">ホームページからチラシまで、目的に合わせた制作事例をご紹介します。</p>
 
       <div class="dr_slider dr_post_slider" data-renewal-slider>
         <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前の制作実績">
@@ -208,6 +257,9 @@ if (!function_exists('dneko_home_category')) {
       <a class="dr_more_button dr_more_green" href="entry_list.php?type=works">
         制作実績を見る <i class="fa-solid fa-paw" aria-hidden="true"></i>
       </a>
+      <a class="dr_portfolio_web_link" href="works_archive.php" data-ga-event="web_works_click" data-ga-location="portfolio">
+        ホームページ制作実績を一覧で見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i>
+      </a>
     </section>
 
     <section class="dr_creator">
@@ -222,7 +274,10 @@ if (!function_exists('dneko_home_category')) {
           <a href="profile.php">ガーヒーのプロフィールを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="dr_creator_visual">
-          <img class="dr_creator_profile_hero" src="images/profile-renewal/profile-hero-gahie-v2.webp" alt="デザネコ代表の比嘉一茂と看板猫のもじゃ・くるる" width="1806" height="871" loading="lazy" decoding="async">
+          <picture>
+            <source media="(max-width: 820px)" srcset="images/profile-renewal/profile-story-gahie-v2.webp" width="1536" height="1024">
+            <img class="dr_creator_profile_hero" src="images/profile-renewal/profile-hero-gahie-v2.webp" alt="デザネコ代表の比嘉一茂と看板猫のもじゃ・くるる" width="1806" height="871" loading="lazy" decoding="async">
+          </picture>
         </div>
       </div>
     </section>
@@ -280,7 +335,10 @@ if (!function_exists('dneko_home_category')) {
           <a href="service_digital.php">サービスについて <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
         </div>
         <div class="dr_story_visual">
-          <img src="images/home-renewal/home-digital-support-section.webp" alt="もじゃとくるるが沖縄のご夫婦のスマホとパソコンをサポートする様子" width="1100" height="825" loading="lazy" decoding="async">
+          <picture>
+            <source media="(max-width: 820px)" srcset="images/home-renewal/hero-digital-support-mobile02.webp" width="1024" height="817">
+            <img src="images/home-renewal/home-digital-support-section.webp" alt="もじゃとくるるが沖縄のご夫婦のスマホとパソコンをサポートする様子" width="1100" height="825" loading="lazy" decoding="async">
+          </picture>
         </div>
       </div>
     </section>
@@ -339,137 +397,17 @@ if (!function_exists('dneko_home_category')) {
       </div>
     </section>
 
-    <section class="dr_section dr_movies">
-      <img class="dr_section_mascots dr_section_mascots_youtube" src="images/home-renewal/deco-youtube.webp" alt="" width="1600" height="533" loading="lazy" decoding="async">
-      <div class="dr_section_heading dr_heading_pink">
-        <h2>YouTube</h2>
-        <p>ムービー</p>
-      </div>
-
-      <div class="dr_slider dr_movie_slider" data-renewal-slider>
-        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のムービー">
-          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-        </button>
-        <div class="dr_slider_viewport">
-          <div class="dr_slider_track">
-            <article class="dr_movie_card">
-              <button class="dr_movie_trigger" type="button" data-youtube-id="SzaEuEhwsgY" aria-haspopup="dialog" aria-label="「酔いどれニャンコの夜」を再生">
-                <figure>
-                  <img src="images/home-renewal/youtube-halloween.webp" alt="【MV】酔いどれニャンコの夜" loading="lazy">
-                  <i class="fa-solid fa-play" aria-hidden="true"></i>
-                </figure>
-                <h3>【MV】酔いどれニャンコの夜</h3>
-              </button>
-            </article>
-            <article class="dr_movie_card">
-              <button class="dr_movie_trigger" type="button" data-youtube-id="ywfFxf84tIA" aria-haspopup="dialog" aria-label="「にゃん！にゃん！ハロウィンニャイト」を再生">
-                <figure>
-                  <img src="images/home-renewal/youtube-yoi.webp" alt="【MV】にゃん！にゃん！ハロウィンニャイト" loading="lazy">
-                  <i class="fa-solid fa-play" aria-hidden="true"></i>
-                </figure>
-                <h3>【MV】にゃん！にゃん！ハロウィンニャイト🐈️</h3>
-              </button>
-            </article>
-            <article class="dr_movie_card">
-              <button class="dr_movie_trigger" type="button" data-youtube-id="bDvGTUucj78" aria-haspopup="dialog" aria-label="「ありがとう僕の小さなネコ」を再生">
-                <figure>
-                  <img src="images/home-renewal/youtube-thanks.webp" alt="【MV】ありがとう僕の小さなネコ" loading="lazy">
-                  <i class="fa-solid fa-play" aria-hidden="true"></i>
-                </figure>
-                <h3>【MV】ありがとう僕の小さなネコ</h3>
-              </button>
-            </article>
-          </div>
-        </div>
-        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のムービー">
-          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <a class="dr_more_button dr_more_pink" href="https://www.youtube.com/@design-cat" target="_blank" rel="noopener">
-        もっと見る <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
-      </a>
-    </section>
-
-    <section class="dr_section dr_goods">
-      <div class="dr_section_heading dr_heading_orange">
-        <h2>Goods</h2>
-        <p>もじゃねこグッズ 人気ランキング</p>
-      </div>
-
-      <div class="dr_slider dr_card_slider" data-renewal-slider>
-        <button class="dr_slider_arrow dr_slider_prev" type="button" aria-label="前のグッズ">
-          <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-        </button>
-        <div class="dr_slider_viewport">
-          <ol class="dr_slider_track dr_goods_track">
-            <li class="dr_goods_card">
-              <span class="dr_rank dr_rank_1">No.<b>1</b></span>
-              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
-                <img src="images/goods01.webp" alt="もじゃねこTシャツ" loading="lazy">
-                <h3>もじゃねこTシャツ</h3>
-                <p>もじゃ＆くるるの仲良しデザイン</p>
-              </a>
-            </li>
-            <li class="dr_goods_card">
-              <span class="dr_rank dr_rank_2">No.<b>2</b></span>
-              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
-                <img src="images/goods02.webp" alt="もじゃねこトートバッグ" loading="lazy">
-                <h3>トートバッグ</h3>
-                <p>毎日使えるナチュラルカラー</p>
-              </a>
-            </li>
-            <li class="dr_goods_card">
-              <span class="dr_rank dr_rank_3">No.<b>3</b></span>
-              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
-                <img src="images/goods03.webp" alt="スマホケースとマグカップ" loading="lazy">
-                <h3>スマホケース＆マグカップ</h3>
-                <p>いつでも一緒の定番アイテム</p>
-              </a>
-            </li>
-            <li class="dr_goods_card">
-              <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
-                <img src="images/goods04.webp" alt="ソックスとアクリルキーホルダー" loading="lazy">
-                <h3>小物コレクション</h3>
-                <p>ソックス＆アクリルキーホルダー</p>
-              </a>
-            </li>
-            <li class="dr_goods_card dr_goods_card_sticker">
-              <a href="https://store.line.me/stickershop/author/5708453/ja" target="_blank" rel="noopener">
-                <img src="images/sticker/42.webp" alt="もじゃねこLINEスタンプ" loading="lazy">
-                <h3>LINEスタンプ</h3>
-                <p>会話がふわっと楽しくなるスタンプ</p>
-              </a>
-            </li>
-          </ol>
-        </div>
-        <button class="dr_slider_arrow dr_slider_next" type="button" aria-label="次のグッズ">
-          <i class="fa-solid fa-chevron-right" aria-hidden="true"></i>
-        </button>
-      </div>
-
-      <a class="dr_more_button dr_more_orange" href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">
-        グッズを見る <i class="fa-solid fa-paw" aria-hidden="true"></i>
-      </a>
-    </section>
+    <?php include __DIR__ . '/home-media.php'; ?>
 
   </main>
 
 </div>
 
-<div class="dr_video_modal" data-video-modal hidden>
-  <div class="dr_video_modal_backdrop" data-video-close></div>
-  <div class="dr_video_dialog" role="dialog" aria-modal="true" aria-labelledby="dr-video-title" tabindex="-1">
-    <div class="dr_video_dialog_header">
-      <h2 id="dr-video-title">YouTubeムービー</h2>
-      <button class="dr_video_close" type="button" data-video-close aria-label="動画を閉じる">
-        <i class="fa-solid fa-xmark" aria-hidden="true"></i>
-      </button>
-    </div>
-    <div class="dr_video_frame">
-      <iframe title="デザネコ YouTube動画" src="" allow="autoplay; encrypted-media; picture-in-picture" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
-    </div>
-  </div>
-</div>
+<aside class="dr_mobile_conversion" aria-label="ホームページ制作の無料相談">
+  <a href="service_blog.php" data-ga-event="web_service_click" data-ga-location="mobile_sticky">料金を見る</a>
+  <a href="contact.php?consultation=website-diagnosis" data-ga-event="free_diagnosis_click" data-ga-location="mobile_sticky">無料診断を相談</a>
+</aside>
+
+<?php include __DIR__ . '/video-modal.php'; ?>
 
 <?php include_once './footer.php'; ?>

@@ -6,11 +6,19 @@ if (empty($_SESSION['contact_form_token'])) {
   $_SESSION['contact_form_token'] = bin2hex(random_bytes(32));
 }
 $contact_form_token = $_SESSION['contact_form_token'];
+$contact_mode = isset($_GET['consultation']) ? trim((string)$_GET['consultation']) : '';
+$is_website_diagnosis = ($contact_mode === 'website-diagnosis');
+$contact_form_type = $is_website_diagnosis ? 'website_diagnosis' : 'contact';
+$contact_view_event = $is_website_diagnosis ? 'free_diagnosis_view' : 'contact_page_view';
+$contact_view_label = $is_website_diagnosis ? 'website_diagnosis_page' : 'contact_page';
+$footer_contact_variant = $is_website_diagnosis ? 'website_diagnosis' : '';
 
-$page_title = 'お問い合わせ';
+$page_title = $is_website_diagnosis ? '無料ホームページ診断・ご相談' : 'お問い合わせ';
 $page_title_eng = 'Contact';
-$page_seo_title = 'デザイン制作のご相談・お問い合わせ';
-$page_description = 'デザネコへの制作相談・お見積り依頼はこちらから。チラシ、名刺、ショップカード、Webまわりのご相談などお気軽にお問い合わせください。';
+$page_seo_title = $is_website_diagnosis ? '無料ホームページ診断・Web制作相談' : 'デザイン制作のご相談・お問い合わせ';
+$page_description = $is_website_diagnosis
+  ? '現在のホームページの改善点や、これから作るホームページに必要な内容を無料で整理します。沖縄の小さなお店・個人事業主の方はお気軽にご相談ください。'
+  : 'デザネコへの制作相談・お見積り依頼はこちらから。チラシ、名刺、ショップカード、Webまわりのご相談などお気軽にお問い合わせください。';
 $page_style = "
 <link href='mailform/jquery.datetimepicker.css' type='text/css' media='all' rel='stylesheet'>
 <style>
@@ -181,9 +189,9 @@ $page_script = "
 <script>
 window.addEventListener('load', function () {
   if (typeof gtag === 'function') {
-    gtag('event', 'contact_page_view', {
+    gtag('event', '{$contact_view_event}', {
       event_category: 'contact',
-      event_label: 'contact_page'
+      event_label: '{$contact_view_label}'
     });
 
   }
@@ -282,11 +290,16 @@ window.addEventListener('load', function () {
           </div>
           <h2 class='line_height_14'>
             <span class='eng base_color fs_40 act inup'>Contact</span><br>
-            <span class='fs_40 fs_sp30 act txt_split type_lineup'>ネコの手、借りませんか？</span>
+            <span class='fs_40 fs_sp30 act txt_split type_lineup'><?php echo $is_website_diagnosis ? '無料ホームページ診断' : 'ネコの手、借りませんか？'; ?></span>
           </h2>
           <p class='t_m2'>
-            チラシ・名刺・ショップカードなどの印刷物、ブログやホームページまわりのご相談、制作後の運用サポートまで。<br>
-            まだ内容がまとまっていない段階でも大丈夫です。まずはお気軽にお聞かせください。
+            <?php if ($is_website_diagnosis): ?>
+              現在のホームページがある方は、URLと一番困っていることをお送りください。<br>
+              まだホームページがない方は、業種と掲載したい内容を一緒に整理します。
+            <?php else: ?>
+              チラシ・名刺・ショップカードなどの印刷物、ホームページまわりのご相談、制作後の運用サポートまで。<br>
+              まだ内容がまとまっていない段階でも大丈夫です。まずはお気軽にお聞かせください。
+            <?php endif; ?>
           </p>
         </div>
 
@@ -304,7 +317,7 @@ window.addEventListener('load', function () {
             <div class='contact-card bg_white radius p4 tcenter'>
               <div class='contact-card__icon'><i class='fas fa-laptop-code'></i></div>
               <h3 class='bold fs_22 fs_sp20 base_color'>Webまわりの相談</h3>
-              <p>ブログ、ホームページ、LINE導線、更新サポートなどのご相談。</p>
+              <p>ホームページ、LINE導線、更新サポートなどのご相談。</p>
             </div>
           </li>
           <li>
@@ -396,7 +409,7 @@ window.addEventListener('load', function () {
           <div class='space_3 space_sp1'></div>
 
           <form id='mailform' class='form type_s' method='post' enctype='multipart/form-data' action='mailform/send.php' onsubmit='return sendmail(this);'>
-            <input type='hidden' name='form_type' value='contact'>
+            <input type='hidden' name='form_type' value='<?php echo htmlspecialchars($contact_form_type, ENT_QUOTES, 'UTF-8'); ?>'>
             <input type='hidden' name='form_started_at' value='<?php echo time(); ?>'>
             <input type='hidden' name='contact_form_token' value='<?php echo htmlspecialchars($contact_form_token, ENT_QUOTES, 'UTF-8'); ?>'>
             <div style='position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden;' aria-hidden='true'>
@@ -412,7 +425,7 @@ window.addEventListener('load', function () {
                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='チラシ・フライヤー制作'>チラシ・フライヤー制作</label>
                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='名刺・ショップカード制作'>名刺・ショップカード制作</label>
                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='シール・印刷物制作'>シール・印刷物制作</label>
-                <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='ブログ・ホームページ制作'>ブログ・ホームページ制作</label>
+                <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='ホームページ制作'<?php echo $is_website_diagnosis ? ' checked' : ''; ?>>ホームページ制作</label>
                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='更新・運用サポート'>更新・運用サポート</label>
                 <label class='checkbox_text'><input type='checkbox' name='ご相談内容(必須)[]' value='まずは相談したい'>まずは相談したい</label>
                 <p class='contact-error-message' data-error-for='consultation'>ご相談内容を1つ以上選択してください。</p>
@@ -463,7 +476,7 @@ window.addEventListener('load', function () {
 
               <dt>お問い合わせ内容<span>必須</span></dt>
               <dd>
-                <textarea name='お問い合わせ内容(必須)' rows='10' cols='75' placeholder='ご相談内容、制作したいもの、現在困っていること、希望納期などをご自由にご記入ください。' required data-contact-required></textarea>
+                <textarea name='お問い合わせ内容(必須)' rows='10' cols='75' placeholder='<?php echo $is_website_diagnosis ? '①業種 ②現在ホームページがあるか ③一番困っていることをご記入ください。' : 'ご相談内容、制作したいもの、現在困っていること、希望納期などをご自由にご記入ください。'; ?>' required data-contact-required></textarea>
               </dd>
             </dl>
 

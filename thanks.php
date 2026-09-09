@@ -24,7 +24,7 @@ $success = preg_match('/\A[a-f0-9]{48}\z/', $ticket) === 1 && isset($tickets[$ti
 $success_source = is_array($success) && isset($success['source']) ? (string)$success['source'] : '';
 $success_created_at = is_array($success) && isset($success['created_at']) ? (int)$success['created_at'] : 0;
 $success_age = $now - $success_created_at;
-$may_show_thanks = in_array($success_source, ['contact', 'marutto_contact'], true)
+$may_show_thanks = in_array($success_source, ['contact', 'website_diagnosis', 'marutto_contact'], true)
     && $success_created_at > 0
     && $success_age >= 0
     && $success_age <= 600;
@@ -53,7 +53,7 @@ $page_script = '';
 if ($should_track_conversion) {
     $event_label = $success_source === 'marutto_contact'
         ? 'marutto_contact_form'
-        : 'contact_form';
+        : ($success_source === 'website_diagnosis' ? 'website_diagnosis_form' : 'contact_form');
     $page_script = '<script>window.addEventListener("load",function(){if(typeof gtag==="function"){gtag("event","form_submit",{event_category:"contact",event_label:'
         . json_encode($event_label, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES)
         . ',form_destination:"thanks.php"});}},{once:true});</script>';

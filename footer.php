@@ -3,7 +3,7 @@
 <?php
 $dr_line_url = isset($line) ? $line : 'contact.php';
 if (!isset($dr_navigation_items)) {
-    $dr_navigation_items = dneko_navigation_items($dr_line_url);
+    $dr_navigation_items = dneko_navigation_items($dr_line_url, isset($footer_contact_variant) && $footer_contact_variant === 'website_diagnosis');
 }
 ?>
 <footer>
@@ -49,6 +49,12 @@ if (!isset($dr_navigation_items)) {
 
 
                     </ul>
+            <nav class="dr_footer_legal tcenter" aria-label="法的情報">
+                <ul>
+                    <li><a href="privacypolicy.php">プライバシーポリシー</a></li>
+                    <li><a href="law.php">特定商取引法に基づく表記について</a></li>
+                </ul>
+            </nav>
 
 
                 </div>
@@ -58,12 +64,7 @@ if (!isset($dr_navigation_items)) {
                     </nav>
                 </div>
             </div>
-            <nav class="nav_normal t_m10 tcenter center pconly" aria-label="法的情報">
-                <ul>
-                    <li><a href="privacypolicy.php">プライバシーポリシー</a></li>
-                    <li><a href="law.php">特定商取引法に基づく表記について</a></li>
-                </ul>
-            </nav>
+
 
         </div>
     </div>

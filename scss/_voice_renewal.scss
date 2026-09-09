@@ -1,12 +1,14 @@
+// Voice page presentation overrides and service archive banners.
+// Loaded once by the shared style.scss entry point.
 .voice_page .voice_box .picture {
   width: min(100%, 240px);
-  aspect-ratio: 1/1;
+  aspect-ratio: 1 / 1;
   margin: 0 auto;
   overflow: hidden;
   border: 4px solid #fff;
   border-radius: 50%;
   background: #fdf7eb;
-  box-shadow: 0 8px 22px rgba(91, 67, 35, 0.12);
+  box-shadow: 0 8px 22px rgba(91, 67, 35, .12);
 }
 
 .voice_page .voice_box .picture img {
@@ -114,18 +116,18 @@
   position: relative;
   display: block;
   overflow: hidden;
-  aspect-ratio: 1200/676;
+  aspect-ratio: 1200 / 676;
   border: 2px solid #f2d5b3;
   border-radius: 22px;
   color: #40382f;
   background: #fff;
-  box-shadow: 0 12px 28px rgba(87, 63, 30, 0.12);
+  box-shadow: 0 12px 28px rgba(87, 63, 30, .12);
 }
 
 .voice_service_banners a::after {
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0.98) 0%, rgba(255, 255, 255, 0.9) 31%, rgba(255, 255, 255, 0.18) 59%, transparent 78%);
+  background: linear-gradient(90deg, rgba(255, 255, 255, .98) 0%, rgba(255, 255, 255, .9) 31%, rgba(255, 255, 255, .18) 59%, transparent 78%);
   content: "";
 }
 
@@ -134,7 +136,7 @@
   height: 100%;
   margin: 0;
   object-fit: cover;
-  transition: transform 0.35s ease;
+  transition: transform .35s ease;
 }
 
 .voice_service_banners a:hover img,
@@ -192,68 +194,85 @@
     padding-right: 0;
     padding-left: 0;
   }
+
   .voice_page .voice_box {
     grid-template-columns: 1fr;
     gap: 26px;
   }
+
   .voice_page .voice_box > li > .mbox {
     max-width: 100%;
     padding: 19px;
   }
+
   .voice_page .voice_box .picture {
     width: min(68vw, 240px);
     margin-bottom: 20px;
   }
+
   .voice_page .voice_box .width_7 {
     visibility: visible;
     opacity: 1;
     transform: none;
   }
+
   .voice_page .voice_box .dl_list {
     display: block;
   }
+
   .voice_page .voice_box .dl_list dt,
   .voice_page .voice_box .dl_list dd {
     width: 100%;
     max-width: none;
   }
+
   .voice_page .voice_box .dl_list dt {
     min-height: 34px;
     margin: 0 0 8px;
     padding: 4px 12px;
     border-radius: 999px;
   }
+
   .voice_page .voice_box .dl_list dd {
     margin: 0 0 10px;
     padding: 0 18px;
   }
+
   .voice_page .voice_quote {
     padding: 12px 14px;
     font-size: 16px;
   }
+
   .voice_service_archive {
     padding: 56px 19px 68px;
   }
+
   .voice_service_heading {
     margin-bottom: 26px;
   }
+
   .voice_service_banners {
     grid-template-columns: 1fr;
     gap: 18px;
   }
+
   .voice_service_banners a {
     border-radius: 17px;
   }
+
   .voice_service_banners a > span {
     left: 5.5%;
     width: 50%;
   }
+
   .voice_service_banners small {
     font-size: clamp(10px, 3vw, 12px);
   }
+
   .voice_service_banners strong {
     font-size: clamp(18px, 5.6vw, 23px);
   }
+
   .voice_service_banners b {
     margin-top: 8px;
     font-size: 11px;

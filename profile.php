@@ -225,10 +225,6 @@ $page_script = '';
                         <p>いいえ、犬も大好きです！実家にいたワンちゃんにもたくさん癒やされてきました。動物みんな大切なパートナーです。</p>
                     </details>
                 </div>
-                <figure class="pf_faq_cats" aria-label="看板猫のもじゃとくるる">
-                    <img src="<?php echo $img; ?>/sticker/01.webp" alt="白猫のくるる" width="200" height="275" loading="lazy" decoding="async">
-                    <img src="<?php echo $img; ?>/sticker/49.webp" alt="黒猫のもじゃ" width="200" height="272" loading="lazy" decoding="async">
-                </figure>
             </div>
         </div>
     </section>

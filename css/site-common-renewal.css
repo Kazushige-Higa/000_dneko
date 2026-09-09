@@ -341,11 +341,15 @@
 
 .dr_global_nav_list {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   width: 100%;
   margin: 0;
   padding: 0;
   list-style: none;
+}
+
+.dr_contact_mobile_break {
+  display: none;
 }
 
 .dr_nav_item {
@@ -554,12 +558,6 @@ footer .dr_footer_navigation .dr_nav_dropdown a {
   text-decoration-thickness: 1px;
   text-underline-offset: 4px;
   transition: color .2s ease, text-decoration-color .2s ease;
-}
-
-footer .dr_footer_navigation .dr_nav_dropdown a::before {
-  margin-left: -12px;
-  color: var(--dr-common-orange);
-  content: "›";
 }
 
 footer .dr_footer_navigation .dr_nav_dropdown a:hover,
@@ -850,7 +848,20 @@ footer .dr_footer_navigation .dr_nav_dropdown a:focus-visible {
   }
 }
 
+@media (min-width: 821px) {
+  .dr_global_nav > .dr_global_nav_list > .dr_nav_item:last-child .dr_nav_primary {
+    padding-right: 6px;
+    padding-left: 6px;
+    font-size: clamp(11px, .85vw, 14px);
+    white-space: nowrap;
+  }
+}
+
 @media (max-width: 520px) {
+  .dr_contact_mobile_break {
+    display: block;
+  }
+
   .dr_logo {
     width: 160px;
   }
@@ -886,7 +897,7 @@ footer .dr_footer_navigation .dr_nav_dropdown a:focus-visible {
 
   .dr_contact_inner {
     width: 100%;
-    min-height: 166px;
+    min-height: 230px;
     background:
       radial-gradient(circle, rgba(248, 188, 128, .22) 0 4px, transparent 5px) 0 100% / 30px 30px,
       linear-gradient(180deg, #fff8ed 0%, #fff3e4 72%, #fff8ed 100%);
@@ -903,13 +914,14 @@ footer .dr_footer_navigation .dr_nav_dropdown a:focus-visible {
   }
 
   .dr_contact_inner > div {
-    min-height: 166px;
-    padding: 24px 0 18px;
+    min-height: 230px;
+    padding: 66px 0 20px;
   }
 
   .dr_contact_inner p {
     margin-bottom: 4px;
     font-size: 12px;
+    line-height: 1.35;
   }
 
   .dr_contact_inner h2 {

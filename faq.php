@@ -32,7 +32,7 @@ faq.php -->
                     <div class="sbox">
 
                         <!-- ▼ 印刷デザインについて ▼ -->
-                        <h3 class="fs_28 fs_sp20 base_color font_kiwi tcenter">🖨️ 印刷デザインについて</h3>
+                        <h3 id="print-design" class="fs_28 fs_sp20 base_color font_kiwi tcenter">🖨️ 印刷デザインについて</h3>
                         <div class='space_1'></div>
                         <dl class='accordion'>
                             <dt class='open'>チラシ・ショップカードなど、どんな印刷物を制作できますか？</dt>
@@ -74,8 +74,8 @@ faq.php -->
 
                         <div class='space_3'></div>
 
-                        <!-- ▼ ブログデザインについて ▼ -->
-                        <h3 class="fs_28 fs_sp20 base_color font_kiwi tcenter">💻 ブログデザインについて</h3>
+                        <!-- ▼ ホームページデザインについて ▼ -->
+                        <h3 id="website-design" class="fs_28 fs_sp20 base_color font_kiwi tcenter">💻 ホームページデザインについて</h3>
                         <div class='space_1'></div>
                         <dl class='accordion'>
                             <dt class='open'>WordPressって何ですか？よくわからないのですが、大丈夫でしょうか？</dt>
@@ -86,7 +86,7 @@ faq.php -->
                                         「デザネコ」では、サーバー契約やドメイン取得のサポートから、初期設定・使い方のレクチャーまで丁寧に対応しますので、初心者の方でも安心してスタートできます。</p>
                                 </div>
                             </dd>
-                            <dt class='open'>ブログを作るのは初めてです。パソコンもあまり得意ではないのですが、大丈夫ですか？</dt>
+                            <dt class='open'>ホームページを作るのは初めてです。パソコンもあまり得意ではないのですが、大丈夫ですか？</dt>
                             <dd class='panel'>
                                 <div class='inner'>
                                     <p>もちろん大丈夫です！<br>
@@ -103,8 +103,8 @@ faq.php -->
                             <dt class='open'>オリジナルデザインって、どこまでやってもらえるんですか？</dt>
                             <dd class='panel'>
                                 <div class='inner'>
-                                    <p>色味や写真のイメージ、雰囲気などをお聞きした上で、ブログ全体のデザイン（配色・ロゴ・レイアウトなど）をカスタマイズ可能です。<br>
-                                        「テンプレートっぽくない、自分だけのブログにしたい」という方にぴったりです。</p>
+                                    <p>色味や写真のイメージ、雰囲気などをお聞きした上で、ホームページ全体のデザイン（配色・ロゴ・レイアウトなど）をカスタマイズ可能です。<br>
+                                        「テンプレートっぽくない、自分だけのホームページにしたい」という方にぴったりです。</p>
                                 </div>
                             </dd>
                             <dt class='open'>公開後の更新や修正もお願いできますか？</dt>
@@ -119,7 +119,7 @@ faq.php -->
                         <div class='space_3'></div>
 
                         <!-- ▼ 撮影について ▼ -->
-                        <h3 class="fs_28 fs_sp20 base_color font_kiwi tcenter">📸 撮影について</h3>
+                        <h3 id="photography" class="fs_28 fs_sp20 base_color font_kiwi tcenter">📸 撮影について</h3>
                         <div class='space_1'></div>
                         <dl class='accordion'>
                             <dt class='open'>どんな撮影に対応していますか？</dt>

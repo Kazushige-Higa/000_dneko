@@ -10,8 +10,11 @@ $conf['max_submit_seconds'] = 7200;
 $form_type = isset($_POST['form_type']) && is_string($_POST['form_type'])
     ? $_POST['form_type']
     : '';
-$is_contact_request = in_array($form_type, ['contact', 'marutto_contact'], true);
+$allowed_form_types = ['contact', 'website_diagnosis', 'marutto_contact', 'oota_tour'];
+$is_allowed_form_type = in_array($form_type, $allowed_form_types, true);
+$is_contact_request = in_array($form_type, ['contact', 'website_diagnosis', 'marutto_contact'], true);
 $is_marutto_contact_request = 'marutto_contact' === $form_type;
+$is_website_diagnosis_request = 'website_diagnosis' === $form_type;
 if ($is_contact_request && session_status() !== PHP_SESSION_ACTIVE) {
     session_start();
 }
@@ -61,10 +64,12 @@ Mail	info@d-neko.com
 ━━━━━━━━━━━━━━━━━━━━━━━━━━
 EOM;
 
-if (isset($_POST['form_type']) && in_array($_POST['form_type'], ['contact', 'marutto_contact'], true)) {
+if (isset($_POST['form_type']) && in_array($_POST['form_type'], ['contact', 'website_diagnosis', 'marutto_contact'], true)) {
     $conf['thanks'] = '/thanks.php';
     if ('marutto_contact' === $_POST['form_type']) {
         $conf['subject'] = 'まるっとお任せプラン無料相談フォームよりご連絡';
+    } elseif ('website_diagnosis' === $_POST['form_type']) {
+        $conf['subject'] = '無料ホームページ診断フォームよりご連絡';
     } else {
         $conf['subject'] = 'デザネコお問い合わせフォームよりご連絡';
     }
@@ -5917,7 +5922,7 @@ class SMTP
 #エラー情報を格納するリスト
 $err;
 
-if("mail_from_check" == $_GET["mode"]) {
+if (isset($_GET["mode"]) && "mail_from_check" === $_GET["mode"]) {
 	// メールフォームチェック
 	mail_from_check();
 
@@ -5943,24 +5948,34 @@ function mail_from_check() {
  * 問合せフォームからの内容をメール送信する。(ファイル添付可能)
  */
 function send_mail() {
-	global $conf,$err,$form_type,$is_contact_request,$is_marutto_contact_request;
+	global $conf,$err,$form_type,$is_allowed_form_type,$is_contact_request,$is_marutto_contact_request,$is_website_diagnosis_request;
 
 	//ini_set( "display_errors", "On");
 	mb_language('uni');
 	mb_internal_encoding("UTF-8");
+
+	// 未知のフォーム種別を既定のメール送信経路へ流さない。
+	if (!$is_allowed_form_type) {
+		header('Location: /contact.php', true, 303);
+		exit;
+	}
 
 	if(0 < is_array_count($_POST)) {
 
         //-----------------------------------メール本文処理開始----------------------------------
 		$http_referer = isset($_SERVER['HTTP_REFERER']) ? (string)$_SERVER['HTTP_REFERER'] : '';
 		$marutto_invalid_redirect = '/service_marutto.php?form_error=1#contact_form';
-		$contact_invalid_redirect = '/contact.php#mailform';
+		$contact_invalid_redirect = $is_website_diagnosis_request
+			? '/contact.php?consultation=website-diagnosis#mailform'
+			: '/contact.php#mailform';
 		$referer_path = parse_url($http_referer, PHP_URL_PATH);
 		if ($is_marutto_contact_request && is_string($referer_path) && preg_match('#/service_marutto\.php$#', $referer_path)) {
 			$marutto_invalid_redirect = $referer_path . '?form_error=1#contact_form';
 		}
 		if ($is_contact_request && !$is_marutto_contact_request && is_string($referer_path) && preg_match('#/contact\.php$#', $referer_path)) {
-			$contact_invalid_redirect = $referer_path . '#mailform';
+			$contact_invalid_redirect = $referer_path
+				. ($is_website_diagnosis_request ? '?consultation=website-diagnosis' : '')
+				. '#mailform';
 		}
 		$safe_failure_redirect = $is_marutto_contact_request
 			? $marutto_invalid_redirect
@@ -6011,6 +6026,7 @@ function send_mail() {
                 'チラシ・フライヤー制作',
                 '名刺・ショップカード制作',
                 'シール・印刷物制作',
+                'ホームページ制作',
                 'ブログ・ホームページ制作',
                 '更新・運用サポート',
                 'まずは相談したい',
@@ -6097,6 +6113,7 @@ function send_mail() {
                 'チラシ・フライヤー制作',
                 '名刺・ショップカード制作',
                 'シール・印刷物制作',
+                'ホームページ制作',
                 'ブログ・ホームページ制作',
                 '更新・運用サポート',
                 'まずは相談したい',

@@ -1,4 +1,5 @@
 <?php
+require_once __DIR__ . "/common.php";
 $page_title = "もじゃねこ｜デザネコ公式キャラクター｜黒猫もじゃ・白猫くるる";
 $page_title_eng = "Moja Cats";
 $page_description = "もじゃねこは沖縄のデザインブランド「デザネコ」公式キャラクター。黒猫「もじゃ」と白猫「くるる」のプロフィール・誕生ストーリー、LINEスタンプ・オリジナルグッズをご紹介します。";
@@ -370,24 +371,24 @@ $page_script = '';
     <section>
         <div class='bg_pink'>
             <div class='single02'>
-                <div class='mbox act blur'>
+                <div class='mbox'>
                     <h2 class="tcenter line_height_14">
                         <span class="eng pink fs_30 fs_sp22">Related Links</span><br>
                         <span class="fs_30 fs_sp22 font_kiwi bold">もじゃねこの関連リンク</span>
                     </h2>
                     <div class='space_2 space_sp1'></div>
-                    <div class="sbox bold">
-                        <p class="tjustify">
+                    <div class="moja_related">
+                        <p class="tcenter">
                             もじゃねこのプロフィールは、ピクシブ百科事典にも掲載されています。<br>
                             また、もじゃねこ関連のSNS・グッズ販売ページは以下からアクセスいただけます。
                         </p>
                         <div class='space_2 space_sp1'></div>
-                        <ul class="link_list bold">
-                            <li>📘 <a href="https://dic.pixiv.net/a/もじゃねこ" target="_blank" rel="noopener">もじゃねこ｜ピクシブ百科事典</a></li>
-                            <li>🎨 <a href="https://store.line.me/stickershop/author/5708453/ja" target="_blank" rel="noopener">もじゃねこLINEスタンプ</a></li>
-                            <li>👕 <a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener">もじゃねこオリジナルグッズ（SUZURI）</a></li>
-                            <li>📷 <a href="<?php echo $instagram; ?>" target="_blank" rel="noopener">もじゃねこ公式Instagram</a></li>
-                            <li>▶️ <a href="<?php echo $youtube; ?>" target="_blank" rel="noopener">もじゃねこ公式YouTube</a></li>
+                        <ul class="moja_related_links">
+                            <li><a href="https://dic.pixiv.net/a/もじゃねこ" target="_blank" rel="noopener"><i class="fa-solid fa-book-open" aria-hidden="true"></i><span><strong>ピクシブ百科事典</strong><small>キャラクターを知る</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></li>
+                            <li><a href="https://store.line.me/stickershop/author/5708453/ja" target="_blank" rel="noopener"><i class="fa-brands fa-line" aria-hidden="true"></i><span><strong>LINEスタンプ</strong><small>会話に、もじゃとくるるを</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></li>
+                            <li><a href="https://suzuri.jp/design_cat" target="_blank" rel="noopener"><i class="fa-solid fa-shirt" aria-hidden="true"></i><span><strong>オリジナルグッズ</strong><small>お気に入りを見つける</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></li>
+                            <li><a href="<?php echo $instagram; ?>" target="_blank" rel="noopener"><i class="fa-brands fa-instagram" aria-hidden="true"></i><span><strong>公式Instagram</strong><small>日々の姿を楽しむ</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></li>
+                            <li><a href="<?php echo $youtube; ?>" target="_blank" rel="noopener"><i class="fa-brands fa-youtube" aria-hidden="true"></i><span><strong>公式YouTube</strong><small>音楽と映像で楽しむ</small></span><i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i></a></li>
                         </ul>
                     </div>
                 </div>
@@ -398,5 +399,13 @@ $page_script = '';
 </div>
 <!-- もじゃねこ -->
 
+
+<!-- Moja media -->
+<div class="overflow dr_page moja_media">
+<?php include __DIR__ . '/home-media.php'; ?>
+</div>
+<!-- Moja media -->
+<?php include __DIR__ . '/video-modal.php'; ?>
+<script src="js/index-renewal.js?v=<?= filemtime(__DIR__ . '/js/index-renewal.js') ?>" defer></script>
 
 <?php include_once './footer.php'; ?>

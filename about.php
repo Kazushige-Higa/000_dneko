@@ -44,7 +44,7 @@ $page_script = '';
                 </li>
                 <li>
                     <span class="dnk_about_number is_green">2</span>
-                    <div><h3>ホームページ制作・運用</h3><p>初期費用0円、月額1万円以内から。公開してからの更新や改善まで、ずっと一緒に育てていきます。</p><a href="website-design.php">くわしく見る <b>→</b></a></div>
+                    <div><h3>ホームページ制作・運用</h3><p>ホームページ制作費0円、月額9,800円から。別途、初回契約手数料5,000円（税別）。公開後の更新や改善まで伴走します。</p><a href="service_blog.php" data-ga-event="web_service_click" data-ga-location="about_service">くわしく見る <b>→</b></a></div>
                     <img class="dnk_about_card_icon" src="images/about-renewal/icons/website.png" alt="ホームページを表示したパソコンのイメージ" loading="lazy">
                 </li>
                 <li>
@@ -90,7 +90,7 @@ $page_script = '';
                 <p>ひとりで全部やっているからこそ、まとめて引き受けられます。</p>
             </header>
             <div class="dnk_about_solution_grid">
-                <article><h3>A. ホームページ面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/website.png" alt="ホームページ制作のイメージ" loading="lazy"><ul><li>初期費用0円ではじめられます</li><li>月額1万円以内から続けやすい</li><li>更新しやすい設計にします</li></ul></article>
+                <article><h3>A. ホームページ面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/website.png" alt="ホームページ制作のイメージ" loading="lazy"><ul><li>ホームページ制作費0円</li><li>月額9,800円（税別）</li><li>更新しやすい設計にします</li></ul></article>
                 <article><h3>B. 運用・更新面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/updates.png" alt="継続的な更新のイメージ" loading="lazy"><ul><li>更新の回数に制限はありません</li><li>AIを使った記事づくりもお手伝い</li><li>LINEで24時間以内にお返事します</li></ul></article>
                 <article><h3>C. 集客面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/analytics.png" alt="集客改善を表すグラフのイメージ" loading="lazy"><ul><li>検索を意識したつくりに設計します</li><li>公開後の数字を一緒に見ながら改善</li><li>SNS用の画像づくりもまとめて</li></ul></article>
                 <article><h3>D. 印刷物・撮影面</h3><img class="dnk_about_solution_icon" src="images/about-renewal/icons/photo-print.png" alt="写真撮影と印刷物のイメージ" loading="lazy"><ul><li>チラシ、名刺、メニューを一括で</li><li>ホームページとデザインを統一</li><li>撮影も僕がやるので、窓口はひとつ</li></ul></article>
@@ -124,20 +124,7 @@ $page_script = '';
                 <dl><div><dt>屋号</dt><dd>デザネコ</dd></div><div><dt>代表者</dt><dd>比嘉 一茂（ひが かずしげ）</dd></div><div><dt>設立</dt><dd>2015年</dd></div><div><dt>所在地</dt><dd>〒901-2226 沖縄県宜野湾市嘉数2-8-2</dd></div><div><dt>電話番号</dt><dd>090-2964-1664</dd></div><div><dt>メール</dt><dd>info@d-neko.com</dd></div></dl>
                 <dl><div><dt>事業内容</dt><dd>ホームページ制作・運用／印刷物デザイン／ロゴ・撮影／AI活用コンサルティング／ご家庭向けデジタルサポート</dd></div><div><dt>対応エリア</dt><dd>沖縄県全域（オンラインで全国対応）</dd></div><div><dt>お支払い方法</dt><dd>銀行振込／クレジットカード／PayPal／PayPay</dd></div><div><dt>取引銀行</dt><dd>琉球銀行／沖縄銀行／楽天銀行</dd></div></dl>
             </div>
-            <p class="dnk_about_estimate">ご相談の内容をお聞かせいただいたあとに、正式なお見積りをお出ししています。<br>ホームページ制作は初期費用0円・月額1万円以内のプランからご案内できます。</p>
-        </div>
-    </section>
-
-    <section class="dnk_about_section dnk_about_faq" aria-labelledby="about-faq-title">
-        <div class="dnk_about_inner">
-            <header class="dnk_about_section_header is_compact"><h2 id="about-faq-title">よくあるご質問</h2></header>
-            <div class="dnk_about_faq_list">
-                <details open><summary><b>Q1.</b> なんでデザネコという屋号なんですか？</summary><p>デザネコという屋号は、ネコが持つ優雅さや遊び心をデザインに反映させることで、見る人の心を惹きつけたいという思いから名付けました。でも、単純にデザインとネコが好きという理由がいちばんかもしれません。</p></details>
-                <details><summary><b>Q2.</b> なんでネコが好きなんですか？</summary><p>幼いころにネコを13匹飼っていたくらい、ネコが好きです。いまでも会話できるくらいネコのことを理解しているつもりです。</p></details>
-                <details><summary><b>Q3.</b> ワンちゃんは嫌いなんですか？</summary><p>ワンちゃんも好きです。ネコアレルギーですが、イヌアレルギーではないので、ワンちゃんならいっぱい抱っこできます。</p></details>
-            </div>
-            <p class="dnk_about_faq_link">料金や制作の進め方など、そのほかのご質問は「よくあるご質問」ページにまとめています。<br><a href="faq.php">→ faq.php</a></p>
-            <img class="dnk_about_faq_cats" src="images/about-renewal/faq-cats-v2.png" alt="質問マークと一緒にのぞく黒猫のもじゃと白猫のくるる" loading="lazy">
+            <p class="dnk_about_estimate">ご相談の内容をお聞かせいただいたあとに、正式なお見積りをお出ししています。<br>ホームページ制作費0円・月額9,800円のプランからご案内できます（別途、初回契約手数料5,000円／価格は税別）。</p>
         </div>
     </section>
 

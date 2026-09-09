@@ -185,7 +185,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
               <li>ホームページとチラシの依頼を別々にするのが面倒…</li>
               <li>制作会社の見積もりが50万円で諦めた…</li>
               <li>HPを作ったけれど、問い合わせに繋がらない…</li>
-              <li>ブログ・SNS・チラシのデザインがバラバラで統一感がない…</li>
+              <li>ホームページ・SNS・チラシのデザインがバラバラで統一感がない…</li>
               <li>更新のたびに追加料金が請求されて、放置している…</li>
               <li>Webの知識がなく、気軽に相談できる人が身近にいない…</li>
             </ul>
@@ -579,7 +579,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
                 </tr>
                 <tr>
                   <th scope="row">事業内容</th>
-                  <td>ホームページ制作／印刷物デザイン／ロゴデザイン／ブログ制作／写真撮影／動画撮影／AI画像生成／SNS運用代行</td>
+                  <td>ホームページ制作／印刷物デザイン／ロゴデザイン／写真撮影／動画撮影／AI画像生成／SNS運用代行</td>
                 </tr>
                 <tr>
                   <th scope="row">取引銀行</th>
@@ -658,7 +658,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
                     <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="チラシ・フライヤー制作">チラシ・フライヤー制作</label>
                     <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="名刺・ショップカード制作">名刺・ショップカード制作</label>
                     <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="シール・印刷物制作">シール・印刷物制作</label>
-                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="ブログ・ホームページ制作">ブログ・ホームページ制作</label>
+                    <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="ホームページ制作">ホームページ制作</label>
                     <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="更新・運用サポート">更新・運用サポート</label>
                     <label class="checkbox_text"><input type="checkbox" name="ご相談内容(必須)[]" value="まずは相談したい">まずは相談したい</label>
                     <p id="marutto_consultation_error" class="contact-error-message" data-error-for="consultation" role="alert">ご相談内容を1つ以上選択してください。</p>

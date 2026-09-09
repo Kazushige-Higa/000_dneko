@@ -1,0 +1,123 @@
+// Shared typography and page refinements, September 2026.
+:root {
+  --dn_body_font: "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+  --dn_heading_font: "Kiwi Maru", serif;
+}
+
+html body,
+html body :is(.dr_page, .pf_page, .dnk_about_page, .fd_page, .dr_header, .dr_contact),
+html body :where(p, li, dt, dd, td, th, label, input, textarea, select, button, summary, blockquote, cite) {
+  font-family: var(--dn_body_font);
+}
+
+:where(h1, h2, h3, h4, h5, h6),
+html body :is(.dr_section_heading p, .dr_hero_copy > p, .dr_kicker, .dnk_about_kicker, .pf_story_badge) {
+  font-family: var(--dn_heading_font);
+}
+
+// Whole cards fit between the browser gutters; the viewport has no inline padding.
+.dr_page .dr_slider {
+  --dr_visible_slides: 3;
+  --dr_slide_gap: 24px;
+  width: calc(100% - 64px);
+  max-width: 1440px;
+  margin-inline: auto;
+}
+.dr_page .dr_slider_hero { --dr_visible_slides: 1; max-width: 1120px; }
+.dr_page .dr_card_slider { --dr_visible_slides: 5; }
+.dr_page .dr_slider_viewport { padding-inline: 0; scroll-snap-type: x mandatory; }
+.dr_page .dr_slider_track {
+  position: relative;
+  width: 100%;
+  gap: var(--dr_slide_gap);
+}
+.dr_page .dr_slider_track > * {
+  min-width: 0;
+  flex: 0 0 calc((100% - (var(--dr_visible_slides) - 1) * var(--dr_slide_gap)) / var(--dr_visible_slides));
+  scroll-snap-align: start;
+}
+.dr_page .dr_slider_prev { left: -24px; }
+.dr_page .dr_slider_next { right: -24px; }
+.dr_page .dr_slider.is_static .dr_slider_track { justify-content: center; }
+.dr_page .dr_slider.is_static .dr_slider_viewport { scroll-snap-type: none; }
+// Restore the live hero carousel without changing the other card sliders.
+.dr_page .dr_hero .dr_slider_hero { width: 100%; max-width: none; margin-inline: 0; }
+.dr_page .dr_hero .dr_slider_viewport { padding-inline: 0; }
+.dr_page .dr_slider_hero .dr_slider_track { width: max-content; gap: 22px; }
+.dr_page .dr_slider_hero .dr_slider_track > * { flex: 0 0 min(1120px, 82vw); scroll-snap-align: center; }
+.dr_page .dr_slider_hero .dr_slider_prev { left: 20px; }
+.dr_page .dr_slider_hero .dr_slider_next { right: 20px; }
+.dr_page .dr_hero_slide_orange .dr_hero_copy h2 { font-size: clamp(18px, 2.15vw, 30px); line-height: 1.5; }
+.dr_page .dr_hero_slide_orange .dr_hero_copy h2 > span { display: inline-block; max-width: 100%; overflow-wrap: anywhere; }
+.dr_page .dr_movie_card h3 { overflow-wrap: anywhere; }
+.dr_page .dr_slider button:focus-visible { outline: 3px solid #17852c; outline-offset: 3px; }
+
+footer .dr_footer_legal { margin-top: 16px; }
+footer .dr_footer_legal ul { display: grid; gap: 8px; padding: 0; margin: 0; list-style: none; }
+footer .dr_footer_legal a { color: #333; font-size: 11px; line-height: 1.45; text-decoration: none; }
+footer .dr_footer_legal a:hover { color: #f9b104; text-decoration: underline; }
+footer .dr_footer_legal a:focus-visible { outline: 2px solid currentColor; outline-offset: 3px; }
+
+.pf_page .pf_story_body .pf_story_badge { display: table; margin-inline: auto; text-align: center; }
+.pf_page .pf_story_body .pf_story_turning { border-left: 0; border-radius: 12px; text-align: center; }
+.pf_page .pf_story_body .pf_story_quote { margin-bottom: 20px; }
+.pf_page .pf_faq_layout { grid-template-columns: minmax(0, 1fr); }
+.dnk_about_page .dnk_about_company_grid { grid-template-columns: 1fr; }
+.dnk_about_page .dnk_about_company dl + dl { border-left: 0; border-top: 1px solid #efce9d; }
+
+.fd_page .fd_final_cta_inner { padding: 0; background: none; }
+
+.moja_related { width: min(1040px, 100%); margin-inline: auto; }
+.moja_related > p { margin-bottom: 24px; line-height: 1.8; }
+.moja_related_links { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; list-style: none; padding: 0; }
+.moja_related_links li { min-width: 0; }
+.moja_related_links a {
+  display: flex; align-items: center; gap: 16px; height: 100%; min-height: 104px;
+  padding: 20px; border: 1px solid #eac9d5; border-radius: 18px;
+  color: #443a35; background: #fff; box-shadow: 0 5px 16px rgba(87, 52, 64, .06);
+}
+.moja_related_links a > i:first-child { flex: 0 0 38px; color: #ad416c; font-size: 30px; text-align: center; }
+.moja_related_links a > i:last-child { margin-left: auto; color: #ad416c; font-size: 14px; }
+.moja_related_links strong { display: block; font-size: 18px; line-height: 1.6; }
+.moja_related_links small { display: block; font-size: 14px; color: #756863; line-height: 1.7; }
+.moja_related_links a:hover { border-color: #ad416c; background: #fff9fc; }
+.moja_related_links a:focus-visible { outline: 3px solid #ad416c; outline-offset: 3px; }
+.moja_media { padding-top: 80px; }
+
+@media (max-width: 1100px) {
+  .dr_page .dr_slider { --dr_visible_slides: 2; }
+  .dr_page .dr_card_slider { --dr_visible_slides: 3; }
+  .dr_page .dr_slider_hero { --dr_visible_slides: 1; }
+}
+@media (max-width: 820px) {
+  .dr_page .dr_slider_hero .dr_slider_track > * { flex-basis: 88vw; }
+  .dr_page .dr_slider_hero .dr_slider_prev { left: 8px; }
+  .dr_page .dr_slider_hero .dr_slider_next { right: 8px; }
+  .dr_page .dr_hero_slide_orange .dr_hero_copy h2 { font-size: clamp(18px, 4.7vw, 34px); }
+  .dr_page .dr_creator_visual:has(.dr_creator_profile_hero) { min-height: 0; }
+  .dr_page .dr_creator_profile_hero { position: static; display: block; height: auto; object-fit: contain; }
+  .dr_page .dr_story_digital .dr_story_visual,
+  .dr_page .dr_story_digital .dr_story_visual img { min-height: 0; }
+  .dr_page .dr_story_digital .dr_story_visual img { height: auto; object-fit: contain; }
+  .dr_page .dr_creator_visual picture,
+  .dr_page .dr_story_visual picture { display: block; }
+  html body .dr_menu_button b { font-size: 10px; }
+  html body .dr_header_sns { right: 57px; gap: 10px; }
+  .dr_page .dr_slider { width: calc(100% - 40px); --dr_slide_gap: 20px; }
+  .dr_page .dr_slider_prev { left: -16px; }
+  .dr_page .dr_slider_next { right: -16px; }
+}
+@media (max-width: 520px) {
+  footer .dr_footer_legal a { font-size: 16px; line-height: 1.7; }
+}
+@media (max-width: 640px) {
+  .dr_page .dr_slider { --dr_visible_slides: 1; }
+  .dr_page .dr_card_slider { --dr_visible_slides: 1; max-width: 380px; }
+  .pf_page .pf_about_logo { margin-inline: auto; justify-self: center; }
+  .fd_page .fd_final_cta_copy { padding: 28px 16px 0; }
+  .moja_related_links { grid-template-columns: 1fr; }
+  .moja_related_links a { gap: 12px; padding: 16px; }
+  .moja_related_links strong { font-size: 17px; }
+  .moja_media { padding-top: 45px; }
+  html body .pf_page :is(.pf_bio_copy p, .pf_story_body p, .pf_story_body .pf_story_quote p, .pf_story_quote cite, .pf_faq_list p, .pf_company_table dt, .pf_company_table dd) { font-size: 16px; line-height: 1.8; }
+}

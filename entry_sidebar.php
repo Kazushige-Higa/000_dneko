@@ -55,29 +55,24 @@
         </div>
     </div>
 
+    <?php
+    $sidebar_entry_type = isset($entry_type) ? (string)$entry_type : 'blog';
+    if ($sidebar_entry_type !== 'works' && $sidebar_entry_type !== 'column') {
+        $sidebar_entry_type = 'blog';
+    }
+    $sidebar_latest_settings = [
+        'blog' => ['title' => 'ブログ新着情報', 'endpoint' => '/blog'],
+        'works' => ['title' => '制作実績新着情報', 'endpoint' => '/works'],
+        'column' => ['title' => 'コラム新着情報', 'endpoint' => '/column'],
+    ];
+    $sidebar_latest = $sidebar_latest_settings[$sidebar_entry_type];
+    $sidebar_latest_response = microcms_get_list($sidebar_latest['endpoint'], "limit=3&orders=-publishedAt");
+    ?>
     <div class="child">
-        <div class="title">ブログ新着情報</div>
+        <div class="title"><?php echo htmlspecialchars($sidebar_latest['title'], ENT_QUOTES, 'UTF-8'); ?></div>
         <?php
-        $sidebar_blog_posts = microcms_get_list("/blog", "limit=3&orders=-publishedAt");
-        ?>
-        <?php
-        $loop_posts = ($sidebar_blog_posts && !empty($sidebar_blog_posts->contents)) ? $sidebar_blog_posts->contents : [];
-        $loop_type = 'blog';
-        $loop_ul_class = 'post_list_mini';
-        $loop_show_desc = false;
-        $loop_empty_message = '';
-        include 'loop_post.php';
-        ?>
-    </div>
-
-    <div class="child">
-        <div class="title">制作実績新着情報</div>
-        <?php
-        $sidebar_works_posts = microcms_get_list("/works", "limit=3&orders=-publishedAt");
-        ?>
-        <?php
-        $loop_posts = ($sidebar_works_posts && !empty($sidebar_works_posts->contents)) ? $sidebar_works_posts->contents : [];
-        $loop_type = 'works';
+        $loop_posts = ($sidebar_latest_response && !empty($sidebar_latest_response->contents)) ? $sidebar_latest_response->contents : [];
+        $loop_type = $sidebar_entry_type;
         $loop_ul_class = 'post_list_mini';
         $loop_show_desc = false;
         $loop_empty_message = '';

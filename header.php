@@ -1,6 +1,6 @@
 <?php require_once './common.php'; ?>
 <?php require_once __DIR__ . '/site-navigation.php'; ?>
-<?php $dr_navigation_items = dneko_navigation_items(isset($line) ? $line : 'contact.php'); ?>
+<?php $dr_navigation_items = dneko_navigation_items(isset($line) ? $line : 'contact.php', isset($footer_contact_variant) && $footer_contact_variant === 'website_diagnosis'); ?>
 <?php
 $is_dnk_lp_home = !empty($top_lp);
 $is_home_renewal = !empty($home_renewal);
@@ -88,7 +88,7 @@ $is_home_renewal = !empty($home_renewal);
   <link href="css/site-common-renewal.css?v=<?= filemtime(__DIR__ . '/css/site-common-renewal.css') ?>" rel="stylesheet">
   <?php echo $page_style ?? ''; ?>
   <?php echo $page_head ?? ''; ?>
-  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Courgette&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kiwi+Maru&family=Courgette&family=M+PLUS+Rounded+1c:wght@400;500;700;800&display=swap" rel="stylesheet">
 
   <!-- OGP -->
   <meta property="og:url" content="<?php echo htmlspecialchars($canonical_url, ENT_QUOTES, 'UTF-8'); ?>">
@@ -147,6 +147,11 @@ $is_home_renewal = !empty($home_renewal);
   <script type="application/ld+json">
     <?php echo json_encode($jsonld_local, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT); ?>
   </script>
+  <?php if (!empty($page_structured_data) && is_array($page_structured_data)): ?>
+    <script type="application/ld+json">
+      <?php echo json_encode($page_structured_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_PRETTY_PRINT); ?>
+    </script>
+  <?php endif; ?>
   <?php if ($is_entry_page && !empty($entry_title)) : ?>
     <!-- Structured Data: Article -->
     <script type="application/ld+json">
@@ -245,9 +250,15 @@ $is_home_renewal = !empty($home_renewal);
           <a href="<?php echo htmlspecialchars($youtube, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener" aria-label="YouTubeを開く">
             <i class="fa-brands fa-youtube" aria-hidden="true"></i><span>YouTube</span>
           </a>
-          <a href="contact.php" aria-label="お問い合わせページを開く">
-            <i class="fa-solid fa-envelope" aria-hidden="true"></i><span>お問い合わせ</span>
-          </a>
+          <?php if (isset($footer_contact_variant) && $footer_contact_variant === 'website_diagnosis'): ?>
+            <a href="contact.php?consultation=website-diagnosis" aria-label="無料ホームページ診断を開く" data-ga-event="free_diagnosis_click" data-ga-location="header">
+              <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i><span>無料診断</span>
+            </a>
+          <?php else: ?>
+            <a href="contact.php" aria-label="お問い合わせを開く">
+              <i class="fa-solid fa-envelope" aria-hidden="true"></i><span>お問い合わせ</span>
+            </a>
+          <?php endif; ?>
         </div>
 
         <button class="dr_menu_button" type="button" aria-expanded="false" aria-controls="dr-global-nav" aria-label="メニューを開く">

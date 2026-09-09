@@ -300,17 +300,41 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
           <?php
           // ==========================================
           //  CTA / アフィリエイトボックス（ランキング対応）
-          //  blog APIの繰り返しフィールド「cta」から取得
+          //  blog APIの繰り返しフィールド「product」（旧「cta」）から取得
+          //  microCMS側のフィールドIDがどちらでも動くようにしてある
           //  データがない記事では何も表示されない
           // ==========================================
-          if (isset($post->cta) && is_array($post->cta) && count($post->cta) > 0):
+          $cta_items = array();
+          if (isset($post->product) && is_array($post->product) && count($post->product) > 0) {
+            $cta_items = $post->product;
+          } elseif (isset($post->cta) && is_array($post->cta)) {
+            $cta_items = $post->cta;
+          }
+          if (count($cta_items) > 0):
           ?>
             <div class="space_5 space_sp2"></div>
             <div class="cta-box-section">
-              <?php foreach ($post->cta as $cta_index => $cta_item):
+              <?php foreach ($cta_items as $cta_index => $cta_item):
                 $rank_num = $cta_index + 1;
                 $rank_class = ($rank_num <= 3) ? 'rank-' . $rank_num : 'rank-other';
-                $has_image = isset($cta_item->image->url) && $cta_item->image->url !== '';
+
+                // 商品画像は「画像フィールド（オブジェクト）」「テキストフィールド（URL文字列）」の
+                // どちらで登録されていても拾えるようにする
+                $cta_image_url = '';
+                if (isset($cta_item->image)) {
+                  if (is_object($cta_item->image) && isset($cta_item->image->url)) {
+                    $cta_image_url = trim((string)$cta_item->image->url);
+                  } elseif (is_string($cta_item->image)) {
+                    $cta_image_url = trim($cta_item->image);
+                  }
+                }
+                // microCMSに置いた画像だけリサイズパラメータが効く
+                if ($cta_image_url !== '' && strpos($cta_image_url, 'images.microcms-assets.io') !== false) {
+                  $cta_image_src = $cta_image_url . '?w=360';
+                } else {
+                  $cta_image_src = $cta_image_url;
+                }
+                $has_image = ($cta_image_url !== '');
                 $has_price = isset($cta_item->price) && trim((string)$cta_item->price) !== '';
                 $has_amazon = isset($cta_item->url_amazon) && trim((string)$cta_item->url_amazon) !== '';
                 $has_rakuten = isset($cta_item->url_rakuten) && trim((string)$cta_item->url_rakuten) !== '';
@@ -324,7 +348,7 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
 
                   <?php if ($has_image): ?>
                     <div class="cta-image">
-                      <img src="<?php echo htmlspecialchars($cta_item->image->url, ENT_QUOTES, 'UTF-8'); ?>?w=360" alt="<?php echo htmlspecialchars($cta_item->name ?? '', ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
+                      <img src="<?php echo htmlspecialchars($cta_image_src, ENT_QUOTES, 'UTF-8'); ?>" alt="<?php echo htmlspecialchars($cta_item->name ?? '', ENT_QUOTES, 'UTF-8'); ?>" loading="lazy">
                     </div>
                   <?php endif; ?>
 
@@ -561,8 +585,8 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
         </div>
 
         <?php
-        // Fetch latest 3 posts from selected microCMS endpoint
-        $sidebar_posts = microcms_get($entry_endpoint . "?limit=3&orders=-publishedAt");
+        // Fetch latest 4 posts from selected microCMS endpoint
+        $sidebar_posts = microcms_get($entry_endpoint . "?limit=4&orders=-publishedAt");
         ?>
 
         <?php

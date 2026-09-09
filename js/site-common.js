@@ -142,3 +142,21 @@
     syncNavigationVisibility(false);
   });
 })();
+
+(function () {
+  'use strict';
+
+  document.addEventListener('click', function (event) {
+    var link = event.target.closest('[data-ga-event]');
+
+    if (!link || typeof window.gtag !== 'function') {
+      return;
+    }
+
+    window.gtag('event', link.getAttribute('data-ga-event'), {
+      event_category: 'cta',
+      event_label: link.getAttribute('data-ga-location') || 'unknown',
+      link_text: (link.textContent || '').trim().replace(/\s+/g, ' ').slice(0, 100)
+    });
+  });
+})();

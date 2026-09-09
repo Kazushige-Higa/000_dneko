@@ -3,7 +3,7 @@ $page_title = "お客様の声";
 $page_title_eng = "Voice";
 $page_seo_title = "お客様の声｜沖縄のデザイン・ホームページ制作";
 $page_description = "デザネコへチラシやホームページ制作をご依頼いただいた沖縄のお客様の声をご紹介します。相談時の対応、制作過程、完成後の変化をご覧ください。";
-$page_style = '<link href="css/voice.css?v=' . filemtime(__DIR__ . '/css/voice.css') . '" rel="stylesheet">';
+$page_style = '';
 $page_script = '';
 ?>
 <?php include_once './header.php'; ?>
@@ -16,7 +16,7 @@ voice.php -->
     <section>
         <div>
             <div class='single02'>
-                <div class='mbox'>
+                <div>
                     <h2 class="line_height_14 tcenter">
                         <span class="fs_40 fs_sp30 act blur font_kiwi">
                             お客様からのうれしい声
@@ -32,7 +32,7 @@ voice.php -->
                                             <img src='<?php echo $img; ?>/voice-yukyunotabi-ura.jpg' alt='旅行代理店 悠久の旅 沖縄 代表の宇良さま' loading='eager' fetchpriority='high' width='480' height='480'>
                                         </div>
                                     </div>
-                                    <div class='width_7 width_sp10 act inup'>
+                                    <div class='width_7 width_sp10'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
                                             <span class="base_color border_bottom">旅行代理店「悠久の旅 沖縄」代表 宇良さま</span><br>
                                         </p>
@@ -79,7 +79,7 @@ voice.php -->
                                             <img class="voice_portrait_top" src='<?php echo $img; ?>/voice-nicoli-arakaki.jpg' alt='ニコリミュージック代表 新垣里実さま' loading='lazy' width='480' height='720'>
                                         </div>
                                     </div>
-                                    <div class='width_7 width_sp10 act inup'>
+                                    <div class='width_7 width_sp10'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
                                             <span class="base_color border_bottom">ニコリミュージック 代表 新垣さま</span><br>
                                         </p>
@@ -127,7 +127,7 @@ voice.php -->
                                             <img src='<?php echo $img; ?>/voice-sunroom-nakagusuku.webp' alt='髪を育てる専門店 Sun Room 中城店 様と制作したショップカードの写真' loading='lazy'>
                                         </div>
                                     </div>
-                                    <div class='width_7 width_sp10 act inup'>
+                                    <div class='width_7 width_sp10'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
                                             <span class="base_color border_bottom">髪を育てる専門店 Sun Room 中城店 みわさま</span><br>
                                         </p>
@@ -159,7 +159,7 @@ voice.php -->
                                             <img src='<?php echo $img; ?>/voice01.webp' alt='イメージ画像' loading='lazy'>
                                         </div>
                                     </div>
-                                    <div class='width_7 width_sp10 act inup'>
+                                    <div class='width_7 width_sp10'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
                                             <span class="base_color border_bottom">サロンオーナー／Nさん</span><br>
                                         </p>
@@ -173,8 +173,8 @@ voice.php -->
 
                                         <div class="memo">
                                             <p>
-                                                ブログを作りたいけど、パソコンは正直苦手で…と不安ばかりでした。でもデザネコさんが、ドメインの取得から投稿のやり方まで丁寧にサポートしてくれて、安心して始めることができました。<br>
-                                                サロンの雰囲気に合わせて優しい色味でデザインしてもらえて、見るたびに嬉しくなります。今ではブログ経由で新規のお客様からのご予約も入るようになりました！
+                                                ホームページを作りたいけど、パソコンは正直苦手で…と不安ばかりでした。でもデザネコさんが、ドメインの取得から投稿のやり方まで丁寧にサポートしてくれて、安心して始めることができました。<br>
+                                                サロンの雰囲気に合わせて優しい色味でデザインしてもらえて、見るたびに嬉しくなります。今ではホームページ経由で新規のお客様からのご予約も入るようになりました！
                                             </p>
                                         </div>
                                     </div>
@@ -189,7 +189,7 @@ voice.php -->
                                             <img src='<?php echo $img; ?>/voice02.webp' alt='イメージ画像' loading='lazy'>
                                         </div>
                                     </div>
-                                    <div class='width_7 width_sp10 act inup'>
+                                    <div class='width_7 width_sp10'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
                                             <span class="base_color border_bottom">ハンドメイド作家／Aさん</span><br>
                                         </p>
@@ -203,8 +203,8 @@ voice.php -->
 
                                         <div class="memo">
                                             <p>
-                                                もともとSNSだけで販売していたのですが、もっと丁寧に作品を紹介できる場所がほしくて、ブログを作ることに。デザネコさんは、“世界観づくり”の部分から一緒に考えてくれて、とても心強かったです。
-                                                更新もお願いできるので、私は作品づくりに集中できるのが嬉しいポイント。ブログが“もうひとりの私”みたいに育っていく感じがして楽しいです。
+                                                もともとSNSだけで販売していたのですが、もっと丁寧に作品を紹介できる場所がほしくて、ホームページを作ることに。デザネコさんは、“世界観づくり”の部分から一緒に考えてくれて、とても心強かったです。
+                                                更新もお願いできるので、私は作品づくりに集中できるのが嬉しいポイント。ホームページが“もうひとりの私”みたいに育っていく感じがして楽しいです。
                                             </p>
                                         </div>
                                     </div>
@@ -219,7 +219,7 @@ voice.php -->
                                             <img src='<?php echo $img; ?>/voice03.webp' alt='イメージ画像' loading='lazy'>
                                         </div>
                                     </div>
-                                    <div class='width_7 width_sp10 act inup'>
+                                    <div class='width_7 width_sp10'>
                                         <p class="bold b_m10 fs_30 fs_sp22">
                                             <span class="base_color border_bottom">カフェ経営／Dさん／Aさん</span><br>
                                         </p>
@@ -233,7 +233,7 @@ voice.php -->
 
                                         <div class="memo">
                                             <p>
-                                                お店のブログを立ち上げたものの、放置状態に…。更新のたびに誰かに頼むのも面倒だったのですが、デザネコさんは“やさしく見守ってくれる相棒”のような存在で、必要な時に手を貸してくれるのがありがたいです。<br>
+                                                お店のホームページを立ち上げたものの、放置状態に…。更新のたびに誰かに頼むのも面倒だったのですが、デザネコさんは“やさしく見守ってくれる相棒”のような存在で、必要な時に手を貸してくれるのがありがたいです。<br>
                                                 デザインも可愛くて、お客様から“お店の雰囲気が伝わってくるね”と言ってもらえるようになりました。
                                             </p>
                                         </div>
@@ -244,6 +244,41 @@ voice.php -->
                     </ul>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="voice_service_archive" aria-labelledby="voice-service-title">
+        <div class="single02">
+            <header class="voice_service_heading">
+                <p>Service</p>
+                <h2 id="voice-service-title">デザネコのサービス</h2>
+            </header>
+            <ul class="voice_service_banners">
+                <li>
+                    <a href="service_blog.php">
+                        <img src="images/voice-renewal/banner-website.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
+                        <span><small>作って終わらない</small><strong>ホームページ制作</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="flyer-design.php">
+                        <img src="images/voice-renewal/banner-flyer.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
+                        <span><small>沖縄のデザインを、もっと身近に</small><strong>チラシデザイン</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="ai-consulting.php">
+                        <img src="images/voice-renewal/banner-ai.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
+                        <span><small>やさしく始める、仕事のAI活用</small><strong>AIコンサルティング</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
+                    </a>
+                </li>
+                <li>
+                    <a href="service_digital.php">
+                        <img src="images/voice-renewal/banner-digital-support.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
+                        <span><small>沖縄のご家庭向け</small><strong>デジタルのネコの手</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
+                    </a>
+                </li>
+            </ul>
         </div>
     </section>
 
