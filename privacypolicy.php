@@ -2,7 +2,7 @@
 $page_title = "プライバシーポリシー";
 $page_title_eng = "Privacy policy";
 $page_seo_title = "プライバシーポリシー";
-$page_description = "デザネコにおける個人情報の取得、利用目的、安全管理、第三者提供、お問い合わせ窓口についてご案内します。";
+$page_description = "デザネコにおける個人情報の取得、利用目的、安全管理、第三者提供、Cookie（クッキー）とアクセス解析ツールの利用、お問い合わせ窓口についてご案内します。";
 $page_style = "";
 $page_script = '';
 ?>
@@ -29,7 +29,7 @@ $page_script = '';
                         <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> 個人情報の利用目的</h5>
                         <p class="b_m10">お客さまからお預かりした個人情報は、<?php echo $abbreviation; ?>からのご連絡や業務のご案内やご質問に対する回答として、電子メールや資料のご送付に利用いたします。</p>
                         <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> 個人情報の第三者への開示・提供の禁止</h5>
-                        <p class="b-m10"><?php echo $abbreviation; ?>は、お客さまよりお預かりした個人情報を適切に管理し、次のいずれかに該当する場合を除き、個人情報を第三者に開示いたしません。</p>
+                        <p class="b_m10"><?php echo $abbreviation; ?>は、お客さまよりお預かりした個人情報を適切に管理し、次のいずれかに該当する場合を除き、個人情報を第三者に開示いたしません。</p>
                         <ul class="list_disc b_m10">
                             <li>お客さまの同意がある場合</li>
                             <li>お客さまが希望されるサービスを行なうために<?php echo $abbreviation; ?>が業務を委託する業者に対して開示する場合</li>
@@ -39,6 +39,57 @@ $page_script = '';
                         <p class="b_m10"><?php echo $abbreviation; ?>は、個人情報の正確性及び安全性確保のために、セキュリティに万全の対策を講じています。</p>
                         <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> ご本人の照会</h5>
                         <p class="b_m10">お客さまがご本人の個人情報の照会・修正・削除などをご希望される場合には、ご本人であることを確認の上、対応させていただきます。</p>
+                        <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> Cookie（クッキー）の使用について</h5>
+                        <p class="b_m10">当ウェブサイトでは、サイトのご利用状況を把握し、サービスの改善に役立てるためにCookie（クッキー）を使用しています。Cookieとは、ウェブサイトを閲覧された際にお客さまの端末に保存される小さなテキストファイルで、これ単体でお客さまの氏名・住所などを特定するものではありません。</p>
+                        <p class="b_m10">Cookieの使用を希望されない場合は、お使いのブラウザの設定から無効にすることができます。無効にされた場合でも、当ウェブサイトの閲覧に支障はありません。ただし、お問い合わせフォームなど一部の機能がご利用いただけなくなる場合があります。</p>
+
+                        <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> アクセス解析ツールについて</h5>
+                        <p class="b_m10">当ウェブサイトでは、サイトの改善を目的として、以下のアクセス解析ツールを利用しています。いずれもCookieを使用して閲覧情報を収集しますが、収集される情報は匿名であり、個人を特定するものではありません。</p>
+
+                        <table class="tbl fs_size_s b_m10">
+                            <tbody>
+                                <tr>
+                                    <th width="30%">ツール名</th>
+                                    <td>Google アナリティクス（GA4）</td>
+                                </tr>
+                                <tr>
+                                    <th>提供事業者</th>
+                                    <td>Google LLC</td>
+                                </tr>
+                                <tr>
+                                    <th>取得する情報</th>
+                                    <td>閲覧ページ、滞在時間、参照元、おおよその地域、ご利用の端末・ブラウザの種類など</td>
+                                </tr>
+                                <tr>
+                                    <th>提供事業者のポリシー</th>
+                                    <td><a href="https://policies.google.com/privacy?hl=ja" target="_blank" rel="noopener noreferrer">Google プライバシーポリシー（新しいタブで開きます）</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <table class="tbl fs_size_s b_m10">
+                            <tbody>
+                                <tr>
+                                    <th width="30%">ツール名</th>
+                                    <td>Microsoft Clarity</td>
+                                </tr>
+                                <tr>
+                                    <th>提供事業者</th>
+                                    <td>Microsoft Corporation</td>
+                                </tr>
+                                <tr>
+                                    <th>取得する情報</th>
+                                    <td>上記に加え、ページ内のスクロール・クリック・マウス操作の記録（お問い合わせフォームの入力欄など、個人情報が表示される箇所は自動的にマスク処理され、入力内容が記録されることはありません）</td>
+                                </tr>
+                                <tr>
+                                    <th>提供事業者のポリシー</th>
+                                    <td><a href="https://privacy.microsoft.com/ja-jp/privacystatement" target="_blank" rel="noopener noreferrer">Microsoft プライバシーステートメント（新しいタブで開きます）</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <p class="b_m10">収集された情報の取扱いについては、各提供事業者のプライバシーポリシーをご確認ください。Google アナリティクスによる情報の収集を希望されない場合は、Google が提供する<a href="https://tools.google.com/dlpage/gaoptout?hl=ja" target="_blank" rel="noopener noreferrer">オプトアウトアドオン（新しいタブで開きます）</a>もご利用いただけます。</p>
+
                         <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> 法令、規範の遵守と見直し</h5>
                         <p class="b_m10"><?php echo $abbreviation; ?>は、保有する個人情報に関して適用される日本の法令、その他規範を遵守するとともに、本ポリシーの内容を適宜見直し、その改善に努めます。</p>
                         <h5 class="border_bottom bold"><b class="base_color"><i class="fas fa-minus"></i></b> お問い合せ</h5>
