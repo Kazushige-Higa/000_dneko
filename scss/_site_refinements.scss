@@ -15,7 +15,7 @@ html body :is(.dr_section_heading p, .dr_hero_copy > p, .dr_kicker, .dnk_about_k
   font-family: var(--dn_heading_font);
 }
 
-// Whole cards fit between the browser gutters; the viewport has no inline padding.
+// Blog-only article typography.
 .blog_entry .blog_article {
   h1 {
     font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
@@ -152,4 +152,47 @@ footer .dr_footer_legal a:focus-visible { outline: 2px solid currentColor; outli
   .moja_related_links strong { font-size: 17px; }
   .moja_media { padding-top: 45px; }
   html body .pf_page :is(.pf_bio_copy p, .pf_story_body p, .pf_story_body .pf_story_quote p, .pf_story_quote cite, .pf_faq_list p, .pf_company_table dt, .pf_company_table dd) { font-size: 16px; line-height: 1.8; }
+}
+
+// Mobile text: one step down, without shrinking controls or already-small captions.
+@media (max-width: 500px) {
+  html body { font-size: clamp(16px, calc(4.6vw - 1px), 17px); }
+
+  html body .dr_page .dr_hero_copy :is(h1, h2) { font-size: clamp(22px, calc(7vw - 2px), 32px); }
+  html body .dr_page .dr_hero_slide_primary .dr_hero_copy h1 { font-size: clamp(23px, calc(7vw - 2px), 30px); }
+  html body .dr_page .dr_hero_slide_orange .dr_hero_copy h2 { font-size: clamp(17px, calc(4.7vw - 1px), 33px); }
+  html body .dr_section_heading h2 { font-size: 37px; }
+  html body .dr_page :is(.dr_service_text, .dr_creator_copy) h2 { font-size: 27px; }
+  html body .dr_page_title_eng { font-size: 37px; }
+  html body .voice_service_heading h2 { font-size: 26px; }
+
+  html body .dnk_about_hero h1 { font-size: 29px; }
+  html body .dnk_about_section_header h2 { font-size: 25px; }
+  html body .dnk_about_experience h2 { font-size: 22px; }
+  html body .pf_hero h1 { font-size: clamp(54px, calc(18vw - 2px), 80px); }
+  html body .pf_hero_subtitle,
+  html body .pf_section_heading h2 { font-size: 22px; }
+  html body .pf_bio_copy h2 { font-size: 21px; }
+  html body .pf_cta_inner h2 { font-size: 23px; }
+
+  html body .fd_hero_title { font-size: clamp(25px, calc(7vw - 2px), 36px); }
+  html body .fd_section_heading h2 { font-size: 23px; }
+  html body .fd_final_cta_copy h2 { font-size: 20px; }
+  html body .digital_neko_hero h1 { font-size: clamp(29px, calc(9vw - 2px), 44px); }
+  html body .digital_neko_heading h2 { font-size: 25px; }
+  html body .digital_neko_page :is(.digital_neko_intro, .digital_neko_story p) { font-size: 16px; }
+
+  html body .ai_consulting_hero h1 { font-size: clamp(32px, calc(10.2vw - 2px), 42px); }
+  html body .ai_consulting_title h2 { font-size: clamp(26px, calc(8vw - 2px), 34px); }
+  html body .ai_consulting_hero_lead { font-size: 18px; }
+  html body .ai_consulting_page :is(.ai_consulting_hero_description, .ai_consulting_start_text p, .ai_consulting_section_lead, .ai_consulting_contact_inner p) { font-size: 16px; }
+  html body .ai_consulting_start_text .ai_consulting_emphasis { font-size: 18px; }
+  html body .ai_consulting_page :is(.ai_consulting_problem_list p, .ai_consulting_scene_list p, .ai_consulting_why_note p, .ai_consulting_reason_cards > li > p:not(.ai_consulting_reason_number), .ai_consulting_menu_cards > li > ul li, .ai_consulting_flow_list span, .ai_consulting_faq_wrap summary, .ai_consulting_faq_wrap details p) { font-size: 16px; }
+
+  html body .service_marutto.marutto_plan { font-size: 17px; }
+  html body .service_marutto :is(.marutto_hero_lead, .marutto_check_list li, .marutto_feature_grid p, .marutto_voice_grid article > p, .marutto_package li, .marutto_profile_intro p:last-child, .marutto_profile_thought p, .marutto_faq details > p, .marutto_company table, .marutto_contact_form_lead) { font-size: 17px; }
+  html body .service_marutto .marutto_campaign_limit h1 { font-size: clamp(26px, calc(8.4vw - 2px), 34px); }
+  html body .service_marutto .marutto_heading h2 { font-size: clamp(26px, calc(8vw - 2px), 34px); }
+  html body .service_diagnosis_cta h2 { font-size: 26px; }
+  html body .service_diagnosis_cta p { font-size: 16px; }
 }
