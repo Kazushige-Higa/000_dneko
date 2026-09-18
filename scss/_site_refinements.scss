@@ -16,6 +16,21 @@ html body :is(.dr_section_heading p, .dr_hero_copy > p, .dr_kicker, .dnk_about_k
 }
 
 // Whole cards fit between the browser gutters; the viewport has no inline padding.
+.blog_entry .blog_article {
+  h1 {
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    font-size: calc(140% - 2px);
+  }
+  #countPost,
+  .description,
+  .speech-lead-section {
+    font-size: calc(1em - 1px);
+    @media (max-width: 500px) {
+      font-size: max(16px, calc(1em - 1px));
+    }
+  }
+}
+
 .dr_page .dr_slider {
   --dr_visible_slides: 3;
   --dr_slide_gap: 24px;

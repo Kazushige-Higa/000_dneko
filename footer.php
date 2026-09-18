@@ -1,4 +1,4 @@
-<?php include __DIR__ . '/service-banners.php'; ?>
+<?php if (empty($hide_service_banners)) include __DIR__ . '/service-banners.php'; ?>
 <?php if (empty($hide_footer_contact)) include __DIR__ . '/footer-contact.php'; ?>
 <?php require_once __DIR__ . '/site-navigation.php'; ?>
 <?php
