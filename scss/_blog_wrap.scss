@@ -134,6 +134,39 @@
     }
 }
 
+// Keep the service links near the viewport top within the article column.
+.sidewrap .sidebar_services {
+    position: sticky;
+    top: 10px;
+    max-height: calc(100dvh - 30px);
+    overflow-y: auto;
+    padding: 4px;
+    scrollbar-width: thin;
+    > p { margin-bottom: 12px; }
+    @include for-size(phone-only) {
+        position: static;
+        max-height: none;
+        overflow: visible;
+    }
+}
+.sidebar_service_banners {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    a {
+        display: block;
+        overflow: hidden;
+        border: 1px solid #f5d6b3;
+        border-radius: 14px;
+        background: #fff8ef;
+        &:focus-visible { outline: 3px solid #247c35; outline-offset: 2px; }
+    }
+    img { display: block; width: 100%; height: auto; }
+}
+
 //blog_month
 .blog_month {
     ul {

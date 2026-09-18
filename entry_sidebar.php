@@ -147,4 +147,15 @@
         <?php endif; ?>
     </div>
 
+    <!-- Sidebar service banners -->
+    <div class="sidebar_services" aria-label="デザネコのサービス">
+        <p class="tcenter bold fs_20 fs_sp20">デザネコのサービス</p>
+        <ul class="sidebar_service_banners">
+            <li><a href="service_blog.php"><img src="<?php echo htmlspecialchars($img, ENT_QUOTES, 'UTF-8'); ?>/sidebar-services/website.webp" width="1200" height="400" alt="ホームページ制作 — 詳しく見る" loading="lazy" decoding="async"></a></li>
+            <li><a href="flyer-design.php"><img src="<?php echo htmlspecialchars($img, ENT_QUOTES, 'UTF-8'); ?>/sidebar-services/flyer.webp" width="1200" height="400" alt="チラシデザイン — 詳しく見る" loading="lazy" decoding="async"></a></li>
+            <li><a href="ai-consulting.php"><img src="<?php echo htmlspecialchars($img, ENT_QUOTES, 'UTF-8'); ?>/sidebar-services/ai.webp" width="1200" height="400" alt="AIコンサルティング — 詳しく見る" loading="lazy" decoding="async"></a></li>
+            <li><a href="service_digital.php"><img src="<?php echo htmlspecialchars($img, ENT_QUOTES, 'UTF-8'); ?>/sidebar-services/digital-support.webp" width="1200" height="400" alt="デジタルのネコの手 — 詳しく見る" loading="lazy" decoding="async"></a></li>
+        </ul>
+    </div>
+    <!-- Sidebar service banners -->
 </aside>
