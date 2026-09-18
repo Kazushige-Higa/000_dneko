@@ -55,6 +55,7 @@
 </div>
 </section>
 
+<?php if (empty($is_home_page)): ?>
     <section>
 <div class="dr_section dr_goods">
       <div class="dr_section_heading dr_heading_orange">
@@ -118,4 +119,5 @@
       </a>
 </div>
 </section>
+<?php endif; ?>
 <!-- YouTube and goods -->

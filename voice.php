@@ -247,41 +247,6 @@ voice.php -->
         </div>
     </section>
 
-    <section class="voice_service_archive" aria-labelledby="voice-service-title">
-        <div class="single02">
-            <header class="voice_service_heading">
-                <p>Service</p>
-                <h2 id="voice-service-title">デザネコのサービス</h2>
-            </header>
-            <ul class="voice_service_banners">
-                <li>
-                    <a href="service_blog.php">
-                        <img src="images/voice-renewal/banner-website.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
-                        <span><small>作って終わらない</small><strong>ホームページ制作</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="flyer-design.php">
-                        <img src="images/voice-renewal/banner-flyer.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
-                        <span><small>沖縄のデザインを、もっと身近に</small><strong>チラシデザイン</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="ai-consulting.php">
-                        <img src="images/voice-renewal/banner-ai.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
-                        <span><small>やさしく始める、仕事のAI活用</small><strong>AIコンサルティング</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
-                    </a>
-                </li>
-                <li>
-                    <a href="service_digital.php">
-                        <img src="images/voice-renewal/banner-digital-support.webp" alt="" width="1200" height="676" loading="lazy" decoding="async">
-                        <span><small>沖縄のご家庭向け</small><strong>デジタルのネコの手</strong><b>詳しく見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></b></span>
-                    </a>
-                </li>
-            </ul>
-        </div>
-    </section>
-
 </div>
 <!-- ・お客様の声
 voice.php -->

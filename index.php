@@ -93,10 +93,7 @@ if (!function_exists('dneko_home_category')) {
                 <p>沖縄の小さなお店・個人事業主向け</p>
                 <h1><span>作って終わらない。</span><strong>ホームページ制作</strong></h1>
                 <span>ホームページ制作費0円・月額9,800円（税別）。<br>取材・撮影・文章・公開後の更新まで伴走します。</span>
-                <div class="dr_hero_actions">
-                  <a href="service_blog.php" data-ga-event="web_service_click" data-ga-location="hero">制作内容と料金を見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
-                  <a class="dr_hero_cta_secondary" href="contact.php?consultation=website-diagnosis" data-ga-event="free_diagnosis_click" data-ga-location="hero">無料診断を相談する</a>
-                </div>
+                <a href="service_blog.php" data-ga-event="web_service_click" data-ga-location="hero">サービスを見る <i class="fa-solid fa-arrow-right" aria-hidden="true"></i></a>
               </div>
             </article>
             <article class="dr_hero_slide dr_hero_slide_orange">

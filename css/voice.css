@@ -69,6 +69,10 @@
 }
 
 .voice_service_archive .single02 {
+  width: 100%;
+  max-width: 1240px;
+  padding-right: 20px;
+  padding-left: 20px;
   padding-top: 0;
   padding-bottom: 0;
 }
@@ -111,6 +115,7 @@
 }
 
 .voice_service_banners a {
+  container-type: inline-size;
   position: relative;
   display: block;
   overflow: hidden;
@@ -154,7 +159,7 @@
   top: 50%;
   left: 6%;
   display: flex;
-  width: 47%;
+  width: 88%;
   flex-direction: column;
   transform: translateY(-50%);
 }
@@ -175,7 +180,7 @@
 .voice_service_banners strong {
   margin-top: 5px;
   color: #f08024;
-  font-size: clamp(20px, 2.15vw, 31px);
+  font-size: clamp(18px, 5cqi, 30px);
   font-weight: 900;
   line-height: 1.35;
 }
@@ -232,7 +237,7 @@
     font-size: 16px;
   }
   .voice_service_archive {
-    padding: 56px 19px 68px;
+    padding: 56px 0 68px;
   }
   .voice_service_heading {
     margin-bottom: 26px;
@@ -246,13 +251,13 @@
   }
   .voice_service_banners a > span {
     left: 5.5%;
-    width: 50%;
+    width: 88%;
   }
   .voice_service_banners small {
     font-size: clamp(10px, 3vw, 12px);
   }
   .voice_service_banners strong {
-    font-size: clamp(18px, 5.6vw, 23px);
+    font-size: clamp(18px, 5cqi, 23px);
   }
   .voice_service_banners b {
     margin-top: 8px;
