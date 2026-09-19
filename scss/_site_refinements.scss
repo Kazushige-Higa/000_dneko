@@ -156,6 +156,36 @@ footer .dr_footer_legal a:focus-visible { outline: 2px solid currentColor; outli
 
 // Mobile text: one step down, without shrinking controls or already-small captions.
 @media (max-width: 500px) {
+  .entry_detail {
+    > .column { padding: 2em 0; border: 0; }
+    .mainwrap, .sidewrap { min-width: 0; }
+    .blog_article { border: 0; overflow-wrap: anywhere; }
+    .blog_article > footer { margin-inline: -1em; padding-inline: 1em; }
+    .sidewrap .blog_month li:nth-child(2n) { margin-left: 0; }
+    .blog_article h1 { font-size: 15px; }
+    .blog_article :is(#countPost, .description, .speech-lead-section, .table_of_contents) {
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .blog_article :is(#countPost, .description, .speech-lead-section, .table_of_contents) :where(p, li, td, th, .table_of_contents_title) {
+      font-size: 13px;
+      line-height: 1.8;
+    }
+    .blog_article :is(h1, #countPost, .description, .speech-lead-section, .table_of_contents),
+    .blog_article :is(h1, #countPost, .description, .speech-lead-section, .table_of_contents) :where(p, li, td, th, a, span, strong, em, blockquote, cite, h1, h2, h3, h4, h5, h6) {
+      font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", Meiryo, sans-serif;
+    }
+    .blog_article .breadcrumb,
+    .blog_article .breadcrumb :where(li, a) { font-size: 10px; }
+    #countPost {
+      min-width: 0;
+      iframe, video, img { max-width: 100%; }
+      table { width: 100%; max-width: 100%; table-layout: fixed; }
+      th, td { min-width: 0; overflow-wrap: anywhere; }
+      pre { max-width: 100%; overflow-x: auto; }
+      p code { max-width: 100%; white-space: pre-wrap; overflow-wrap: anywhere; }
+    }
+  }
   html body { font-size: clamp(16px, calc(4.6vw - 1px), 17px); }
 
   html body .dr_page .dr_hero_copy :is(h1, h2) { font-size: clamp(22px, calc(7vw - 2px), 32px); }

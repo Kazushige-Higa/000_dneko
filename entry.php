@@ -52,7 +52,7 @@ $post = !empty($eid) ? microcms_get_entry($eid, $entry_type, $draft_key) : null;
 <?php endif; ?>
 
 <div class='space_1 space_sp1'></div>
-<div class="blog_wrap<?php echo $entry_type === 'blog' ? ' blog_entry' : ''; ?>">
+<div class="blog_wrap entry_detail<?php echo $entry_type === 'blog' ? ' blog_entry' : ''; ?>">
   <div class="column">
     <main class="mainwrap">
 
