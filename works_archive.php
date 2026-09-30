@@ -80,7 +80,11 @@ if (is_readable($wd_csv) && ($wd_fp = fopen($wd_csv, 'r')) !== false) {
     $wd_domain = explode('/', $wd_url)[0];
     // サムネイルファイル名（"/"や":"を含むURLでも安全なファイル名に変換）
     $wd_thumb_name = preg_replace('/[^A-Za-z0-9._-]/', '_', $wd_url) . '.webp';
-    $wd_thumb = 'images/web_design/' . $wd_thumb_name;
+    // New captures live in image/; retain the existing thumbnail collection.
+    $wd_thumb = 'image/' . $wd_thumb_name;
+    if (!file_exists(__DIR__ . '/' . $wd_thumb)) {
+      $wd_thumb = 'images/web_design/' . $wd_thumb_name;
+    }
     $wd_items[] = [
       'cat'    => $wd_cat,
       'name'   => $wd_name !== '' ? $wd_name : $wd_url,
