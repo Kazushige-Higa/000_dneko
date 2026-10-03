@@ -88,9 +88,9 @@ $page_script = '';
 
             <div class="puton tcenter center line_height_10 shadow width_sp10">
                 <h1>
-                    <span class="act02 txt_split type_up fs_120 fs_sp80 line_height_14 tcenter white bold shadow font_kiwi">moja-cats</span>
+                    <span class="act02 txt_split type_up fs_120 fs_sp50 line_height_14 tcenter white bold shadow font_kiwi">moja-cats</span>
                     <br>
-                    <span class="act03 blur fs_40 fs_sp30 line_height_14 tcenter white bold shadow font_kiwi">もじゃねこ｜デザネコ公式キャラクターの「もじゃ」と「くるる」</span>
+                    <span class="act03 blur fs_40 fs_sp20 line_height_14 tcenter white bold shadow font_kiwi">もじゃねこ｜デザネコ公式キャラクターの「もじゃ」と「くるる」</span>
                 </h1>
                 <div class='space_3 space_sp6'></div>
                 <div class="act04 blur width_3 width_sp7">
