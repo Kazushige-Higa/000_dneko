@@ -1,0 +1,20 @@
+{
+  "name": "デザネコ｜沖縄のホームページ制作・デザイン",
+  "short_name": "デザネコ",
+  "description": "沖縄のデザネコが、ホームページ制作・チラシデザイン・撮影・SNS運用までまるっとサポートします。",
+  "lang": "ja",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "browser",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    {
+      "src": "/images/favicon.png",
+      "sizes": "120x120",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

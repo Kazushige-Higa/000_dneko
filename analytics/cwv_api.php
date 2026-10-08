@@ -23,7 +23,7 @@ header('Cache-Control: no-store');
 $TARGETS = [
     ['url' => 'https://d-neko.com/',                   'label' => 'トップページ'],
     ['url' => 'https://d-neko.com/entry_list.php',     'label' => '制作実績'],
-    ['url' => 'https://d-neko.com/service_design.php', 'label' => '印刷デザイン・料金'],
+    ['url' => 'https://d-neko.com/flyer-design.php',   'label' => '印刷デザイン・料金'],
 ];
 $STRATEGY    = 'mobile';   // 'mobile' または 'desktop'（Googleの評価はモバイル基準）
 $PSI_API_KEY = '';         // 任意。Google Cloud でキーを発行すると呼び出し制限が緩和される

@@ -49,7 +49,7 @@
         </button>
       </div>
 
-      <a class="dr_more_button dr_more_pink" href="https://www.youtube.com/@design-cat" target="_blank" rel="noopener">
+      <a class="dr_more_button dr_more_pink" href="<?php echo htmlspecialchars($youtube, ENT_QUOTES, 'UTF-8'); ?>" target="_blank" rel="noopener">
         もっと見る <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
       </a>
 </div>

@@ -42,7 +42,7 @@ $page_style = '
       "url": "' . htmlspecialchars($home_url, ENT_QUOTES, 'UTF-8') . '",
       "sameAs": [
         "https://www.instagram.com/dezaneko/",
-        "https://www.youtube.com/@design-cat",
+        "https://www.youtube.com/@mojaneko_okinawa",
         "https://line.me/R/ti/p/@quy1014b",
         "https://store.line.me/stickershop/author/5708453/ja",
         "https://suzuri.jp/design_cat",

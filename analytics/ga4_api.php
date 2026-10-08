@@ -430,7 +430,7 @@ function ga4_build_dashboard($property_id, $token, $key_events = [], $exclude_pr
             'dimensionFilter' => [
                 'orGroup' => [
                     'expressions' => [
-                        ['filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/service_design.php', 'matchType' => 'EXACT']]],
+                        ['filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/flyer-design.php',  'matchType' => 'EXACT']]],
                         ['filter' => ['fieldName' => 'pagePath', 'stringFilter' => ['value' => '/service_blog.php',   'matchType' => 'EXACT']]],
                     ],
                 ],
