@@ -235,7 +235,8 @@ $is_home_renewal = !empty($home_renewal);
   </script>
 </head>
 
-<body id="top" class="<?php echo trim(($is_dnk_lp_home ? 'dnk_lp_body ' : '') . ($is_home_renewal ? 'dneko_home_body' : '')); ?>">
+<body id="top" class="<?php echo trim(($is_dnk_lp_home ? 'dnk_lp_body ' : '') . ($is_home_renewal ? 'dneko_home_body ' : '') . (!empty($is_moja_page) ? 'moja_body' : '')); ?>">
+  <?php if (empty($hide_common_layout)): ?>
   <header class="dr_header">
     <div class="dr_header_inner">
       <div class="dr_header_top">
@@ -271,3 +272,4 @@ $is_home_renewal = !empty($home_renewal);
       </nav>
     </div>
   </header>
+  <?php endif; ?>

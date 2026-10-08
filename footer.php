@@ -1,3 +1,4 @@
+<?php if (empty($hide_common_layout)): ?>
 <?php if (empty($hide_service_banners)) include __DIR__ . '/service-banners.php'; ?>
 <?php if (empty($hide_footer_contact)) include __DIR__ . '/footer-contact.php'; ?>
 <?php require_once __DIR__ . '/site-navigation.php'; ?>
@@ -74,6 +75,7 @@ if (!isset($dr_navigation_items)) {
         <small>&copy;<?php echo date('Y'); ?> <?php echo $copyright; ?>.</small>
     </div>
 </footer>
+<?php endif; ?>
 
 <div id="pagetop" class="radius bottom dr_common_pagetop">
     <a href="<?php echo htmlspecialchars($page_top_href ?? '#top', ENT_QUOTES, 'UTF-8'); ?>" aria-label="ページトップへ"><i class="fas fa-chevron-up" aria-hidden="true"></i><span>TOP</span></a>
