@@ -29,7 +29,71 @@ voice.php -->
                                 <div class='flexbox gap3'>
                                     <div class="width_3 width_sp10">
                                         <div class="picture">
-                                            <img src='<?php echo $img; ?>/voice-yukyunotabi-ura.jpg' alt='旅行代理店 悠久の旅 沖縄 代表の宇良さま' loading='eager' fetchpriority='high' width='480' height='480'>
+                                            <img src='./image/voice-otohapi-enami.webp' alt='音楽教室 おとハピ♪ 榎並加奈さま' loading='eager' fetchpriority='high' width='450' height='400'>
+                                        </div>
+                                    </div>
+                                    <div class='width_7 width_sp10'>
+                                        <p class="bold b_m10 fs_30 fs_sp22">
+                                            <span class="base_color border_bottom">音楽教室 おとハピ♪ 榎並さま</span><br>
+                                        </p>
+
+                                        <dl class="dl_list radius b_m10">
+                                            <dt>お名前</dt>
+                                            <dd>榎並 加奈さま</dd>
+                                            <dt>業種</dt>
+                                            <dd>沖縄豊見城のピアノ・エレクトーン・リトミック教室♪</dd>
+                                            <dt>教室名</dt>
+                                            <dd>音楽教室 おとハピ♪</dd>
+                                            <dt>ホームページ</dt>
+                                            <dd>
+                                                <a class="voice_site_link" href="https://oto-hapi.com/" target="_blank" rel="noopener" aria-label="音楽教室 おとハピ♪のホームページ（新しいタブで開きます）">
+                                                    音楽教室 おとハピ♪ <i class="fa-solid fa-arrow-up-right-from-square" aria-hidden="true"></i>
+                                                </a>
+                                            </dd>
+                                        </dl>
+
+                                        <div class="memo">
+                                            <p>
+                                                がーひーさんは、とにかくお人柄が素晴らしく、とても親身になって対応してくださる方です😊
+                                            </p>
+                                            <p>
+                                                「こんなことをお願いできますか？」と相談すると、いつも快く引き受けてくださり、ホームページやチラシの修正なども迅速に対応してくださるので、本当に助かっています！
+                                            </p>
+                                            <p>
+                                                何より嬉しいのは、私自身の好みや想い、そして音楽教室「おとハピ♫」の雰囲気をしっかり汲み取って、形にしてくださることです。
+                                            </p>
+                                            <p>
+                                                自分ではうまく言葉にできないイメージも、素敵に表現してくださるので、仕上がりにはいつも大満足です！
+                                            </p>
+                                            <p>
+                                                実際に、同業の先生方からもホームページやチラシを褒めていただくことがあり、がーひーさんにお願いして本当に良かったと感じています。
+                                            </p>
+                                            <p>
+                                                また、制作だけでなく、いろいろな相談にも親身になって乗ってくださるので、とても心強い存在です。
+                                            </p>
+                                            <p>
+                                                こちらの想いや希望を大切にしながら、いつも柔軟に対応してくださることに感謝しています。
+                                            </p>
+                                            <p>
+                                                安心してお任せできる、本当に信頼できる方です！
+                                            </p>
+                                            <p>
+                                                これからも末永くお付き合いさせていただきたいと思っています😊
+                                            </p>
+                                            <p>
+                                                いつもありがとうございます！
+                                            </p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="b_m20 radius">
+                            <div class='mbox bg_white'>
+                                <div class='flexbox gap3'>
+                                    <div class="width_3 width_sp10">
+                                        <div class="picture">
+                                            <img src='<?php echo $img; ?>/voice-yukyunotabi-ura.jpg' alt='旅行代理店 悠久の旅 沖縄 代表の宇良さま' loading='lazy' width='480' height='480'>
                                         </div>
                                     </div>
                                     <div class='width_7 width_sp10'>
