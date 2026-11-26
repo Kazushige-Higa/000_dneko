@@ -1,0 +1,10 @@
+# New production assets: 7 images
+image/moja-cat-hero-v1.webp
+image/moja-cat-hero-mobile-v1.webp
+image/moja-cat-moja-v1.webp
+image/moja-cat-kururu-v1.webp
+image/moja-cat-fuwarin-v1.webp
+image/moja-cat-palm-v1.webp
+image/moja-cat-meadow-v1.webp
+
+# Existing images remain referenced in images/. The design concept PNG and generation source PNGs are not required by the page.
