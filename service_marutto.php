@@ -25,95 +25,7 @@ if ($marutto_is_local && is_string($marutto_request_path)) {
 $marutto_page_path = $page_base . 'service_marutto.php';
 $page_top_href = $marutto_page_path . '#top';
 $page_head = '<link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700;900&display=swap" rel="stylesheet"><link rel="preload" as="image" href="images/marutto-moja-surprise.webp">';
-$page_style = '<link href="css/service-marutto.css?v=' . filemtime(__DIR__ . '/css/service-marutto.css') . '" rel="stylesheet">';
-$page_script = <<<'HTML'
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  document.querySelectorAll('.marutto_plan a').forEach(function (link) {
-    link.addEventListener('click', function () {
-      if (typeof gtag !== 'function') return;
-      var href = link.getAttribute('href') || '';
-      var label = href.indexOf('line.me') !== -1 ? 'line'
-        : href.indexOf('tel:') === 0 ? 'phone'
-        : href.indexOf('contact.php') !== -1 || href.indexOf('#contact_form') !== -1 ? 'form'
-        : href.indexOf('works_archive.php') !== -1 ? 'works' : 'internal';
-      gtag('event', 'marutto_plan_click', {
-        event_category: 'contact',
-        event_label: label,
-        page_variant: 'service_marutto'
-      });
-    });
-  });
 
-  var form = document.getElementById('mailform');
-  if (!form) return;
-
-  var consultationChecks = form.querySelectorAll('input[name="ご相談内容(必須)[]"]');
-  var consultationError = form.querySelector('[data-error-for="consultation"]');
-  var requiredFields = form.querySelectorAll('[data-contact-required]');
-  var submitBtn = form.querySelector('.contact-submit-btn');
-
-  function setFieldError(field, hasError) {
-    field.classList.toggle('field-error', hasError);
-  }
-
-  function isFormReady() {
-    for (var i = 0; i < requiredFields.length; i++) {
-      if (!requiredFields[i].value.trim()) return false;
-    }
-    return Array.prototype.some.call(consultationChecks, function (checkbox) {
-      return checkbox.checked;
-    });
-  }
-
-  function updateSubmitState() {
-    if (submitBtn) submitBtn.disabled = !isFormReady();
-  }
-
-  function validateContactForm() {
-    var isValid = true;
-    requiredFields.forEach(function (field) {
-      var hasError = !field.value.trim();
-      setFieldError(field, hasError);
-      if (hasError) isValid = false;
-    });
-
-    var hasCheckedConsultation = Array.prototype.some.call(consultationChecks, function (checkbox) {
-      return checkbox.checked;
-    });
-    consultationChecks.forEach(function (checkbox) {
-      checkbox.required = !hasCheckedConsultation;
-    });
-    if (consultationError) consultationError.classList.toggle('is-show', !hasCheckedConsultation);
-    if (!hasCheckedConsultation) isValid = false;
-    return isValid;
-  }
-
-  requiredFields.forEach(function (field) {
-    field.addEventListener('input', function () {
-      setFieldError(field, !field.value.trim());
-      updateSubmitState();
-    });
-  });
-  consultationChecks.forEach(function (checkbox) {
-    checkbox.addEventListener('change', function () {
-      validateContactForm();
-      updateSubmitState();
-    });
-  });
-  updateSubmitState();
-
-  form.addEventListener('submit', function (event) {
-    if (!validateContactForm()) {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      form.reportValidity();
-    }
-  }, true);
-
-});
-</script>
-HTML;
 $marutto_has_form_error = isset($_GET['form_error']) && $_GET['form_error'] === '1';
 ?>
 <?php include_once './header.php'; ?>
@@ -214,11 +126,11 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
           <div class="marutto_feature_grid">
             <article><span>特徴 1</span><i class="fa-solid fa-user-pen" aria-hidden="true"></i>
               <h3 class="orange">20年・1,000件超の経験で<br>一貫プロデュース</h3>
-              <p>大手のような分業ではなく、ヒアリングから公開後の改善まで、比嘉が最初から最後まで責任を持って担当します。</p>
+              <p>ヒアリング・取材・撮影・文章作成から、デザインと公開後の改善まで。比嘉が最初から最後まで担当するので、写真や原稿の準備で手が止まりません。</p>
             </article>
             <article><span>特徴 2</span><i class="fa-solid fa-chart-line" aria-hidden="true"></i>
               <h3 class="orange">HP制作後も、<br>数字で改善サポート</h3>
-              <p>閲覧数・男女比・検索キーワード等を数値化し、改善案をご提案。狙ったターゲットへの届け方や検索上位表示のご相談にも柔軟に対応します。</p>
+              <p>アクセス数・検索キーワード・問い合わせにつながる動きを、専用ダッシュボードで確認。月次レポートをもとに、次に取り組む改善をご提案します。</p>
             </article>
             <article><span>特徴 3</span><i class="fa-solid fa-palette" aria-hidden="true"></i>
               <h3 class="orange">印刷物以外のデザインも<br>まとめてお任せ</h3>
@@ -229,6 +141,57 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
         </div>
       </div>
     </section>
+
+    <!-- Website production and ongoing support -->
+    <section>
+      <div id="website_support" class="marutto_section marutto_website_support">
+        <div class="marutto_inner">
+          <div class="marutto_heading">
+            <p>Website Support</p>
+            <h2><span class="marutto_phrase">ホームページの</span><span class="marutto_phrase">成果を、</span><br><strong><span class="marutto_phrase">数字で見ながら</span><span class="marutto_phrase">育てる。</span></strong></h2>
+          </div>
+          <div class="marutto_website_layout">
+            <div class="marutto_website_copy">
+              <p class="marutto_website_label fs_18"><span class="marutto_phrase">あなたのお店の、</span><span class="marutto_phrase">身近なWeb担当に。</span></p>
+              <h3 class="fs_25 fs_sp22"><span class="marutto_phrase">「作ったあと、どうする？」</span><br><span class="marutto_phrase">まで一緒に考えます。</span></h3>
+              <p>チラシを見て訪れた人に、お店の魅力が伝わっているか。ホームページから相談や予約につながっているか。公開後も数字を確認しながら、伝え方とお問い合わせまでの流れを整えます。</p>
+              <ul class="marutto_website_checks">
+                <li><strong>いつでも確認</strong><span>専用ダッシュボードでアクセス数や問い合わせの状況をチェック。</span></li>
+                <li><strong>毎月振り返る</strong><span>月次レポートで検索キーワードや訪問のきっかけを確認。</span></li>
+                <li><strong>次の改善へ</strong><span>写真・文章・導線を見直し、チラシやSNSの発信にも活かします。</span></li>
+              </ul>
+            </div>
+            <figure class="marutto_dashboard">
+              <figcaption><i class="fa-solid fa-chart-line" aria-hidden="true"></i><strong>お店専用ダッシュボード</strong></figcaption>
+              <p class="marutto_dashboard_note fs_17">表示イメージ（数値はサンプルです）</p>
+              <dl class="marutto_dashboard_metrics">
+                <div><dt class="fs_17">アクセス数</dt><dd class="fs_32 fs_sp30">12,834<span class="fs_10">回</span></dd></div>
+                <div><dt class="fs_17">問い合わせ数</dt><dd class="fs_32 fs_sp30">152<span class="fs_10">件</span></dd></div>
+              </dl>
+              <div class="marutto_dashboard_graph" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+              <ul class="marutto_dashboard_tags fs_17"><li>検索キーワード</li><li>流入チャネル</li><li>月次レポート</li></ul>
+              <p class="marutto_dashboard_caption">数字の読み方も、<br><strong>専門用語を使わずお伝えします。</strong></p>
+            </figure>
+          </div>
+          <div class="marutto_feature_grid marutto_website_features">
+            <article><span>制作前</span><i class="fa-solid fa-camera" aria-hidden="true"></i>
+              <h3 class="fs_22 fs_sp22"><span class="marutto_phrase">写真も文章も、</span><br><span class="marutto_phrase">まるごとお任せ</span></h3>
+              <p>取材でお店の強みを整理し、撮影・キャッチコピー・文章作成まで対応。本業に集中しながら、制作を進められます。</p>
+            </article>
+            <article><span>制作中</span><i class="fa-solid fa-mobile-screen-button" aria-hidden="true"></i>
+              <h3 class="fs_22 fs_sp22"><span class="marutto_phrase">小さなお店に合う、</span><br><span class="marutto_phrase">必要な設計を</span></h3>
+              <p>開業1〜3年目の個人事業主の方にも、無理のない構成をご提案。スマホで読みやすく、相談・予約しやすいページへ整えます。</p>
+            </article>
+            <article><span>公開後</span><i class="fa-regular fa-comments" aria-hidden="true"></i>
+              <h3 class="fs_22 fs_sp22"><span class="marutto_phrase">更新の相談は、</span><br><span class="marutto_phrase">LINEやメールで</span></h3>
+              <p>お知らせやメニューの変更も、気軽にご相談ください。数字を見ながら、必要な更新や改善を継続して支援します。</p>
+            </article>
+          </div>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-solid fa-magnifying-glass-chart" aria-hidden="true"></i><span>いまのHPを無料診断する<small>お問い合わせ欄にURLをご記入ください</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
+        </div>
+      </div>
+    </section>
+    <!-- Website production and ongoing support -->
 
     <section>
       <div class="marutto_section marutto_results">
@@ -429,6 +392,8 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
                 <li>ページ追加OK！</li>
                 <li>サーバー・ドメイン費 コミコミ</li>
                 <li>SSL・スマホ・タブレット対応</li>
+                <li>取材・撮影・文章作成</li>
+                <li>専用ダッシュボード・月次レポート</li>
                 <li>ブログシステム設置</li>
                 <li>お問合せフォーム／SNS連携</li>
                 <li>Google Map（MEO）サポート</li>
@@ -445,6 +410,8 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
                 <li>予約システム</li>
                 <li>クレジットカード決済機能</li>
                 <li>カート決済システム</li>
+                <li>名刺・パンフレット制作</li>
+                <li>AI活用・SNS運用の相談</li>
               </ul>
               <p>必要な機能だけ、事前に分かりやすくお見積りします。</p>
             </aside>
@@ -453,6 +420,28 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
         </div>
       </div>
     </section>
+
+    <!-- Consultation and production process -->
+    <section>
+      <div id="production_flow" class="marutto_section marutto_production_flow">
+        <div class="marutto_inner">
+          <div class="marutto_heading">
+            <p>Flow</p>
+            <h2><span class="marutto_phrase">ご相談から公開、</span><br><strong class="marutto_phrase">その後の運用まで。</strong></h2>
+          </div>
+          <p class="marutto_flow_lead">内容が決まっていなくても大丈夫。<br class="sponly">いまのお悩みから整理します。</p>
+          <ol class="marutto_flow_list">
+            <li><span class="marutto_flow_number fs_22">01</span><div><h3 class="fs_22 fs_sp22"><span class="marutto_phrase">LINE・</span><span class="marutto_phrase">フォームで相談</span></h3><p>新規制作もリニューアルも、まずは無料相談。お持ちのHPの診断も承ります。</p></div></li>
+            <li><span class="marutto_flow_number fs_22">02</span><div><h3 class="fs_22 fs_sp22"><span class="marutto_phrase">ヒアリング・</span><span class="marutto_phrase">無料診断</span></h3><p>お店の強みや届けたい相手を確認。既存サイトがあれば、集客の課題を整理します。</p></div></li>
+            <li><span class="marutto_flow_number fs_22">03</span><div><h3 class="fs_22 fs_sp22"><span class="marutto_phrase">ご提案・</span><span class="marutto_phrase">お見積り</span></h3><p>必要なページと機能をご提案。追加機能や印刷費も、事前に分かりやすくご案内します。</p></div></li>
+            <li><span class="marutto_flow_number fs_22">04</span><div><h3 class="fs_22 fs_sp22"><span class="marutto_phrase">取材・撮影・</span><span class="marutto_phrase">制作</span></h3><p>写真・文章・デザインをまとめて制作。チラシとホームページの雰囲気も揃えます。</p></div></li>
+            <li><span class="marutto_flow_number fs_22">05</span><div><h3 class="fs_22 fs_sp22"><span class="marutto_phrase">公開・</span><span class="marutto_phrase">運用スタート</span></h3><p>公開後も月次レポートで振り返り。更新や改善を相談しながら、ページを育てていきます。</p></div></li>
+          </ol>
+          <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>写真や原稿の準備は不要です</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
+        </div>
+      </div>
+    </section>
+    <!-- Consultation and production process -->
 
     <section>
       <div class="marutto_section marutto_profile">
@@ -544,6 +533,14 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <details>
               <summary><span>Q8.</span> デザインの修正は何回までできますか？<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
               <p>基本的な修正は2〜3回まで無料で対応。それ以降の修正や大幅な変更が必要な場合は、事前にご案内いたします。</p>
+            </details>
+            <details>
+              <summary><span>Q9.</span> パソコンが苦手でも大丈夫ですか？<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+              <p>はい。専門用語をできるだけ使わず、必要な確認はLINEやメールで進めます。ダッシュボードの見方もご案内します。</p>
+            </details>
+            <details>
+              <summary><span>Q10.</span> 公開後の更新もお願いできますか？<i class="fa-solid fa-plus" aria-hidden="true"></i></summary>
+              <p>はい。LINEやメールでご相談いただけます。月次レポートを見ながら、必要な更新や改善を継続して支援します。大幅な変更や追加機能は、事前にお見積りします。</p>
             </details>
           </div>
           <div class="marutto_section_action"><a class="marutto_cta marutto_cta_compact" href="<?php echo htmlspecialchars($marutto_page_path, ENT_QUOTES, 'UTF-8'); ?>#contact_form"><i class="fa-regular fa-envelope" aria-hidden="true"></i><span>まずは無料相談する<small>小さな疑問にもお答えします</small></span><i class="fa-solid fa-chevron-down" aria-hidden="true"></i></a></div>
@@ -722,6 +719,93 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
 </main>
 <!-- デザインまるっとお任せプラン service_marutto.php -->
 
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  document.querySelectorAll('.marutto_plan a').forEach(function (link) {
+    link.addEventListener('click', function () {
+      if (typeof gtag !== 'function') return;
+      var href = link.getAttribute('href') || '';
+      var label = href.indexOf('line.me') !== -1 ? 'line'
+        : href.indexOf('tel:') === 0 ? 'phone'
+        : href.indexOf('contact.php') !== -1 || href.indexOf('#contact_form') !== -1 ? 'form'
+        : href.indexOf('works_archive.php') !== -1 ? 'works' : 'internal';
+      gtag('event', 'marutto_plan_click', {
+        event_category: 'contact',
+        event_label: label,
+        page_variant: 'service_marutto'
+      });
+    });
+  });
+
+  var form = document.getElementById('mailform');
+  if (!form) return;
+
+  var consultationChecks = form.querySelectorAll('input[name="ご相談内容(必須)[]"]');
+  var consultationError = form.querySelector('[data-error-for="consultation"]');
+  var requiredFields = form.querySelectorAll('[data-contact-required]');
+  var submitBtn = form.querySelector('.contact-submit-btn');
+
+  function setFieldError(field, hasError) {
+    field.classList.toggle('field-error', hasError);
+  }
+
+  function isFormReady() {
+    for (var i = 0; i < requiredFields.length; i++) {
+      if (!requiredFields[i].value.trim()) return false;
+    }
+    return Array.prototype.some.call(consultationChecks, function (checkbox) {
+      return checkbox.checked;
+    });
+  }
+
+  function updateSubmitState() {
+    if (submitBtn) submitBtn.disabled = !isFormReady();
+  }
+
+  function validateContactForm() {
+    var isValid = true;
+    requiredFields.forEach(function (field) {
+      var hasError = !field.value.trim();
+      setFieldError(field, hasError);
+      if (hasError) isValid = false;
+    });
+
+    var hasCheckedConsultation = Array.prototype.some.call(consultationChecks, function (checkbox) {
+      return checkbox.checked;
+    });
+    consultationChecks.forEach(function (checkbox) {
+      checkbox.required = !hasCheckedConsultation;
+    });
+    if (consultationError) consultationError.classList.toggle('is-show', !hasCheckedConsultation);
+    if (!hasCheckedConsultation) isValid = false;
+    return isValid;
+  }
+
+  requiredFields.forEach(function (field) {
+    field.addEventListener('input', function () {
+      setFieldError(field, !field.value.trim());
+      updateSubmitState();
+    });
+  });
+  consultationChecks.forEach(function (checkbox) {
+    checkbox.addEventListener('change', function () {
+      validateContactForm();
+      updateSubmitState();
+    });
+  });
+  updateSubmitState();
+
+  form.addEventListener('submit', function (event) {
+    if (!validateContactForm()) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      form.reportValidity();
+    }
+  }, true);
+
+});
+</script>
+
 <script type="application/ld+json">
   {
     "@context": "https://schema.org",
@@ -788,6 +872,22 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
         "acceptedAnswer": {
           "@type": "Answer",
           "text": "基本的な修正は2〜3回まで無料で対応。それ以降の修正や大幅な変更が必要な場合は、事前にご案内いたします。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "パソコンが苦手でも大丈夫ですか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。専門用語をできるだけ使わず、必要な確認はLINEやメールで進めます。ダッシュボードの見方もご案内します。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "公開後の更新もお願いできますか？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "はい。LINEやメールでご相談いただけます。月次レポートを見ながら、必要な更新や改善を継続して支援します。大幅な変更や追加機能は、事前にお見積りします。"
         }
       }
     ]
