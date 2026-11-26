@@ -43,7 +43,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
           <div class="marutto_campaign_limit_inner">
             <h1>
               <span class="marutto_campaign_service tcenter">チラシとホームページ<br>まるっとお任せプラン</span>
-              <span class="marutto_campaign_limit_title tcenter">守成クラブの方 <strong>毎月2組限定</strong></span>
+              <span class="marutto_campaign_limit_title tcenter"><strong>毎月2組限定</strong></span>
             </h1>
             <p>一人で全工程を担当するため、月に2組までしかお引き受けできません。</p>
           </div>
@@ -57,12 +57,12 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
 
             <div class="marutto_campaign_prices">
               <div class="marutto_campaign_price is_flyer">
-                <p>守成クラブの方特別サービス</p>
+                <p>ご紹介限定 特別サービス</p>
                 <div><span>通常30,000円チラシデザインが</span><strong>制作費 <em>0</em>円</strong></div>
               </div>
               <span class="marutto_campaign_plus" aria-hidden="true">＋</span>
               <div class="marutto_campaign_price is_web">
-                <p>守成クラブの方限定特別価格</p>
+                <p>ご紹介限定 特別価格</p>
                 <div><span>通常月額9,800円のホームページが</span><strong><small>月々</small><em>8,800</em>円<sup>（税別）</sup></strong></div>
               </div>
             </div>
@@ -381,7 +381,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <div class="marutto_special_price">
               <p>★ ご紹介限定 特別価格 ★</p>
               <strong><small>月額</small> 8,800<em>円</em><small>（税別）</small></strong>
-              <span>守成クラブの方／毎月2組限定</span>
+              <span>毎月2組限定</span>
             </div>
           </div>
           <div class="marutto_package">
@@ -608,7 +608,7 @@ $marutto_tel_link = htmlspecialchars(str_replace(['-', 'ー', ' '], '', $telNo),
             <h2>まずは無料相談から</h2>
           </div>
           <p class="marutto_final_lead">チラシ・ホームページ・SNS…<br class="sponly">どんなご相談でも大丈夫。<br><strong>お気軽にご連絡ください<br class="sponly">（返信は24時間以内）</strong>。</p>
-          <p class="marutto_limited">★ 守成クラブの方 毎月2組限定 ★</p>
+          <p class="marutto_limited">★ 毎月2組限定 ★</p>
           <div class="marutto_contact_grid">
             <a class="is_line" href="<?php echo $marutto_line_url; ?>" target="_blank" rel="noopener noreferrer"><img src="<?php echo $img; ?>/marutto-plan-line-qr.png" alt="デザネコ公式LINEのQRコード" width="320" height="320" loading="lazy"><i class="fa-brands fa-line" aria-hidden="true"></i><span><small>LINEで気軽に相談</small><strong>まずは無料相談</strong></span><i class="fa-solid fa-chevron-right" aria-hidden="true"></i></a>
             <a class="is_tel" href="tel:<?php echo $marutto_tel_link; ?>"><i class="fa-solid fa-phone" aria-hidden="true"></i><span><small>今すぐ電話する／平日9:00〜18:00</small><strong><?php echo htmlspecialchars($telNo, ENT_QUOTES, 'UTF-8'); ?></strong></span></a>
