@@ -1,0 +1,37 @@
+Use case: ui-mockup
+Asset type: polished full-length desktop website redesign concept image for existing Japanese character page moja-cat.php, one single continuous website page, not a flyer, not a moodboard, no device frames. Tall portrait canvas approximately 1280 x 3840 pixels. This is an image proposal only.
+Primary request: Redesign the Moja Cats official character web page using the supplied flyer and model sheets, preserve all existing content sections, add the new friends Fuwarin and Palm. Deliver a beautifully art-directed, legible web design that can later be coded.
+Input images and roles: reference 1 is the colorful flyer, used for scenery and drawing style; reference 2 Kururu character model sheet; reference 3 Moja model sheet; reference 4 Palm model sheet; reference 5 Fuwarin model sheet. Model sheets define character identities; do not place entire model sheets in the webpage.
+Character fidelity: Moja is small charcoal black cat, curly dark forelock, huge yellow eyes, pink cheeks; Kururu is white cat with airy curls, huge blue eyes, pink bow on her upper right ear and pink collar with small yellow flower pendant; Fuwarin is pale golden fluffy female cat with very large round curly afro, folded small ears and yellow eyes; Palm is gray male cat with side-swept wavy gray forelock, triangular ears and blue eyes. Match their supplied cute rounded 2D crayon/watercolor style with thick chocolate brown hand-drawn outlines; never photorealistic animals. Exactly these four cats in hero, no additional cats.
+Design direction: an inviting storybook garden. Soft blue sky with white clouds and faint rainbow, grassy meadow with daisies and pink blossoms, subtle textured ivory paper, chocolate brown headings, restrained pastel pink yellow blue mint accents. Hero and section separators may be richly illustrated, reading areas spacious and quiet. Real website rhythm: wide horizontal hero, constrained readable content, large titles, rounded pill actions, thin hand-drawn border accents. Clean Japanese sans-serif body text, friendly rounded Japanese headings. Do not turn all sections into identical cards. No excessive giant blank areas. Maintain realistic web typography and spacing. No design annotations, no color palettes or layout labels outside the webpage.
+Top-to-bottom layout:
+1. Compact white existing brand site header: text logo "デザネコ" at left, restrained navigation and "Instagram", "YouTube", "お問い合わせ" at right.
+2. Wide immersive garden hero. Wooden hanging sign centered with "もじゃねこシリーズ". Small sublabel "デザネコ公式キャラクター". Four large cats nestled together on a flower-covered grass edge, order Moja, Kururu, Fuwarin, Palm. Hero occupies roughly first 650px of a 3840px page. Copy "かわいい もじゃねこたちが みんなを えがおにするよ！". Under that two prominent pill buttons "LINEスタンプはコチラ" in green and "オリジナルグッズ販売中" in pink. Small circular down arrow.
+3. Ivory intro preserving these existing texts (do not replace with invented marketing claims):
+"もじゃねこは、沖縄県を拠点とするデザインブランド「デザネコ」の公式キャラクターです。黒猫の「もじゃ」と白猫の「くるる」の2匹で構成され、デザネコのコラム記事やSNS、LINEスタンプ、オリジナルグッズに登場しています。"
+"このページでは、もじゃねこの2匹それぞれの誕生ストーリー・性格・トレードマーク、そしてLINEスタンプ・オリジナルグッズの情報をご紹介します。"
+Below the original intro add a separate small pastel announcement "新しい仲間、ふわりんとパームが加わりました！".
+4. Centered section title "もじゃねこのなかまたち". A row of four smaller illustrated character anchors, each with color-coded name pill: "もじゃ", "くるる", "ふわりん", "パーム". Subtle "NEW" badge only Fuwarin and Palm.
+5. Existing two stories in attractive alternating wide editorial rows, large sitting illustrated character on one side and readable text on the other, on calm ivory surface, airy line spacing, not a dense flyer. Moja yellow accent, Kururu pink accent. Preserve exact headings and original body copy:
+Heading "もじゃねこの黒猫「もじゃ」"
+Paragraphs:
+"黒い毛並みと黄色い瞳、トレードマークの“もじゃもじゃヘア”が特徴の、もじゃねこの黒猫「もじゃ」。幼い頃はこのくせ毛がコンプレックスで、まわりのネコたちにからかわれることもありました。"
+"そんなもじゃを変えたのは、同じ天然パーマを持つ白ネコ「くるる」との出会い。「その髪型は個性的でステキよ。」その一言が心に火を灯し、もじゃは自分のもじゃもじゃヘアを誇れるようになりました。"
+"いまではその個性を活かして、デザインの仕事をしているもじゃ。「みんなの“らしさ”をカタチにする」ことが、もじゃの得意分野です。今日もくるんとした髪を揺らしながら、世界に“かわいい”と“自信”を届けています。"
+Heading "もじゃねこの白猫「くるる」"
+Paragraphs:
+"白い毛並みと青い瞳、まるでパーマをかけたような美しいカールヘアが特徴の、もじゃねこの白猫「くるる」。明るくて好奇心旺盛、気になることがあればなんでもチャレンジ！ピアノにダンス、料理や接客まで、くるるの毎日はワクワクでいっぱい。"
+"でも、パソコン作業やデザインはちょっぴり苦手。そんなときは、いつも黒ネコの「もじゃ」にお願いして助けてもらっています。"
+"「もじゃはすごいのよ。私が思ってることを、ちゃんと形にしてくれるんだもん！」くるるの自由な発想と、もじゃの丁寧なデザイン。ふたりがそろえば、どんなことだって楽しいクリエイティブに変わります。"
+Optional small pose strips beneath each story echo the expressions in supplied sheets; never replace text with pose strips.
+6. New-friends section "新しいなかまをご紹介". Two generous side-by-side feature panels, cream yellow Fuwarin and sky blue Palm, each large character illustration plus several readable short profile facts. Fuwarin depicted near a small keyboard, Palm near a blue bass and book. Facts grounded in supplied model sheets:
+"ふわりん" / "Fuwarin" / "ふわふわの女の子" / "無口・賢い・おだやか" / "好きなこと：キーボード、読書" / "サラサラふわふわアフロがチャームポイント" / quote "ことばは少なくても、ちゃんと思ってるよ。ゆっくりで大丈夫。"
+"パーム" / "Palm" / "ロシアンブルーの男の子" / "冷静・賢い・クール" / "好きなこと：ベース、読書" / "青い瞳とゆるくかかったパーマヘア" / quote "あわてなくて大丈夫。落ち着いていれば、きっとうまくいくよ。"
+7. Existing shopping content, headline "ネコ好きをちょっとHappyにするアイテム誕生！", smaller English "Purrfect Items to Make Cat Lovers Happy!". Preserve text:
+"そんなもじゃねこの「もじゃ」と「くるる」のLINEスタンプと、かわいいオリジナルグッズができました！2匹のゆるくて楽しい表情がたっぷり詰まっています。下記のリンクからご購入いただけます。"
+Use two distinct wide showcase blocks: LINE stamp expression preview with green action "LINEスタンプはコチラ", and original merch display showing existing pink/white T-shirts with Moja and Kururu designs and canvas tote / mug as visually subordinate existing merch categories, with pink action "「もじゃねこ」のオリジナルグッズ販売中". Do not suggest that the new cats already have goods on sale. Keep real existing two-character merchandise identity distinct from new cartoon art.
+8. Preserve related link area titled "もじゃねこの関連リンク", text "もじゃねこのプロフィールは、ピクシブ百科事典にも掲載されています。また、もじゃねこ関連のSNS・グッズ販売ページは以下からアクセスいただけます。" Five compact links "ピクシブ百科事典", "LINEスタンプ", "オリジナルグッズ", "公式Instagram", "公式YouTube".
+9. Existing media section "YouTube" / "ムービー". Three wide 16:9 illustrated video thumbnail previews in a carousel with play icons, arrows, and "もっと見る". Show a tiny preview representing the existing Moja/Kururu movie within this media section. Do not invent unverified subscriber numbers or availability claims.
+10. Existing section "Goods" / "もじゃねこグッズ 人気ランキング", compact merchandise carousel, names "もじゃねこTシャツ", "トートバッグ", "スマホケース＆マグカップ", "小物コレクション", "LINEスタンプ", button "グッズを見る".
+11. Calm garden footer with four cats small along grass and a brand link "デザネコ".
+Constraints: fully visible complete long webpage, no cropped final section, high legibility, generous usable reading widths. Preserve existing stories and content categories and add the two new cats. Make hero visually memorable and polished, with web rather than printed poster proportions. Use only Japanese copy supplied here; no fake ratings, no fabricated features. No QR code on website mockup. No HTML, no actual coding, output image only.
